@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.eni.echeres;
+package fr.eni.encheres;
 
 import java.util.ArrayList;
 import java.util.List;

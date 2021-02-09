@@ -3,20 +3,19 @@
  */
 package fr.eni.encheres.dal;
 
-import fr.eni.echeres.BusinessException;
+import fr.eni.encheres.BusinessException;
 
 /**
- * 
+ * Cette interface regroupe les différentes méthodes utilisées pour communiquer avec
+ * la base de données.
+ * En cas d'erreur, le code est enregistré dans l'objet businessException
  *
  */
 public interface EnchereDAO {
 	
-//	public void insert(ListeCourse listeCourse) throws BusinessException;
-	public void delete(int id) throws BusinessException;
-//	public List<ListeCourse> selectAll() throws BusinessException;
-//	public ListeCourse selectById(int id) throws BusinessException;
-	public void deleteArticle(int idArticle) throws BusinessException;
-	public void cocherArticle(int idArticle) throws BusinessException;
-	public void decocherArticle(int idArticle) throws BusinessException;
-	public void decocherListeCourse(int listeCourse) throws BusinessException;
+	// Les méthodes utilisées ci-dessous doivent également être implementé dans la classe
+	// EnchereDAOJdbcImpl
+	
+//	public void insert(Avis avis) throws BusinessException;
+
 }

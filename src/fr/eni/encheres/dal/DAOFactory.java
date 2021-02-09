@@ -4,9 +4,13 @@
 package fr.eni.encheres.dal;
 
 /**
- * @author Joach
+ * @author Joachim
  *
  */
-public class DAOFactory {
+public abstract class DAOFactory {
 
+	public static EnchereDAO getEnchereDAO() {
+		
+		return new EnchereDAOJdbcImpl();
+	}
 }

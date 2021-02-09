@@ -8,7 +8,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-abstract class ConnexionProvider {
+abstract class ConnectionProvider {
 	private static DataSource dataSource;
 	
 	/**
@@ -19,8 +19,7 @@ abstract class ConnexionProvider {
 		Context context;
 		try {
 			context = new InitialContext();
-			ConnexionProvider.dataSource = (DataSource)context.lookup("java:comp/env/jdbc/pool_cnx");
-			System.out.println("connection ok");
+			ConnectionProvider.dataSource = (DataSource)context.lookup("java:comp/env/jdbc/pool_cnx");
 		} catch (NamingException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Impossible d'accéder à la base de données");
@@ -35,6 +34,6 @@ abstract class ConnexionProvider {
 	 */
 	public static Connection getConnection() throws SQLException
 	{
-		return ConnexionProvider.dataSource.getConnection();
+		return ConnectionProvider.dataSource.getConnection();
 	}
 }
