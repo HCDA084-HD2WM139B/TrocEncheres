@@ -9,8 +9,8 @@ package fr.eni.encheres.dal;
  */
 public abstract class DAOFactory {
 
-	public static EnchereDAO getEnchereDAO() {
+	public static UtilisateurDAO getUtilisateurDAO() {
 		
-		return new EnchereDAOJdbcImpl();
+		return null;
 	}
 }
