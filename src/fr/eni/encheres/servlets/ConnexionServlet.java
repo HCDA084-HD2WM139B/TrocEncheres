@@ -28,7 +28,7 @@ public class ConnexionServlet extends HttpServlet {
 		String identifiant = request.getParameter("identifiant");
 		String motDePasse = request.getParameter("motDePasse");
 		
-		// Appel du manager pour appeler les méthodes de vérification de connexion
+		// Appel du manager pour appeler les méthodes de vérification de connexion !
 		EnchereManager manager = EnchereManager.getEnchereManager();
 		
 		if(!manager.verifierIdentifiant(identifiant)) {
