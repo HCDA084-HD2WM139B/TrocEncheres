@@ -1,7 +1,7 @@
 package fr.eni.encheres.bll;
 
 import fr.eni.encheres.dal.DAOFactory;
-import fr.eni.encheres.dal.EnchereDAO;
+import fr.eni.encheres.dal.UtilisateurDAO;
 
 /**
  * Cette classe permet d'effectuer les traitements attendus sur la classe
