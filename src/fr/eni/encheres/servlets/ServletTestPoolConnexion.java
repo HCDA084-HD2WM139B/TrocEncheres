@@ -15,6 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import fr.eni.encheres.BusinessException;
+import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.dal.UtilisateurDAO;
+import fr.eni.encheres.dal.UtilisateurDAOImpl;
+
 /**
  * Servlet implementation class ServletTestPoolConnexion
  */
@@ -43,6 +48,19 @@ public class ServletTestPoolConnexion extends HttpServlet {
 			Connection cnx = dataSource.getConnection();
 			//Exploitation de la connexion
 			out.print("La connexion est "+ (cnx.isClosed()?"fermée":"ouverte")+".");
+			
+			// TODO à commenter
+			UtilisateurDAO utilisateurDao = new UtilisateurDAOImpl();
+			Utilisateur utilisateur = new Utilisateur("jojo44", "DE SOUSA PEIXEIRA", "Joachim", "jo@campus-eni.fr", "0606060606", "19 boulevard", "44300", "Nantes", "azerty", 0, false);
+			try {
+				utilisateurDao.insertUtilisateur(utilisateur);
+				System.out.println("Ajout Ok");
+			} catch (BusinessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// ********************************************************
+			
 			//Libération de la connexion. Elle n'est pas fermée mais remise dans le pool
 			cnx.close();
 		} catch (NamingException | SQLException e) {

@@ -7,8 +7,4 @@ public interface UtilisateurDAO {
 
 	public void insertUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
-
-	
-	
-
 }

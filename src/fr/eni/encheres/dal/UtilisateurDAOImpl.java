@@ -10,7 +10,7 @@ import fr.eni.encheres.bo.Utilisateur;
 
 public class UtilisateurDAOImpl implements UtilisateurDAO {
 
-	private static final String INSERT_UTILISATEUR = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+	private static final String INSERT_UTILISATEUR = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	
 	/**
 	 * Cette méthode permet d'ajouter un utilisateur dans la base de données ENCHERE_DB sur la table UTILISATEUR
@@ -38,6 +38,8 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			psmt.setString(7, utilisateur.getCodePostal());
 			psmt.setString(8, utilisateur.getVille());
 			psmt.setString(9, utilisateur.getMotDePasse());
+			psmt.setInt(10, utilisateur.getCredit());
+			psmt.setBoolean(11, false);
 			// On execute la requête
 			psmt.executeUpdate();
 			// On récupère le résultat
@@ -46,7 +48,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 				// On ajoute l'ID récupérer au noUtilisateur
 				utilisateur.setNoUtilisateur(rs.getInt(1));
 			}
-			// S'il y a une erreur on l'enregistre dans la businessException
+			// S'il y a une erreur on l'enregistre dans la businessEx
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 			BusinessException businessException = new BusinessException();
