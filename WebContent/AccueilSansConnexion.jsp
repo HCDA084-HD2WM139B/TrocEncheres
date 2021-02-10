@@ -45,7 +45,7 @@
       				  <input type="text" class="form-control" placeholder="Article" aria-label="Article" aria-describedby="basic-addon1">
     			 </div></aside>
     		
-    			<aside class="input-group mt-2 mb-2">
+    			<aside class="input-group mt-2 mb-1">
     				<label class="col-4" for="categories">Catégories :</label>
     					<select class="col-8" name="categories" id="categories">
     						<option value="toutes">Toutes</option>
