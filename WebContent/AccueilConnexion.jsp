@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <script src="https://kit.fontawesome.com/7a045c691c.js" crossorigin="anonymous"></script>
+<script src="script.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
 <title>Accueil</title>
 </head>
@@ -24,7 +25,16 @@
       <div class="col collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link text-white" href="#">Se connecter / S'inscrire</a>
+            <a class="nav-link text-white" href="#">Enchères</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">Vendre un objet</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">Mon Profil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">Déconnexion</a>
           </li>
         </ul>
       </div>
@@ -35,17 +45,17 @@
     </div>
     
     <div class="container d-flex justify-content-between align-items-center align-self-center flex-wrap">
-    	<article class="col-xl-5 col-md-12">
+    	<section class="col-xl-6 col-md-12">
     		<h2>Les Filtres : </h2>
     		<form method="POST" action"">
-    			 <aside class="d-none d-lg-block d-md-none"><div class="input-group mt-1">
+    			 <article class="d-none d-lg-block d-md-none"><div class="input-group mt-1">
 				      <div class="input-group-prepend">
 				        <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
 				      </div>
       				  <input type="text" class="form-control" placeholder="Article" aria-label="Article" aria-describedby="basic-addon1">
-    			 </div></aside>
+    			 </div></article>
     		
-    			<aside class="input-group mt-2 mb-2">
+    			<article class="input-group mt-2 mb-2">
     				<label class="col-4" for="categories">Catégories :</label>
     					<select class="col-8" name="categories" id="categories">
     						<option value="toutes">Toutes</option>
@@ -54,18 +64,43 @@
     						<option value="vetements">Vetements</option>
     						<option value="sport_loisirs">Sport & Loisirs</option>
     					</select>
-    			</aside>
+    			</article>
     			
-    			 <aside class="d-none d-md-block d-lg-none mt-4 mb-4"><div class="input-group mt-1">
+    			 <article class="d-none d-md-block d-lg-none mt-4 mb-4"><div class="input-group mt-1">
 				      <div class="input-group-prepend">
 				        <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
 				      </div>
       				  <input type="text" class="form-control" placeholder="Article" aria-label="Article" aria-describedby="basic-addon1">
-    			 </div></aside>
-    	</article>
-    	<article class="col-xl-5 col-md-12">
-    		<input type="submit" class="col-12 pt-3 pb-3 btn btn-primary" value="Rechercher">
-    	</article>
+    			 </div></article>
+    			 
+    			 <article class="input-group mt-2 mb-2">
+    			 	<aside class="col-12 mt-3 d-flex justify-content-between">
+    			 		<div>
+	  						<input id="inp_achats" name="inp_radio" type="radio">
+	    			 		<label for="inp_achats">Achats</label>
+	    			 		<div class="d-flex flex-column ml-3">
+	    			 			  <div><input type="checkbox" id="en_open" name="en_open"><label class="ml-2" for="en_open">enchères ouvertes</label></div>
+	    			 			  <div><input type="checkbox" id="en_encours" name="en_encours"><label class="ml-2" for="en_encours">mes enchères en cours</label></div>
+	    			 			  <div><input type="checkbox" id="en_val" name="en_val"><label class="ml-2" for="en_val">mes enchères achevés</label></div>
+	    			 			  
+	    			 		</div>
+    			 		</div>
+    			 		<div>
+	  						<input id="vente" name="inp_radio" type="radio"/>
+	    			 		<label for="vente">Mes ventes</label>
+	    			 		<div class="d-flex flex-column ml-4">
+	    			 			  <div><input type="checkbox" id="ve_encours" name="ve_encours"><label class="ml-2" for="ve_encours">mes ventes en cours</label></div>
+	    			 			  <div><input type="checkbox" id="ve_null" name="ve_null"><label class="ml-2" for="en_encours">mes ventes non débutées</label></div>
+	    			 			  <div><input type="checkbox" id="ve_over" name="ve_over"><label class="ml-2" for="ve_over">mes ventes terminées</label></div>
+	    			 		</div>
+	    			 		
+    			 		</div>
+    			 	</aside>
+    			 </article>
+    	</section>
+    	<section class="col-xl-5 col-md-12">
+    		<input type="submit" class="col-12 pt-4 pb-4 btn btn-primary" value="Rechercher">
+    	</section>
     	</form>
     </div>
     
