@@ -62,6 +62,7 @@ public class ConnexionServlet extends HttpServlet {
 
 		// verif regles Mdp
 		boolean motDePasseCorrect = true;
+		Utilisateur utilisateurTrouve = null;
 
 		if (!manager.verifierMotDePasse(motDePasse)) {
 			request.setAttribute("erreurConnexionMdp", "Le mot de passe saisi est incorrect.");
@@ -69,23 +70,37 @@ public class ConnexionServlet extends HttpServlet {
 			motDePasseCorrect = false;
 		}
 
-		if ( loginCorrect && motDePasseCorrect ) {
-			//appel BDD pour verif identifiants existants
-			try {
-				Utilisateur utilisateurTrouve = manager.getUtilisateurByLogin(identifiant);
-			} catch (BusinessException e) {
-				e.printStackTrace();
+		try {
+			if (loginCorrect && motDePasseCorrect) {
+				// appel BDD pour verif identifiants existants
+
+				utilisateurTrouve = manager.getUtilisateurByLogin(identifiant);
+
+				if (utilisateurTrouve == null) {
+					request.setAttribute("erreurConnexionId", "Login incorrect.");
+
+					RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/jsp/PageConnexion.jsp");
+					rd.forward(request, response);
+
+				} else if (!manager.isItSamePassword(motDePasse, utilisateurTrouve.getMotDePasse())) {
+					request.setAttribute("erreurConnexionMdp", "Mot de passe incorrect");
+
+					RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/jsp/PageConnexion.jsp");
+					rd.forward(request, response);
+				} else {
+					RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/jsp/AccueilConnexion.jsp");
+					rd.forward(request, response);
+				}
+
+			} else {
+				// redirection page connexion pour erreur
+				RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/jsp/PageConnexion.jsp");
+				rd.forward(request, response);
+
 			}
-			
-		} else {
-			//redirection page connexion pour erreur
-			RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/jsp/PageConnexion.jsp");
-			rd.forward(request, response);
-
+		} catch (BusinessException e) {
+			e.printStackTrace();
 		}
-		
-
-		
 
 	}
 

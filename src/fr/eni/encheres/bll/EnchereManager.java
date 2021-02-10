@@ -78,6 +78,15 @@ public class EnchereManager {
 
 		return resultat;
 	}
+	
+	
+	public boolean isItSamePassword(String mDpSaisie, String mDpBdd) {
+		boolean resultat = false;
+		if (mDpSaisie.equals(mDpBdd)) {
+			resultat = true;
+		}
+		return resultat;
+	}
 
 	public Utilisateur getUtilisateurByLogin(String pIdentifiant) throws BusinessException {
 		Utilisateur utilisateurTrouve = null;
@@ -97,4 +106,13 @@ public class EnchereManager {
 		
 		return utilisateurTrouve;
 	}
+	
+	public boolean verifierSiChampVide(String pChampAverifier) {
+        boolean resultat = false;
+       
+        if( !pChampAverifier.isEmpty()) {
+            resultat = true;
+        }
+        return resultat;
+    }
 }
