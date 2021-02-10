@@ -1,0 +1,16 @@
+@charset "ISO-8859-1";
+
+.col-sm-10 {
+	width: 350px;
+	background-color:yellow;
+	}
+	
+h1 {
+	background-color:red;
+	}
+	
+	#staticEmail {
+	width: 300px;
+	background-color:green;
+	}
+	

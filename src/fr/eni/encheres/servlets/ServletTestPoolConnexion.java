@@ -51,7 +51,7 @@ public class ServletTestPoolConnexion extends HttpServlet {
 			
 			// TODO à commenter
 			UtilisateurDAO utilisateurDao = new UtilisateurDAOImpl();
-			Utilisateur utilisateur = new Utilisateur("jojo44", "DE SOUSA PEIXEIRA", "Joachim", "jo@campus-eni.fr", "0606060606", "19 boulevard", "44300", "Nantes", "azerty", 0, false);
+			Utilisateur utilisateur = new Utilisateur("brebr", "grebre", "fzfz", "jo@campus-eni.fr", "0606060606", "19 boulevard", "44300", "Nantes", "azerty", 0, false);
 			try {
 				utilisateurDao.insertUtilisateur(utilisateur);
 				System.out.println("Ajout Ok");

@@ -11,6 +11,6 @@ public abstract class DAOFactory {
 
 	public static UtilisateurDAO getUtilisateurDAO() {
 		
-		return null;
+		return new UtilisateurDAOImpl();
 	}
 }

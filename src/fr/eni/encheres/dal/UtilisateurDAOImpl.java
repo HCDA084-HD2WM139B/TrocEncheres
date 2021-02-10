@@ -26,9 +26,10 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		}
 		
 		// Sinon on lance la connexion
-		try (Connection cnx = ConnectionProvider.getConnection()) {
+		
+		try (Connection cnx = ConnectionProvider.getConnection(); 
+				PreparedStatement psmt = cnx.prepareStatement(INSERT_UTILISATEUR, PreparedStatement.RETURN_GENERATED_KEYS); ) {
 			// On prépare la requête SQL pour insérer un utilisateur et on récupère l'ID généré par l'insertion
-			PreparedStatement psmt = cnx.prepareStatement(INSERT_UTILISATEUR, PreparedStatement.RETURN_GENERATED_KEYS);
 			psmt.setString(1, utilisateur.getPseudo());
 			psmt.setString(2, utilisateur.getNom());
 			psmt.setString(3, utilisateur.getPrenom());
@@ -54,7 +55,6 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			BusinessException businessException = new BusinessException();
 			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
 			throw businessException;
-		}
-		
+		}		
 	}
 }
