@@ -9,19 +9,29 @@ package fr.eni.encheres.dal;
 public abstract class CodesResultatDAL {
 	
 	/**
-	 * Echec général quand tentative d'ajouter un objet null
+	 * Echec gï¿½nï¿½ral quand tentative d'ajouter un objet null
 	 */
 	public static final int INSERT_OBJET_NULL=10000;
 	
 	/**
-	 * Echec général quand erreur non gérée à l'insertion 
+	 * Echec gï¿½nï¿½ral quand erreur non gï¿½rï¿½e ï¿½ l'insertion 
 	 */
 	public static final int INSERT_OBJET_ECHEC=10001;
 	
 	/**
-	 * Echec de l'insertion d'un avis à cause de la note
+	 * Echec de l'insertion d'un avis ï¿½ cause de la note
 	 */
 	public static final int INSERT_AVIS_NOTE_ECHEC=10002;
+	
+	/**
+	 * Echec de la requete en base de donnÃ©es de l'utilisateur par son login
+	 */
+	public static final int SELECT_OBJET_NULL=10003;
+	
+	/**
+	 * Echec de lecture en base de donnÃ©es de l'utilisateur
+	 */
+	public static final int SELECT_OBJET_ECHEC=10004;
 	
 	
 }

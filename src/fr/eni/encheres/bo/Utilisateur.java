@@ -31,6 +31,7 @@ public class Utilisateur implements Serializable {
 		this(pPseudo,pNom,pPrenom,pEmail,pRue,pCodePostal,pVille,pMotDePasse,pCredit,pAdministrateur);
 		setTelephone(pTelephone);
 	}
+	
 
 	public Utilisateur(String pPseudo, String pNom, String pPrenom, String pEmail, String pRue, String pCodePostal,
 			String pVille, String pMotDePasse, int pCredit, boolean pAdministrateur) {

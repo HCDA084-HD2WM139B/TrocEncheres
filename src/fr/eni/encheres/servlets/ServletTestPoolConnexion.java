@@ -39,21 +39,21 @@ public class ServletTestPoolConnexion extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out= response.getWriter();
-		//Création d'un objet de type Context permettant la recherche d'une ressource nommée dans l'arbre JNDI
+		//Crï¿½ation d'un objet de type Context permettant la recherche d'une ressource nommï¿½e dans l'arbre JNDI
 		try {
 			Context context = new InitialContext();
 			//Recherche de la ressource
 			DataSource dataSource = (DataSource)context.lookup("java:comp/env/jdbc/pool_cnx");
-			//Demande d'une connexion. La méthode getConnection met la demande en attente tant qu'il n'y a pas de connexion disponible
+			//Demande d'une connexion. La mï¿½thode getConnection met la demande en attente tant qu'il n'y a pas de connexion disponible
 			Connection cnx = dataSource.getConnection();
 			//Exploitation de la connexion
-			out.print("La connexion est "+ (cnx.isClosed()?"fermée":"ouverte")+".");
+			out.print("La connexion est "+ (cnx.isClosed()?"fermï¿½e":"ouverte")+".");
 			
-			// TODO à commenter
+			// TODO ï¿½ commenter
 			UtilisateurDAO utilisateurDao = new UtilisateurDAOImpl();
-			Utilisateur utilisateur = new Utilisateur("brebr", "grebre", "fzfz", "jo@campus-eni.fr", "0606060606", "19 boulevard", "44300", "Nantes", "azerty", 0, false);
+			//Utilisateur utilisateur = new Utilisateur("brebr", "grebre", "fzfz", "jo@campus-eni.fr", "0606060606", "19 boulevard", "44300", "Nantes", "azerty", 0, false);
 			try {
-				utilisateurDao.insertUtilisateur(utilisateur);
+				utilisateurDao.selectByEmail("jo@camus-eni.fr");
 				System.out.println("Ajout Ok");
 			} catch (BusinessException e) {
 				// TODO Auto-generated catch block
@@ -61,12 +61,12 @@ public class ServletTestPoolConnexion extends HttpServlet {
 			}
 			// ********************************************************
 			
-			//Libération de la connexion. Elle n'est pas fermée mais remise dans le pool
+			//Libï¿½ration de la connexion. Elle n'est pas fermï¿½e mais remise dans le pool
 			cnx.close();
 		} catch (NamingException | SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			e.printStackTrace();
-			out.println("Une erreur est survenue lors de l'utilisation de la base de données : " + e.getMessage());
+			out.println("Une erreur est survenue lors de l'utilisation de la base de donnï¿½es : " + e.getMessage());
 		}
 		out.close();
 	}

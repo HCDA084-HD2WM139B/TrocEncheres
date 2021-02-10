@@ -11,9 +11,13 @@ import fr.eni.encheres.bo.Utilisateur;
 public class UtilisateurDAOImpl implements UtilisateurDAO {
 
 	private static final String INSERT_UTILISATEUR = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+	private static final String SELECT_BY_EMAIL = "SELECT * FROM UTILISATEURS WHERE email = ? ";
+	private static final String SELECT_BY_PSEUDO = "SELECT * FROM UTILISATEURS WHERE pseudo = ? ";
+
+	
 	
 	/**
-	 * Cette méthode permet d'ajouter un utilisateur dans la base de données ENCHERE_DB sur la table UTILISATEUR
+	 * Cette mï¿½thode permet d'ajouter un utilisateur dans la base de donnï¿½es ENCHERE_DB sur la table UTILISATEUR
 	 */
 	@Override
 	public void insertUtilisateur(Utilisateur utilisateur) throws BusinessException {
@@ -29,7 +33,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		
 		try (Connection cnx = ConnectionProvider.getConnection(); 
 				PreparedStatement psmt = cnx.prepareStatement(INSERT_UTILISATEUR, PreparedStatement.RETURN_GENERATED_KEYS); ) {
-			// On prépare la requête SQL pour insérer un utilisateur et on récupère l'ID généré par l'insertion
+			// On prï¿½pare la requï¿½te SQL pour insï¿½rer un utilisateur et on rï¿½cupï¿½re l'ID gï¿½nï¿½rï¿½ par l'insertion
 			psmt.setString(1, utilisateur.getPseudo());
 			psmt.setString(2, utilisateur.getNom());
 			psmt.setString(3, utilisateur.getPrenom());
@@ -41,12 +45,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			psmt.setString(9, utilisateur.getMotDePasse());
 			psmt.setInt(10, utilisateur.getCredit());
 			psmt.setBoolean(11, false);
-			// On execute la requête
+			// On execute la requï¿½te
 			psmt.executeUpdate();
-			// On récupère le résultat
+			// On rï¿½cupï¿½re le rï¿½sultat
 			ResultSet rs = psmt.getGeneratedKeys();
 			if (rs.next()) {
-				// On ajoute l'ID récupérer au noUtilisateur
+				// On ajoute l'ID rï¿½cupï¿½rer au noUtilisateur
 				utilisateur.setNoUtilisateur(rs.getInt(1));
 			}
 			// S'il y a une erreur on l'enregistre dans la businessEx
@@ -56,5 +60,100 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
 			throw businessException;
 		}		
+	}
+	
+	@Override
+	public Utilisateur selectByEmail(String pEmail) throws BusinessException {
+		
+		Utilisateur utilisateurTrouve = null;
+		
+		if (pEmail == null) {
+			// TODO changer code erreur
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
+			throw businessException;
+		}
+	
+		try (Connection cnx = ConnectionProvider.getConnection(); 
+				PreparedStatement psmt = cnx.prepareStatement(SELECT_BY_EMAIL); ) {
+			
+			psmt.setString(1, pEmail);
+			
+			ResultSet rs = psmt.executeQuery();
+			if (rs.next()) {
+				System.out.println("user trouvÃ© !");
+				// traitement du retour
+				utilisateurTrouve = new Utilisateur(
+						rs.getString("pseudo"),
+						rs.getString("nom"),
+						rs.getString("prenom"),
+						rs.getString("email"),
+						rs.getString("telephone"),
+						rs.getString("rue"),
+						rs.getString("code_postal"),
+						rs.getString("ville"),
+						rs.getString("mot_de_passe"),
+						rs.getInt("credit"),
+						rs.getBoolean("administrateur"));
+				utilisateurTrouve.setNoUtilisateur(rs.getInt("no_utilisateur"));
+			}
+			
+			// S'il y a une erreur on l'enregistre dans la businessEx
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			//TODO Changer code d'erreur
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
+			throw businessException;
+		}	
+		return utilisateurTrouve;
+	}
+	
+	
+	@Override
+	public Utilisateur selectByPseudo(String pPseudo) throws BusinessException {
+		
+		Utilisateur utilisateurTrouve = null;
+		
+		if (pPseudo == null) {
+			// TODO changer code erreur
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
+			throw businessException;
+		}
+	
+		try (Connection cnx = ConnectionProvider.getConnection(); 
+				PreparedStatement psmt = cnx.prepareStatement(SELECT_BY_PSEUDO); ) {
+			
+			psmt.setString(1, pPseudo);
+			
+			ResultSet rs = psmt.executeQuery();
+			if (rs.next()) {
+				System.out.println("user trouvÃ© !");
+				// traitement du retour
+				utilisateurTrouve = new Utilisateur(
+						rs.getString("pseudo"),
+						rs.getString("nom"),
+						rs.getString("prenom"),
+						rs.getString("email"),
+						rs.getString("telephone"),
+						rs.getString("rue"),
+						rs.getString("code_postal"),
+						rs.getString("ville"),
+						rs.getString("mot_de_passe"),
+						rs.getInt("credit"),
+						rs.getBoolean("administrateur"));
+				utilisateurTrouve.setNoUtilisateur(rs.getInt("no_utilisateur"));
+			}
+			
+			// S'il y a une erreur on l'enregistre dans la businessEx
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			//TODO Changer code d'erreur
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
+			throw businessException;
+		}	
+		return utilisateurTrouve;
 	}
 }

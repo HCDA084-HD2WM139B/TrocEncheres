@@ -25,7 +25,7 @@
 	
 	<h2 class="text-center mb-5">Se Connecter</h2>
 
-	<form class="d-flex flex-column justify-content-center" action="/listeEncheresConnecte" method="post">
+	<form class="d-flex flex-column justify-content-center" action="<%= request.getContextPath() %>/cnx" method="post">
 		<div class="d-flex mt-2 mb-2">
 			<label class="col-4" for="identifiant">Identifiant : </label>
 			<input class="col-8" type="text" name="identifiant" id="identifiant"/>
