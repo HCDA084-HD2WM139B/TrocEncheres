@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"   %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -11,24 +12,7 @@
 
 
 <body>
-<nav class="mb-4 navbar navbar-expand-lg navbar-light bg-dark">
-    <div class="col-md navbar-brand">
-      <h4 class="text-white mr-4 mt-1">ENI Enchères</h4>
-    </div>
-    <div class="justify-content-end">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </div>
-    </div>
-      <div class="col collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-        <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link text-white" href="#">Se connecter / S'inscrire</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+	<%@include file="nav.jsp" %>
     
     <div>
     	<h1 class="container text-center mt-4 mb-3">Liste des enchères</h1>
