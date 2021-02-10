@@ -1,14 +1,25 @@
 package fr.eni.encheres.bo;
 
 public class Categorie {
-	int noCategorie;
-	String libelle;
+	private Integer noCategorie;
+	private String libelle;
 	
-	public Categorie(int noCategorie, String libelle) {
+	public Categorie() {
+		noCategorie = null;
+	}
+	
+	public Categorie(String libelle) {
 		super();
-		this.noCategorie = noCategorie;
+		this.libelle = libelle;
+	}
+
+	public String getLibelle() {
+		return libelle;
+	}
+
+	public void setLibelle(String libelle) {
 		this.libelle = libelle;
 	}
 	
-	
+		
 }
