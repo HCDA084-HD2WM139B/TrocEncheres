@@ -77,17 +77,18 @@ public class InscriptionServlet extends HttpServlet {
 				listErreurs.add("Le champ " + entree.getKey() + " doit être compris entre 2 et " + valeurMax + " caractères.");
 				tailleChamp = false;
 			}
-			// Vérification que le mot de passe est égal à la confirmation
-			try {
-				if (manager.verifMotDePasse(parametre.get("motDePasse"), parametre.get("motDePasseConf"))) {
-					erreurMotDePasse = false;
-				} else {
-					listErreurs.add(MOT_DE_PASSE_KO);
-				}
-			} catch (BusinessException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+		}
+		
+		// Vérification que le mot de passe est égal à la confirmation
+		try {
+			if (manager.verifMotDePasse(parametre.get("motDePasse"), parametre.get("motDePasseConf"))) {
+				erreurMotDePasse = false;
+			} else {
+				listErreurs.add(MOT_DE_PASSE_KO);
 			}
+		} catch (BusinessException e1) {
+			// TODO Auto-generated catch blockS
+			e1.printStackTrace();
 		}
 		
 		// Vérification dans la base de données si le pseudo est déjà utilisé
