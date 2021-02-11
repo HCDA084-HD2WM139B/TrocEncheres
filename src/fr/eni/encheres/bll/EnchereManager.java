@@ -1,7 +1,5 @@
 package fr.eni.encheres.bll;
-
  
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,9 +9,6 @@ import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.DAOFactory;
 import fr.eni.encheres.dal.UtilisateurDAO;
-
- 
-
 
 /**
  * Classe de la couche Métier (BLL)
@@ -35,9 +30,7 @@ public class EnchereManager {
     // Méthode static pour obtenir une instance d'EnchereManager
     public static EnchereManager getEnchereManager() {
         return new EnchereManager();
-    }
-    
-    
+    }     
     
     /**
      * Méthode permettant de vérifier si l'E-mail est :
@@ -51,9 +44,7 @@ public class EnchereManager {
             resultat = true;
         } 
         return resultat;
-    }
-    
-    
+    }      
     
     /**
      * Méthode permettant de vérifier si le pseudo est :
@@ -67,9 +58,7 @@ public class EnchereManager {
             resultat = true;
         } 
         return resultat;
-    }
-    
-    
+    }  
     
     /**
      * Méthode permettant de vérifier si le mot de passe est : 
@@ -88,7 +77,6 @@ public class EnchereManager {
         } 
         return resultat;
     }
-    
     
     /**
      * Méthode retournant le type de l'identifiant saisie par l'utilisateur passé en paramètre.
@@ -115,11 +103,7 @@ public class EnchereManager {
         }
         return resultat;
     }
-    
-
- 
-
-    
+        
     /**
      * Méthode permettant de connaitre si un utilisateur existe en Base De Données selon le mot de passe et l'identifiant rentrés en paramètres.
      * @param typeRequete Le nom exact de la colonne de la table UTILISATEUR en Base de données.
@@ -135,13 +119,12 @@ public class EnchereManager {
         this.utilisateurConnecte = utilisateurTrouve;
         return utilisateurTrouve;
     }
-    
-    
-    
+        
     /**
-     * Méthode vérifiant si la chaine de caractère passé en paramètre est vide.
+     * Méthode vérifiant si la chaine de caractère passé en paramètre est supérieure à deux caractères,
+     * et inférieur à tailleChamp
      * @param pChampAverifier (String) la chaine de caractère.
-     * @return True si la chaine de caractère n'est pas vide, sinon False.
+     * @return True si la chaine de caractère est comprise entre deux et tailleChamp, sinon False.
      */    
     public boolean verifierTailleChamp(String pChampAverifier, int tailleChamp) {
         boolean resultat = false;
@@ -151,6 +134,11 @@ public class EnchereManager {
         return resultat;
     }
     
+    /**
+     * Méthode permettant d'attribuer une valeur max à la chaine de caractère en fonction du champ à vérifier
+     * @param pChampAverifier chaîne de caractère
+     * @return la valeurMax pouvant être atteinte par la chaîne de caractère
+     */
     public int valeurMax(String pChampAverifier) {
     	int valeurMax = 0;
     	
@@ -164,18 +152,37 @@ public class EnchereManager {
     	return valeurMax;
     }
     
+    /**
+     * Méthode permettant de récupérer la totalité des pseudo présent dans la base de données
+     * @param pPseudo chaîne de caractère qui représente le pseudo
+     * @return true si le pseudo est trouvé dans la base de données et false s'il n'existe pas
+     * @throws BusinessException
+     */
     public boolean getPseudoExiste(String pPseudo) throws BusinessException {
     	boolean pseudoTrouve = false;
     	pseudoTrouve = DAOFactory.getUtilisateurDAO().selectAllPseudo(pPseudo);
         return pseudoTrouve;
     }
     
+    /**
+     * Méthode permettant de récupérer la totalité des emails présent dans la base de données
+     * @param pEmail chaîne de caractère qui représente l'email
+     * @return true si l'email est trouvé dans la base de données et false s'il n'existe pas
+     * @throws BusinessException
+     */
     public boolean getEmailExiste(String pEmail) throws BusinessException {
     	boolean emailTrouve = false;
     	emailTrouve = DAOFactory.getUtilisateurDAO().selectAllEmail(pEmail);
         return emailTrouve;
     }
     
+    /**
+     * Méthode permettant de vérifier si le mot de passe saisie est identique au mot de passe confirmé
+     * @param pMotDePasse chaîne de caractère qui représente le mot de passe
+     * @param pConfirmation chaîne de caractère qui représente la confirmation du mot de passe
+     * @return true si les mots de passe correspondent
+     * @throws BusinessException
+     */
     public boolean verifMotDePasse(String pMotDePasse, String pConfirmation) throws BusinessException {
     	boolean motDePasse = false;
     	if(pMotDePasse.equals(pConfirmation)) {
@@ -184,6 +191,20 @@ public class EnchereManager {
     	return motDePasse;
     }
     
+    /**
+     * Méthode permettant d'ajouter un utilisateur dans la base de données
+     * @param pPseudo chaîne de caractère représentant le pseudo
+     * @param pPrenom chaîne de caractère représentant le prénom
+     * @param pTelephone chaîne de caractère représentant le téléphone
+     * @param pCodePostal chaîne de caractère représentant le code postal
+     * @param pMotDePasse chaîne de caractère représentant le mot de passe
+     * @param pNom  chaîne de caractère représentant le nom
+     * @param pEmail chaîne de caractère représentant l'email
+     * @param pRue chaîne de caractère représentant la rue
+     * @param pVille chaîne de caractère représentant la ville
+     * @return un utilisateur
+     * @throws BusinessException
+     */
     public Utilisateur getInsertUtilisateur(String pPseudo, String pPrenom, String pTelephone, String pCodePostal, String pMotDePasse, 
     		String pNom, String pEmail, String pRue, String pVille) throws BusinessException {
         Utilisateur utilisateurCree = new Utilisateur(pPseudo, pNom, pPrenom, pEmail, pTelephone, pRue, pCodePostal, pVille, pMotDePasse, 0, false);
@@ -198,11 +219,8 @@ public class EnchereManager {
         return DAOutilisateur;
     }
 
- 
-
     private Utilisateur getUtilisateurConnecte() {
         return utilisateurConnecte;
     }
-    
-    
+        
 }

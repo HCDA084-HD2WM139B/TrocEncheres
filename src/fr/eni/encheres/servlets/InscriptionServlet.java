@@ -24,6 +24,9 @@ import fr.eni.encheres.bll.EnchereManager;
  */
 @WebServlet("/inscription")
 public class InscriptionServlet extends HttpServlet {
+	private static final String MOT_DE_PASSE_KO = "Le mot de passe ne correpond pas à la confirmation.";
+	private static final String ACCUEIL_CONNEXION_JSP = "/WEB-INF/jsp/AccueilConnexion.jsp";
+	private static final String INSCRIPTION_JSP = "/WEB-INF/jsp/Inscription.jsp";
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -31,7 +34,7 @@ public class InscriptionServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/Inscription.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher(INSCRIPTION_JSP);
 		rd.forward(request, response);
 	}
 
@@ -42,8 +45,7 @@ public class InscriptionServlet extends HttpServlet {
 		
 		// Déclaration des variables
 		int valeurMax = 0;
-		boolean champMax = true;
-		boolean champMin = true;
+		boolean tailleChamp = true;
 		boolean pseudoUtilise = true;
 		boolean emailUtilise = true;
 		boolean erreurMotDePasse = true;
@@ -64,7 +66,6 @@ public class InscriptionServlet extends HttpServlet {
 		parametre.put("motDePasse", request.getParameter("motDePasse"));		
 		parametre.put("motDePasseConf", request.getParameter("motDePasseConf"));
 		
-		
 		// Appel du manager pour appeler les méthodes
 		EnchereManager manager = EnchereManager.getEnchereManager();
 		
@@ -74,14 +75,14 @@ public class InscriptionServlet extends HttpServlet {
 			// Vérification de la taille du champ qui doit être compris entre deux et valeurMax. (Le champ téléphone est exclu car il peut être nul
 			if (!manager.verifierTailleChamp(entree.getValue(), valeurMax) && !entree.getKey().contains("telephone") ) {
 				listErreurs.add("Le champ " + entree.getKey() + " doit être compris entre 2 et " + valeurMax + " caractères.");
-				champMin = false;
+				tailleChamp = false;
 			}
 			// Vérification que le mot de passe est égal à la confirmation
 			try {
 				if (manager.verifMotDePasse(parametre.get("motDePasse"), parametre.get("motDePasseConf"))) {
 					erreurMotDePasse = false;
 				} else {
-					listErreurs.add("Le mot de passe ne correpond pas à la confirmation.");
+					listErreurs.add(MOT_DE_PASSE_KO);
 				}
 			} catch (BusinessException e1) {
 				// TODO Auto-generated catch block
@@ -114,7 +115,7 @@ public class InscriptionServlet extends HttpServlet {
 		}
 				
 		// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'utilisateur est ajouté à la base de données
-		if (champMax == true && champMin == true && pseudoUtilise == false && emailUtilise == false && erreurMotDePasse == false) {
+		if (tailleChamp == true && pseudoUtilise == false && emailUtilise == false && erreurMotDePasse == false) {
 			try {
 				manager.getInsertUtilisateur(parametre.get("pseudo"), parametre.get("prenom"), parametre.get("telephone"), parametre.get("codePostal"),
 						parametre.get("motDePasse"), parametre.get("nom"), parametre.get("email"), parametre.get("rue"), parametre.get("ville"));
@@ -125,17 +126,21 @@ public class InscriptionServlet extends HttpServlet {
 			}
 		} 
 		
-		// Si listErreurs est différente de nulle on redirige vers la page d'accueil
+		// Si l'utilisateur est ajouté, on redirige vers la page d'accueil
 		if (utilisateurAjoute) {
 			// Redirection vers la page d'inscription :
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/AccueilConnexion.jsp");
-			rd.forward(request, response);
+			RequestDispatcher rd = request.getRequestDispatcher(ACCUEIL_CONNEXION_JSP);
+			if (rd != null) {
+				rd.forward(request, response);
+			}
 		} else {
-			// On ajoute les erreurs dans request :
+			// Si non, on ajoute les erreurs dans request et on retourne la page d'inscription
 			request.setAttribute("erreurs", listErreurs);
 			// Redirection vers la page d'inscription :
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/Inscription.jsp");
-			rd.forward(request, response);
+			RequestDispatcher rd = request.getRequestDispatcher(INSCRIPTION_JSP);
+			if (rd != null) {
+				rd.forward(request, response);
+			}
 		}
 	}
 
