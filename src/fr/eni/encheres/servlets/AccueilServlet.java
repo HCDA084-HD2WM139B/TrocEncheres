@@ -44,6 +44,7 @@ public class AccueilServlet extends HttpServlet {
 			}
 
 		System.out.println(listeCategories.toString());
+		System.out.println(listeCategories.toString());
 	}
 
 	/**
