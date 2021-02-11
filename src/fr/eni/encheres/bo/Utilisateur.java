@@ -2,10 +2,16 @@ package fr.eni.encheres.bo;
 
 import java.io.Serializable;
 
+/**
+ * Classe de la couche Métier BO modélisant un Utilisateur (Classe BEAN)
+ * @author Groupe 3
+ *
+ */
 public class Utilisateur implements Serializable {
 
 	// Attributs d'instance
 
+	private static final long serialVersionUID = 1L;
 	private Integer noUtilisateur;
 	private String pseudo;
 	private String nom;
@@ -19,20 +25,13 @@ public class Utilisateur implements Serializable {
 	private int credit;
 	private boolean administrateur;
 
-	// Constructeurs
-
+	// surcharge de Constructeurs
+	
 	public Utilisateur() {
 		noUtilisateur = null;
 	}
 
-	public Utilisateur(String pPseudo, String pNom, String pPrenom, String pEmail, String pTelephone, String pRue, String pCodePostal,
-			String pVille, String pMotDePasse, int pCredit, boolean pAdministrateur) {
-		
-		this(pPseudo,pNom,pPrenom,pEmail,pRue,pCodePostal,pVille,pMotDePasse,pCredit,pAdministrateur);
-		setTelephone(pTelephone);
-	}
 	
-
 	public Utilisateur(String pPseudo, String pNom, String pPrenom, String pEmail, String pRue, String pCodePostal,
 			String pVille, String pMotDePasse, int pCredit, boolean pAdministrateur) {
 		this();
@@ -46,7 +45,31 @@ public class Utilisateur implements Serializable {
 		setMotDePasse(pMotDePasse);
 		setCredit(pCredit);
 		setAdministrateur(pAdministrateur);
-
+	}
+	
+	public Utilisateur(String pPseudo, String pNom, String pPrenom, String pEmail, String pTelephone, String pRue, String pCodePostal,
+			String pVille, String pMotDePasse, int pCredit, boolean pAdministrateur) {
+		
+		this(pPseudo,pNom,pPrenom,pEmail,pRue,pCodePostal,pVille,pMotDePasse,pCredit,pAdministrateur);
+		setTelephone(pTelephone);
+	}
+	
+	public Utilisateur(Integer pNoUtilisateur, String pPseudo, String pNom, String pPrenom, String pEmail, String pTelephone, String pRue, String pCodePostal,
+			String pVille, String pMotDePasse, int pCredit, boolean pAdministrateur) {
+		
+		this(pPseudo,pNom,pPrenom,pEmail,pTelephone,pRue,pCodePostal,pVille,pMotDePasse,pCredit,pAdministrateur);
+		setNoUtilisateur(pNoUtilisateur);
+	}
+	
+	// Méthodes
+	
+	@Override
+	public String toString() {
+		String utilisateur = null;
+		String admin = (this.administrateur)? "OUI" : "NON" ;
+		utilisateur = String.format("User [id: %d - pseudo: %s - nom: %s - prenom: %s - email: %s - tel: %s - adresse: %s %s %s - MdP: %s - credit: %d - admin: %s ]", 
+				noUtilisateur, pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, credit, admin);
+		return utilisateur;
 	}
 
 	// Getters & Setters

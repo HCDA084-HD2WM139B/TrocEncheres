@@ -8,29 +8,35 @@ import java.sql.SQLException;
 import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bo.Utilisateur;
 
+/**
+ * Classe de la DAL implémentant l'interface UtilisateurDAO permettant de réaliser les requetes (CRUD) à l'entité utilisateur d'une Base de données SQL Server.
+ * @author Groupe 3
+ *
+ */
 public class UtilisateurDAOImpl implements UtilisateurDAO {
 
+	
+	// Constantes
 	private static final String INSERT_UTILISATEUR = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-	private static final String SELECT_BY_EMAIL = "SELECT * FROM UTILISATEURS WHERE email = ? ";
-	private static final String SELECT_BY_PSEUDO = "SELECT * FROM UTILISATEURS WHERE pseudo = ? ";
+	// le nom exact des colonnes dans la table utilisateur en BDD :
+	private static final String COLONNE_EMAIL = "email";
+	private static final String COLONNE_PSEUDO = "pseudo";
 
 	
-	
+
 	/**
-	 * Cette m�thode permet d'ajouter un utilisateur dans la base de donn�es ENCHERE_DB sur la table UTILISATEUR
+	 * Méthode permettant d'ajouter un utilisateur, passé en paramètre, dans la base de données sur la table UTILISATEUR.
+	 * @param utilisateur (Utilisateur) L'utilisateur à enregistrer.
 	 */
 	@Override
 	public void insertUtilisateur(Utilisateur utilisateur) throws BusinessException {
-		
 		// Si l'objet utilisateur est null, on enregistre un message d'erreur dans la businessException
 		if (utilisateur == null) {
 			BusinessException businessException = new BusinessException();
 			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_NULL);
 			throw businessException;
 		}
-		
 		// Sinon on lance la connexion
-		
 		try (Connection cnx = ConnectionProvider.getConnection(); 
 				PreparedStatement psmt = cnx.prepareStatement(INSERT_UTILISATEUR, PreparedStatement.RETURN_GENERATED_KEYS); ) {
 			// On pr�pare la requ�te SQL pour ins�rer un utilisateur et on r�cup�re l'ID g�n�r� par l'insertion
@@ -62,28 +68,37 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		}		
 	}
 	
+	
+	/**
+	 * Méthode retournant un utilisateur en fonction d'un identifiant, d'un mot de passe, et du type d'identifiant passés en paramètre.
+	 * @param pTypeRequete (String) Le type d'identifiant correspondant au nom exact de la colonne en table Utilisateur de la Base de données.
+	 * @param pIdentifiant (String) Le login valide saisie par l'utilisateur.
+	 * @param pMotDePasse (String) Le mot de passe valide saisie par l'utilisateur.
+	 * @return (Utilisateur) un utilisateur si les identifiants existent en base de données, sinon null.
+	 */
 	@Override
-	public Utilisateur selectByEmail(String pEmail) throws BusinessException {
-		
+	public Utilisateur selectByLogin(String pTypeRequete, String pIdentifiant, String pMotDePasse) throws BusinessException {
 		Utilisateur utilisateurTrouve = null;
-		
-		if (pEmail == null) {
+		// Vérification des paramètres (le type doit etre correct !)
+		if (pIdentifiant == null || pTypeRequete == null || pMotDePasse == null || ( !pTypeRequete.equals(COLONNE_EMAIL) && !pTypeRequete.equals(COLONNE_PSEUDO) ) ) {
 			// TODO changer code erreur
 			BusinessException businessException = new BusinessException();
 			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
 			throw businessException;
 		}
-	
-		try (Connection cnx = ConnectionProvider.getConnection(); 
-				PreparedStatement psmt = cnx.prepareStatement(SELECT_BY_EMAIL); ) {
-			
-			psmt.setString(1, pEmail);
-			
+		// on établit la requete SQL en fonction du type d'identifiant
+		String sql = "SELECT * FROM UTILISATEURS WHERE " + pTypeRequete + " = ? AND mot_de_passe = ?";
+		// Connexion à la BDD & Préparation de la requete (leurs fermetures y sont implicite)
+		try (Connection cnx = ConnectionProvider.getConnection(); PreparedStatement psmt = cnx.prepareStatement(sql) ) {
+			psmt.setString(1, pIdentifiant);
+			psmt.setString(2, pMotDePasse);
+			// Exécution de la requete
 			ResultSet rs = psmt.executeQuery();
+			// Si la requete retourne une ligne (on considère une seule réponse car l'email et le pseudo sont uniques en BDD)
 			if (rs.next()) {
-				System.out.println("user trouvé !");
-				// traitement du retour
+				// on hydrate notre nouvelle utilisateur
 				utilisateurTrouve = new Utilisateur(
+						rs.getInt("no_utilisateur"),
 						rs.getString("pseudo"),
 						rs.getString("nom"),
 						rs.getString("prenom"),
@@ -95,10 +110,8 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 						rs.getString("mot_de_passe"),
 						rs.getInt("credit"),
 						rs.getBoolean("administrateur"));
-				utilisateurTrouve.setNoUtilisateur(rs.getInt("no_utilisateur"));
 			}
-			
-			// S'il y a une erreur on l'enregistre dans la businessEx
+		// S'il y a une erreur on l'enregistre dans la businessEx
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 			BusinessException businessException = new BusinessException();
@@ -109,51 +122,5 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		return utilisateurTrouve;
 	}
 	
-	
-	@Override
-	public Utilisateur selectByPseudo(String pPseudo) throws BusinessException {
-		
-		Utilisateur utilisateurTrouve = null;
-		
-		if (pPseudo == null) {
-			// TODO changer code erreur
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
-			throw businessException;
-		}
-	
-		try (Connection cnx = ConnectionProvider.getConnection(); 
-				PreparedStatement psmt = cnx.prepareStatement(SELECT_BY_PSEUDO); ) {
-			
-			psmt.setString(1, pPseudo);
-			
-			ResultSet rs = psmt.executeQuery();
-			if (rs.next()) {
-				System.out.println("user trouvé !");
-				// traitement du retour
-				utilisateurTrouve = new Utilisateur(
-						rs.getString("pseudo"),
-						rs.getString("nom"),
-						rs.getString("prenom"),
-						rs.getString("email"),
-						rs.getString("telephone"),
-						rs.getString("rue"),
-						rs.getString("code_postal"),
-						rs.getString("ville"),
-						rs.getString("mot_de_passe"),
-						rs.getInt("credit"),
-						rs.getBoolean("administrateur"));
-				utilisateurTrouve.setNoUtilisateur(rs.getInt("no_utilisateur"));
-			}
-			
-			// S'il y a une erreur on l'enregistre dans la businessEx
-		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			//TODO Changer code d'erreur
-			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
-			throw businessException;
-		}	
-		return utilisateurTrouve;
-	}
+
 }

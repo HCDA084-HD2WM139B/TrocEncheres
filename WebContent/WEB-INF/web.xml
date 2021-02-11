@@ -12,4 +12,10 @@
     <servlet-name>JSP_ACCUEIL</servlet-name>
     <url-pattern>/encheres</url-pattern>
   </servlet-mapping>
+  
+  
+  <session-config>
+  	<session-timeout>1</session-timeout>
+  </session-config>
+
 </web-app>

@@ -39,7 +39,7 @@
         </ul>
       </div>
     </nav>
-    
+
     <div>
     	<h1 class="container text-center mt-4 mb-3">Liste des enchères</h1>
     </div>

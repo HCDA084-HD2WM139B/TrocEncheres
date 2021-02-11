@@ -53,7 +53,7 @@ public class ServletTestPoolConnexion extends HttpServlet {
 			UtilisateurDAO utilisateurDao = new UtilisateurDAOImpl();
 			//Utilisateur utilisateur = new Utilisateur("brebr", "grebre", "fzfz", "jo@campus-eni.fr", "0606060606", "19 boulevard", "44300", "Nantes", "azerty", 0, false);
 			try {
-				utilisateurDao.selectByEmail("jo@camus-eni.fr");
+				utilisateurDao.selectByLogin("email", "jo@camus-eni.fr", "azerty");
 				System.out.println("Ajout Ok");
 			} catch (BusinessException e) {
 				// TODO Auto-generated catch block
