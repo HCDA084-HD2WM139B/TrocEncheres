@@ -22,4 +22,11 @@ public class Categorie {
 	}
 	
 		
+	public Integer getnoCategorie() {
+		return noCategorie;
+	}
+	
+	public void setnoCategorie(Integer noCategorie) {
+		this.noCategorie = noCategorie;
+	}
 }
