@@ -142,28 +142,56 @@ public class EnchereManager {
      * Méthode vérifiant si la chaine de caractère passé en paramètre est vide.
      * @param pChampAverifier (String) la chaine de caractère.
      * @return True si la chaine de caractère n'est pas vide, sinon False.
-     */
-    public boolean verifierSiChampVide(String pChampAverifier) {
+     */    
+    public boolean verifierTailleChamp(String pChampAverifier, int tailleChamp) {
         boolean resultat = false;
-        if( !pChampAverifier.isEmpty()) {
-            resultat = true;
-        }
-        return resultat;
-    }
-
- 
-
-    
-    
-    public boolean verifierTailleChampMax(String pChampAverifier, int tailleChamp) {
-        boolean resultat = false;
-        if(pChampAverifier.length() > tailleChamp) {
+        if( pChampAverifier.length() > 2 && pChampAverifier.length() <= tailleChamp) {
             resultat = true;
         }
         return resultat;
     }
     
+    public int valeurMax(String pChampAverifier) {
+    	int valeurMax = 0;
+    	
+    	if (pChampAverifier.contains("pseudo") || pChampAverifier.contains("motDePasse")) {
+    		valeurMax = 8;
+    	} else if (pChampAverifier.contains("codePostal")) {
+    		valeurMax = 6;
+    	} else {
+    		valeurMax = 40;
+    	}
+    	return valeurMax;
+    }
     
+    public boolean getPseudoExiste(String pPseudo) throws BusinessException {
+    	boolean pseudoTrouve = false;
+    	pseudoTrouve = DAOFactory.getUtilisateurDAO().selectAllPseudo(pPseudo);
+        return pseudoTrouve;
+    }
+    
+    public boolean getEmailExiste(String pEmail) throws BusinessException {
+    	boolean emailTrouve = false;
+    	emailTrouve = DAOFactory.getUtilisateurDAO().selectAllEmail(pEmail);
+        return emailTrouve;
+    }
+    
+    public boolean verifMotDePasse(String pMotDePasse, String pConfirmation) throws BusinessException {
+    	boolean motDePasse = false;
+    	if(pMotDePasse.contains(pConfirmation)) {
+    		motDePasse = true;
+    	}
+    	return motDePasse;
+    }
+    
+    public Utilisateur getInsertUtilisateur(String pPseudo, String pPrenom, String pTelephone, String pCodePostal, String pMotDePasse, 
+    		String pNom, String pEmail, String pRue, String pVille) throws BusinessException {
+        Utilisateur utilisateurCree = new Utilisateur(pPseudo, pNom, pPrenom, pEmail, pTelephone, pRue, pCodePostal, pVille, pMotDePasse, 0, false);
+        utilisateurCree = DAOFactory.getUtilisateurDAO().insertUtilisateur(utilisateurCree);
+        // état applicatif : on enregistre l'utilisateur qui est connecté dans le manager :
+        this.utilisateurConnecte = utilisateurCree;
+        return utilisateurCree;
+    }
     
     // Getters & Setters
     private UtilisateurDAO getDAOUtilisateur() {

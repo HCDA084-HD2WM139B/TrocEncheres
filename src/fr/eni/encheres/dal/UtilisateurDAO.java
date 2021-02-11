@@ -11,12 +11,16 @@ import fr.eni.encheres.bo.Utilisateur;
 public interface UtilisateurDAO {
 
 	// Insertion d'un utilisateur dans l'application.
-	public void insertUtilisateur(Utilisateur utilisateur) throws BusinessException;
+	public Utilisateur insertUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
 	// Selection d'un utilisateur par ses identifiants de connexion.
 	public Utilisateur selectByLogin(String pTypeRequete, String pIdentifiant, String pMotDePasse) throws BusinessException;
 
-
+	// Selection de la liste des pseudo.
+	public boolean selectAllPseudo(String pPseudo) throws BusinessException;
+	
+	// Selection de la liste des email.
+	public boolean selectAllEmail(String pEmail) throws BusinessException;
 
 	
 }

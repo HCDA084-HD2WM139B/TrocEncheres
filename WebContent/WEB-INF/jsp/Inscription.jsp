@@ -27,7 +27,7 @@
 <div class="container">
 <h2>Mon profil</h2>
 <br/>
-<form action="/InscriptionServlet" method="post">
+<form action="<%= request.getContextPath() %>/inscription" method="post">
 
 <div class="row">
 <div class="col">

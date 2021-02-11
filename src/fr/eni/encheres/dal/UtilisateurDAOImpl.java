@@ -29,7 +29,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	 * @param utilisateur (Utilisateur) L'utilisateur à enregistrer.
 	 */
 	@Override
-	public void insertUtilisateur(Utilisateur utilisateur) throws BusinessException {
+	public Utilisateur insertUtilisateur(Utilisateur utilisateur) throws BusinessException {
 		// Si l'objet utilisateur est null, on enregistre un message d'erreur dans la businessException
 		if (utilisateur == null) {
 			BusinessException businessException = new BusinessException();
@@ -66,6 +66,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
 			throw businessException;
 		}		
+		return null;
 	}
 	
 	
@@ -122,5 +123,71 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		return utilisateurTrouve;
 	}
 	
+	@Override
+	public boolean selectAllPseudo(String pPseudo) throws BusinessException {
+		boolean pseudo = false;
+		// Vérification des paramètres (le type doit etre correct !)
+		if (pPseudo == null ) {
+			// TODO changer code erreur
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
+			throw businessException;
+		}
+		
+		// on établit la requete SQL en fonction du type d'identifiant
+		String sql = "SELECT * FROM UTILISATEURS WHERE pseudo = ?";
+		// Connexion à la BDD & Préparation de la requete (leurs fermetures y sont implicite)
+		try (Connection cnx = ConnectionProvider.getConnection(); PreparedStatement psmt = cnx.prepareStatement(sql) ) {
+			psmt.setString(1, pPseudo);
+			// Exécution de la requete
+			ResultSet rs = psmt.executeQuery();
+			// Si la requete retourne une ligne (on considère une seule réponse car l'email et le pseudo sont uniques en BDD)
+			if (rs.next()) {
+				pseudo = true;
+			}
+			
+		// S'il y a une erreur on l'enregistre dans la businessEx
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			//TODO Changer code d'erreur
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
+			throw businessException;
+		}	
+		return pseudo;
+	}
+	
+	@Override
+	public boolean selectAllEmail(String pEmail) throws BusinessException {
+		boolean email = false;
+		// Vérification des paramètres (le type doit etre correct !)
+		if (pEmail == null ) {
+			// TODO changer code erreur
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
+			throw businessException;
+		}
+		// on établit la requete SQL en fonction du type d'identifiant
+		String sql = "SELECT * FROM UTILISATEURS WHERE email = ?";
+		// Connexion à la BDD & Préparation de la requete (leurs fermetures y sont implicite)
+		try (Connection cnx = ConnectionProvider.getConnection(); PreparedStatement psmt = cnx.prepareStatement(sql) ) {
+			psmt.setString(1, pEmail);
+			// Exécution de la requete
+			ResultSet rs = psmt.executeQuery();
+			// Si la requete retourne une ligne (on considère une seule réponse car l'email et le pseudo sont uniques en BDD)
+			if (rs.next()) {
+				email = true;
+			}
+			
+		// S'il y a une erreur on l'enregistre dans la businessEx
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			//TODO Changer code d'erreur
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
+			throw businessException;
+		}	
+		return email;
+	}
 
 }
