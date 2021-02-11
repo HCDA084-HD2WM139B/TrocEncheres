@@ -14,7 +14,7 @@ public class CategorieDAOImpl implements CategorieDAO {
 	
 	private static final String SELECT_CATEGORIE = "SELECT * FROM categories";
 	
-	//Recuperer la liste des catégories 
+	//Recuperer la liste des catÃ©gories 
 	public List<Categorie> selectAllCategorie() {
 		
 		List<Categorie> ListCategories = new ArrayList<Categorie>();
@@ -23,12 +23,12 @@ public class CategorieDAOImpl implements CategorieDAO {
 			PreparedStatement pstmt = cnx.prepareStatement(SELECT_CATEGORIE);
 			ResultSet rs = pstmt.executeQuery();
 			
-			Categorie categorie = new Categorie();
-			
 			while ( rs.next() )
 			{
-					categorie = categorieBuilder(rs);
-					ListCategories.add(categorie);
+				Categorie categorie = new Categorie();
+                categorie.setnoCategorie(rs.getInt("no_categorie"));
+                categorie.setLibelle(rs.getString("libelle"));
+                ListCategories.add(categorie);
 			}
 			
 			
@@ -40,13 +40,5 @@ public class CategorieDAOImpl implements CategorieDAO {
 		return ListCategories;
 		
 	}
-	
-	private Categorie categorieBuilder(ResultSet rs) throws SQLException {
-		Categorie categorie = new Categorie();
-		
-		categorie.setnoCategorie(rs.getInt("no_categorie"));
-		categorie.setLibelle(rs.getString("libelle"));
-		
-		return categorie;
-	}
+
 }

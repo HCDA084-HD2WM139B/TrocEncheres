@@ -32,19 +32,18 @@ public class AccueilServlet extends HttpServlet {
 		CategorieManager categorieManager = new CategorieManager();
 		List<Categorie> listeCategories = null;
 		listeCategories = categorieManager.selectionnerToutesLesCategories();
+		System.out.println(listeCategories.toString());
 			if (listeCategories.isEmpty()) {
 				RequestDispatcher rd = request.getRequestDispatcher(JSP_CONNECTION);
 				rd.forward(request, response);
 			} else {
+				// Dépot du résultat dans l'espace d'échange (contexte de requete)
+				request.setAttribute(ATTRIBUT_LISTE_CATEGORIES, listeCategories);
 				// Transfert de l'affichage à la JSP
 				RequestDispatcher rd = request.getRequestDispatcher(JSP_ACCUEIL);
 				rd.forward(request, response);
-				// Dépot du résultat dans l'espace d'échange (contexte de requete)
-				request.setAttribute(ATTRIBUT_LISTE_CATEGORIES, listeCategories);
 			}
 
-		System.out.println(listeCategories.toString());
-		System.out.println(listeCategories.toString());
 	}
 
 	/**

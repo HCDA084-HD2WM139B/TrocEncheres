@@ -18,7 +18,7 @@
 	<%@include file="nav.jsp" %>
     
     <div>
-    	<h1 class="container text-center mt-4 mb-3">Liste des ench�res</h1>
+    	<h1 class="container text-center mt-4 mb-3">Liste des enchères</h1>
     </div>
     
     <div class="container d-flex justify-content-between align-items-center align-self-center flex-wrap">
@@ -34,13 +34,13 @@
     			 
     		
     			<aside class="input-group mt-2 mb-1">
-    				<label class="col-4" for="categories">Cat�gories :</label>
+    				<label class="col-4" for="categories">Catégories :</label>
     					<select class="col-8" name="categories" id="categories">
     						<option value"0">Toutes</option>
     						
     						<c:if test="${ ! empty listeCategories }">
 								<c:forEach items="${ listeCategories }" var="categorie">
-	    						<option value="<c:out value="${ categorie.noCategorie }"></c:out>">${ categorie.libelle }</option>
+	    						<option value="${ categorie.noCategorie }"><c:out value="${​​​​ categorie.libelle }​​​​"></c:out></option>
     							</c:forEach>
 							</c:if>
     					</select>
@@ -68,9 +68,9 @@
 			  		<img alt="img-default" class="img-thumbnail" src="https://zupimages.net/up/21/06/blep.png">
 			  	</div>
 			  	<div class="col-xl-7 col-md-5 d-flex flex-column">
-				    <a href="#" class="card-title badge badge-pill badge-dark">Ins�rez titre ici</a>
+				    <a href="#" class="card-title badge badge-pill badge-dark">Insérez titre ici</a>
 					<span>Prix : </span>
-					<span>Fin de l'ench�re : </span>
+					<span>Fin de l'enchère : </span>
 					<span class="mt-3">Vendeur : </span>
 			    </div>
 			  </div>
@@ -82,9 +82,9 @@
 			  		<img alt="img-default" class="img-thumbnail" src="https://zupimages.net/up/21/06/blep.png">
 			  	</div>
 			  	<div class="col-xl-7 col-md-5 d-flex flex-column">
-				    <a href="#" class="card-title badge badge-pill badge-dark">Ins�rez titre ici</a>
+				    <a href="#" class="card-title badge badge-pill badge-dark">Insérez titre ici</a>
 					<span>Prix : </span>
-					<span>Fin de l'ench�re : </span>
+					<span>Fin de l'enchère : </span>
 					<span class="mt-3">Vendeur : </span>
 			    </div>
 			  </div>
@@ -96,9 +96,9 @@
 			  		<img alt="img-default" class="img-thumbnail" src="https://zupimages.net/up/21/06/blep.png">
 			  	</div>
 			  	<div class="col-xl-7 col-md-5 d-flex flex-column">
-				    <a href="#" class="card-title badge badge-pill badge-dark">Ins�rez titre ici</a>
+				    <a href="#" class="card-title badge badge-pill badge-dark">Insérez titre ici</a>
 					<span>Prix : </span>
-					<span>Fin de l'ench�re : </span>
+					<span>Fin de l'enchère : </span>
 					<span class="mt-3">Vendeur : </span>
 			    </div>
 			  </div>
