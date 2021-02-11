@@ -154,9 +154,9 @@ public class EnchereManager {
     public int valeurMax(String pChampAverifier) {
     	int valeurMax = 0;
     	
-    	if (pChampAverifier.contains("pseudo") || pChampAverifier.contains("motDePasse")) {
+    	if (pChampAverifier.equals("pseudo") || pChampAverifier.equals("motDePasse")) {
     		valeurMax = 8;
-    	} else if (pChampAverifier.contains("codePostal")) {
+    	} else if (pChampAverifier.equals("codePostal")) {
     		valeurMax = 6;
     	} else {
     		valeurMax = 40;
@@ -178,7 +178,7 @@ public class EnchereManager {
     
     public boolean verifMotDePasse(String pMotDePasse, String pConfirmation) throws BusinessException {
     	boolean motDePasse = false;
-    	if(pMotDePasse.contains(pConfirmation)) {
+    	if(pMotDePasse.equals(pConfirmation)) {
     		motDePasse = true;
     	}
     	return motDePasse;

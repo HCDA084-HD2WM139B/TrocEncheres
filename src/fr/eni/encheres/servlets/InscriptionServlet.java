@@ -67,17 +67,17 @@ public class InscriptionServlet extends HttpServlet {
 			valeurMax = manager.valeurMax(entree.getKey());
 			// Vérification pour chaque champ si le nombre de caractère utilisé n'est pas inférieur au chiffre autorisé, sauf pour le champ téléphone qui peut être nul
 			if (!manager.verifierTailleChamp(entree.getValue(), valeurMax) && !entree.getKey().contains("telephone") ) {
-				System.out.println("Le champ " + entree.getKey() + " doit être compris entre 2 et " + valeurMax + "caractères.");
+				System.out.println("Le champ " + entree.getKey() + " doit être compris entre 2 et " + valeurMax + " caractères.");
 				request.setAttribute("erreurChampMin", "Le champ " + entree.getKey() + " ne peut pas être inférieur à deux caractères.");
 				champMin = false;
 			} else {
-				System.out.println("Le champ " + entree.getKey() + " est ok car compris entre 2 et " + valeurMax + "caractères." + " et il vaut: " + entree.getValue());
+				System.out.println("Le champ " + entree.getKey() + " est ok car compris entre 2 et " + valeurMax + " caractères." + " et il vaut: " + entree.getValue());
 			}
 		}
 		
 		// Vérification que le mot de passe est égal à la confirmation
 		try {
-			if (!manager.verifMotDePasse(parametre.get("motDePasse"), parametre.get("motDePasseConf"))) {
+			if (manager.verifMotDePasse(parametre.get("motDePasse"), parametre.get("motDePasseConf"))) {
 				System.out.println("Le mot de passe correpond");
 				System.out.println("mot de passe: " + parametre.get("motDePasse"));
 				System.out.println("confirmation: " + parametre.get("motDePasseConf"));
