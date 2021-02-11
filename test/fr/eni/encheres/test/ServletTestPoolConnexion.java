@@ -1,4 +1,4 @@
-package fr.eni.encheres.servlets;
+package fr.eni.encheres.test;
 
 import java.io.IOException;
 import java.io.PrintWriter;
