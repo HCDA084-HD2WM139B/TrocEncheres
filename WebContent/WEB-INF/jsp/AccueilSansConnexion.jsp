@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
     <%@page import="java.util.List"%>
     <%@page import="fr.eni.encheres.bo.Categorie"%>
@@ -40,13 +40,11 @@
     						
     						<c:if test="${ ! empty listeCategories }">
 								<c:forEach items="${ listeCategories }" var="categorie">
-	    						<option value="${ categorie.noCategorie }"><c:out value="${​​​​ categorie.libelle }​​​​"></c:out></option>
+	    						<option value ="${ categorie.noCategorie }"><c:out value="${ categorie.libelle }"></c:out></option>
     							</c:forEach>
 							</c:if>
     					</select>
     			</aside>
-    			<c:out value="${ requestScope.listeCategories.get(0) }"></c:out>
-    			<p>${ listeCategories.get(0) }</p>
     			 <aside class="d-none d-md-block d-lg-none mt-4 mb-4"><div class="input-group mt-1">
 				      <div class="input-group-prepend">
 				        <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
