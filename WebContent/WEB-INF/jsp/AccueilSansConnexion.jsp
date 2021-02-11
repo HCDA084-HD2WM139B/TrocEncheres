@@ -37,14 +37,16 @@
     				<label class="col-4" for="categories">Catégories :</label>
     					<select class="col-8" name="categories" id="categories">
     						<option value"0">Toutes</option>
+    						
     						<c:if test="${ ! empty listeCategories }">
 								<c:forEach items="${ listeCategories }" var="categorie">
-	    						<option value="${ categorie.noCategorie }">${ categorie.libelle }</option>
+	    						<option value="<c:out value="${ categorie.noCategorie }"></c:out>">${ categorie.libelle }</option>
     							</c:forEach>
 							</c:if>
     					</select>
     			</aside>
-    			
+    			<c:out value="${ requestScope.listeCategories.get(0) }"></c:out>
+    			<p>${ listeCategories.get(0) }</p>
     			 <aside class="d-none d-md-block d-lg-none mt-4 mb-4"><div class="input-group mt-1">
 				      <div class="input-group-prepend">
 				        <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>

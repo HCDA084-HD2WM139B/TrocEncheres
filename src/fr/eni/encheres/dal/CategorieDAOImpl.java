@@ -27,11 +27,8 @@ public class CategorieDAOImpl implements CategorieDAO {
 			
 			while ( rs.next() )
 			{
-				if( rs.getInt("no_categorie") != categorie.getnoCategorie() ){
 					categorie = categorieBuilder(rs);
 					ListCategories.add(categorie);
-				}
-				
 			}
 			
 			

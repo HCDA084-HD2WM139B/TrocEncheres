@@ -21,6 +21,7 @@ public class CategorieManager {
 	 */
 	public List<Categorie> selectionnerToutesLesCategories() {
 		return this.categorieDAO.selectAllCategorie();
+		
 	}
 
 }
