@@ -154,7 +154,7 @@ public class EnchereManager {
     public int valeurMax(String pChampAverifier) {
     	int valeurMax = 0;
     	
-    	if (pChampAverifier.equals("pseudo") || pChampAverifier.equals("motDePasse")) {
+    	if (pChampAverifier.equals("pseudo") || pChampAverifier.equals("motDePasse") || pChampAverifier.equals("motDePasseConf")) {
     		valeurMax = 8;
     	} else if (pChampAverifier.equals("codePostal")) {
     		valeurMax = 6;

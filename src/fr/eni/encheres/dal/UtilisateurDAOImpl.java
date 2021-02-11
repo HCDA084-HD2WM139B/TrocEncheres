@@ -18,6 +18,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	
 	// Constantes
 	private static final String INSERT_UTILISATEUR = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+	private static final String INSERT_CREDIT = "UPDATE UTILISATEURS SET credit = ? WHERE no_utilisateur = ?";
 	// le nom exact des colonnes dans la table utilisateur en BDD :
 	private static final String COLONNE_EMAIL = "email";
 	private static final String COLONNE_PSEUDO = "pseudo";
@@ -65,7 +66,25 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			BusinessException businessException = new BusinessException();
 			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
 			throw businessException;
-		}		
+		}
+		
+		if (utilisateur.getNoUtilisateur() <= 100) {
+					try (Connection cnx = ConnectionProvider.getConnection(); 
+							PreparedStatement psmt = cnx.prepareStatement(INSERT_CREDIT, PreparedStatement.RETURN_GENERATED_KEYS); ) {
+						// On pr�pare la requ�te SQL pour ins�rer un utilisateur et on r�cup�re l'ID g�n�r� par l'insertion
+						psmt.setInt(1, 100);
+						psmt.setInt(2, utilisateur.getNoUtilisateur());
+						// On execute la requ�te
+						psmt.executeUpdate();
+						// S'il y a une erreur on l'enregistre dans la businessEx
+					} catch (SQLException sqle) {
+						sqle.printStackTrace();
+						BusinessException businessException = new BusinessException();
+						businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
+						throw businessException;
+					}
+		}
+		
 		return null;
 	}
 	
