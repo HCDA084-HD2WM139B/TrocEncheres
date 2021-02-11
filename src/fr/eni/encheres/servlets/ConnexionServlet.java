@@ -42,7 +42,7 @@ public class ConnexionServlet extends HttpServlet {
 	private static final String MSG_ERROR_CONNEXION = "Identifiants incorrects.";
 	// redirections 
 	private static final String PAGE_CONNEXION = "WEB-INF/jsp/PageConnexion.jsp";
-	private static final String PAGE_ACCUEIL = "WEB-INF/jsp/AccueilConnexion.jsp";
+	private static final String PAGE_ACCUEIL_CONNECTE = "WEB-INF/jsp/AccueilConnexion.jsp";
 
 	
 	/**
@@ -135,13 +135,13 @@ public class ConnexionServlet extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher(PAGE_CONNEXION);
 			rd.forward(request, response);
 		} else {
-			// Redirection définitive à la page d'accueil :
-			RequestDispatcher rd = request.getRequestDispatcher(PAGE_ACCUEIL);
-			rd.forward(request, response);
 			// On ouvre une session :
 			HttpSession session = request.getSession();
 			// On ajoute l'Id utilisateur en attribut de session (pour pouvoir le reconnaitre)
 			session.setAttribute("utilisateurConnecte", utilisateurTrouve.getNoUtilisateur());
+			// Redirection définitive à la page d'accueil :
+			RequestDispatcher rd = request.getRequestDispatcher(PAGE_ACCUEIL_CONNECTE);
+			rd.forward(request, response);
 		}
 	}
 
