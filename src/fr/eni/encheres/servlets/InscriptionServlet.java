@@ -40,9 +40,6 @@ public class InscriptionServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// TODO à retirer après le test
-		System.out.println("Passage dans le DoGet");
-		
 		// Déclaration des variables
 		int valeurMax = 0;
 		boolean champMax = true;
@@ -131,7 +128,7 @@ public class InscriptionServlet extends HttpServlet {
 		// Si listErreurs est différente de nulle on redirige vers la page d'accueil
 		if (utilisateurAjoute) {
 			// Redirection vers la page d'inscription :
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/accueil.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/AccueilConnexion.jsp");
 			rd.forward(request, response);
 		} else {
 			// On ajoute les erreurs dans request :
