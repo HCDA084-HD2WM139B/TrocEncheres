@@ -15,7 +15,7 @@ public class CategorieManager {
 	}
 	
 	/**
-	 * Selectionne l'ensemble des repas depuis que l'application est déployée
+	 * Selectionne l'ensemble des categories depuis que l'application est déployée
 	 * @return
 	 * @throws BusinessException
 	 */

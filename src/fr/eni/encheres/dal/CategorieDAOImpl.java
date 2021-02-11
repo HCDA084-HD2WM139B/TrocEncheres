@@ -12,7 +12,7 @@ import fr.eni.encheres.bo.Categorie;
 
 public class CategorieDAOImpl implements CategorieDAO {
 	
-	private static final String SELECT_CATEGORIE = "SELECT * FROM categorie";
+	private static final String SELECT_CATEGORIE = "SELECT * FROM categories";
 	
 	//Recuperer la liste des catégories 
 	public List<Categorie> selectAllCategorie() {
@@ -27,7 +27,7 @@ public class CategorieDAOImpl implements CategorieDAO {
 			
 			while ( rs.next() )
 			{
-				if( rs.getInt("noCategorie") != categorie.getnoCategorie() ){
+				if( rs.getInt("no_categorie") != categorie.getnoCategorie() ){
 					categorie = categorieBuilder(rs);
 					ListCategories.add(categorie);
 				}
@@ -47,7 +47,7 @@ public class CategorieDAOImpl implements CategorieDAO {
 	private Categorie categorieBuilder(ResultSet rs) throws SQLException {
 		Categorie categorie = new Categorie();
 		
-		categorie.setnoCategorie(rs.getInt("noCategorie"));
+		categorie.setnoCategorie(rs.getInt("no_categorie"));
 		categorie.setLibelle(rs.getString("libelle"));
 		
 		return categorie;

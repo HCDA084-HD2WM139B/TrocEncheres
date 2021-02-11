@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"   %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    <%@page import="java.util.List"%>
+    <%@page import="fr.eni.encheres.bo.Categorie"%>
+    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -28,15 +31,17 @@
 				      </div>
       				  <input type="text" class="form-control" placeholder="Article" aria-label="Article" aria-describedby="basic-addon1">
     			 </div></aside>
+    			 
     		
     			<aside class="input-group mt-2 mb-1">
     				<label class="col-4" for="categories">Catégories :</label>
     					<select class="col-8" name="categories" id="categories">
-    						<option value="toutes">Toutes</option>
-    						<option value="informatique">Informatique</option>
-    						<option value="ameublement">Ameublement</option>
-    						<option value="vetements">Vetements</option>
-    						<option value="sport_loisirs">Sport & Loisirs</option>
+    						<option value"0">Toutes</option>
+    						<c:if test="${ ! empty listeCategories }">
+								<c:forEach items="${ listeCategories }" var="categorie">
+	    						<option value="${ categorie.noCategorie }">${ categorie.libelle }</option>
+    							</c:forEach>
+							</c:if>
     					</select>
     			</aside>
     			
