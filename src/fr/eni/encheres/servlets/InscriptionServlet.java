@@ -129,7 +129,7 @@ public class InscriptionServlet extends HttpServlet {
 		
 		// Si l'utilisateur est ajouté, on redirige vers la page d'accueil
 		if (utilisateurAjoute) {
-			// Redirection vers la page d'inscription :
+			// Redirection vers la page d'inscription:
 			RequestDispatcher rd = request.getRequestDispatcher(ACCUEIL_CONNEXION_JSP);
 			if (rd != null) {
 				rd.forward(request, response);
