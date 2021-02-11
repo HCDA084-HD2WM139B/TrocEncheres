@@ -22,7 +22,7 @@ import fr.eni.encheres.bo.Utilisateur;
  * @author Groupe 3
  *
  */
-@WebServlet("/cnx")
+@WebServlet("/connexion")
 public class ConnexionServlet extends HttpServlet {
 	
 	// Constantes :

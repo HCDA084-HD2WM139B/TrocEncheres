@@ -11,10 +11,10 @@
       <div class="col collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link text-white" href="<%=request.getContextPath()%>/seconnecter">Se connecter</a>
+            <a class="nav-link text-white" href="<c:url value="/connexion" />">Se connecter</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="<%=request.getContextPath()%>/inscription">S'inscrire</a>
+            <a class="nav-link text-white" href="<c:url value="/inscription" />">S'inscrire</a>
           </li>
         </ul>
       </div>
