@@ -20,6 +20,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	private static final String INSERT_UTILISATEUR = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	private static final String INSERT_CREDIT = "UPDATE UTILISATEURS SET credit = ? WHERE no_utilisateur = ?";
 	private static final String UPDATE_UTILISATEUR = "UPDATE UTILISATEURS SET pseudo =?, nom =?, prenom =?, email=?, telephone=?, rue=?, code_postal=?, ville=?, mot_de_passe=?";
+	private static final String SELECT_UTILISATEUR_BY_ID = "SELECT * FROM UTILISATEURS WHERE no_utilisateur = ?";
 	// le nom exact des colonnes dans la table utilisateur en BDD :
 	private static final String COLONNE_EMAIL = "email";
 	private static final String COLONNE_PSEUDO = "pseudo";
@@ -235,8 +236,44 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+	}
 	
+	@Override
+	public Utilisateur afficheUtilisateurbyId(int id) {
+
+		Utilisateur utilisateurTrouve = null;
+		try {
+			Connection cnx = ConnectionProvider.getConnection();
+		
+			PreparedStatement psmt = cnx.prepareStatement(SELECT_UTILISATEUR_BY_ID);
+			
+			psmt.setInt(1, id);
+			
+			ResultSet rs = psmt.executeQuery();
+			
+			if(rs.next()) {
+				utilisateurTrouve = new Utilisateur(
+						rs.getInt("no_utilisateur"),
+						rs.getString("pseudo"),
+						rs.getString("nom"),
+						rs.getString("prenom"),
+						rs.getString("email"),
+						rs.getString("telephone"),
+						rs.getString("rue"),
+						rs.getString("code_postal"),
+						rs.getString("ville"),
+						rs.getString("mot_de_passe"),
+						rs.getInt("credit"),
+						rs.getBoolean("administrateur"));
+			}
+
+		} catch (SQLException e) {
+			
+			//TODO ajouter code d'erreur
+			e.printStackTrace();
+		}
+		return utilisateurTrouve;
+
 		
 	}
 

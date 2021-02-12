@@ -143,6 +143,7 @@ public class ConnexionServlet extends HttpServlet {
 			// On ajoute l'Id utilisateur en attribut de session (pour pouvoir le reconnaitre)
 			session.setAttribute("utilisateurConnecte", "connecte");
 			session.setAttribute("pseudo", utilisateurTrouve.getPseudo());
+			session.setAttribute("id_utilisateur", utilisateurTrouve.getNoUtilisateur());
 			// Redirection définitive à la page d'accueil :
 			RequestDispatcher rd = request.getRequestDispatcher(SERVLET_ACCUEIL);
 			rd.forward(request, response);

@@ -232,12 +232,13 @@ public class EnchereManager {
     }
     
     
-    public Utilisateur getUtilisateurByID(int id) {​​​​
+    public Utilisateur getUtilisateurByID(int id) {
         Utilisateur utilisateurTrouve =null;
-
+       
         utilisateurTrouve = DAOFactory.getUtilisateurDAO().afficheUtilisateurbyId(id);
-
+       
         return utilisateurTrouve;
+        
     }
     
     public List<Article> getAllSales() throws BusinessException {

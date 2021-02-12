@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.bll.EnchereManager;
+import fr.eni.encheres.bo.Utilisateur;
 
 /**
  * Servlet implementation class MonProfilServlet
@@ -19,9 +20,22 @@ public class MonProfilServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
+		Utilisateur utilisateurTrouve= null;
+		
+		//Récupération du paramètre
+		String sNo_utilisateur = request.getParameter("id");
+		
+		//Transforme le type Vue en type Modele pour préparer l'appel au Modele.
+		int no_utilisateur = Integer.parseInt(sNo_utilisateur);
+		
 		EnchereManager manager = EnchereManager.getEnchereManager();
 		
-		request.getSession().getAttribute("utilisateurConnecte");
+		utilisateurTrouve = manager.getUtilisateurByID(no_utilisateur);
+		
+		System.out.println(utilisateurTrouve);
+		
+		request.setAttribute("afficheUtilisateur", utilisateurTrouve);
+
 
 		getServletContext().getRequestDispatcher("/WEB-INF/jsp/AfficheProfil.jsp").forward(request, response);
 		

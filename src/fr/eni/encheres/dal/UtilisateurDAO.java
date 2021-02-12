@@ -24,6 +24,7 @@ public interface UtilisateurDAO {
 	
 	//Mise à jour données utilisateur.
 	public void updateUtilisateur(Utilisateur utilisateur);
-
+	
+	public Utilisateur afficheUtilisateurbyId(int id);
 	
 }
