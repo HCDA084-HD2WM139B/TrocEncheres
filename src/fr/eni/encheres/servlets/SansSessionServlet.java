@@ -1,6 +1,7 @@
 package fr.eni.encheres.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -51,7 +52,7 @@ public class SansSessionServlet extends HttpServlet {
 
 			// Recherche des articles
 			listeArticles = enchereManager.getAllSales();
-
+			
 			// Recherche des categories
 			listeCategories = categorieManager.selectionnerToutesLesCategories();
 		} catch (BusinessException be) {
@@ -68,7 +69,7 @@ public class SansSessionServlet extends HttpServlet {
 		}
 		//TEST
 
-		if (!listeCategories.isEmpty() /* && !listeArticles.isEmpty() */ ) {
+		if (!listeCategories.isEmpty() && !listeArticles.isEmpty() ) {
 			
 			// D�pot du r�sultat dans l'espace d'�change (contexte de requete)
 			request.setAttribute(ATTRIBUT_LISTE_CATEGORIES, listeCategories);

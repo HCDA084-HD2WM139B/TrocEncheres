@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/deconnexion")
 public class DeconnexionServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String JSP_ACCUEILNONCONNECTE = "/WEB-INF/jsp/AccueilSansConnexion.jsp";
+	private static final String SERVLET_ACCUEIL = "/encheres";
        
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -26,7 +26,7 @@ public class DeconnexionServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		session.invalidate();		
 		
-		RequestDispatcher rd = request.getRequestDispatcher(JSP_ACCUEILNONCONNECTE);
+		RequestDispatcher rd = request.getRequestDispatcher(SERVLET_ACCUEIL);
 		rd.forward(request, response);
 		
 		
@@ -36,8 +36,7 @@ public class DeconnexionServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		// 
 	}
 
 }
