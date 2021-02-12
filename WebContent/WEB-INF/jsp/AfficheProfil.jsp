@@ -13,21 +13,42 @@
 </head>
 <body>
 
-<%@include file="nav.jsp" %>
+<%@include file="navVide.jsp" %>
     
-    <div id="profil">
+    <session class="container d-flex justify-content-center flex-column" id="profil">
     
-    <p>Pseudo : <c:out value="${ utilisateurConnecte }"> </c:out> </p>
+    	<h2 class="text-center mt-5 mb-5">Mon Profil</h2>
     
-    <p>Nom : </p>
-    <p>Prénom : </p>
-    <p>Email : </p>
-    <p>Téléphone : </p>
-    <p>Rue : </p>
-    <p>Code postal : </p>
-    <p>Ville : </p>
+    	<article class=" mb-4 text-center d-flex justify-content-center">
+    		<span class="col-3">Pseudo : </span> <span class="col-3"><c:out value="${ utilisateurConnecte }"></c:out></span>
+    	</article>
+    	<article class=" mb-4 text-center d-flex justify-content-center">
+    		<span class="col-3">Nom : </span> <span class="col-3"><c:out value=""></c:out></span>
+    	</article>
+    	<article class=" mb-4 text-center d-flex justify-content-center">
+    		<span class="col-3">Prénom : </span> <span class="col-3"><c:out value=""></c:out></span>
+    	</article>
+    	<article class=" mb-4 text-center d-flex justify-content-center">
+    		<span class="col-3">Email: </span> <span class="col-3"><c:out value=""></c:out></span>
+    	</article>
+    	<article class=" mb-4 text-center d-flex justify-content-center">
+    		<span class="col-3">Téléphone : </span> <span class="col-3"><c:out value=""></c:out></span>
+    	</article>
+    	<article class=" mb-4 text-center d-flex justify-content-center">
+    		<span class="col-3">Rue : </span> <span class="col-3"><c:out value=""></c:out></span>
+    	</article>
+    	<article class=" mb-4 text-center d-flex justify-content-center">
+    		<span class="col-3">Code Postal : </span> <span class="col-3"><c:out value=""></c:out></span>
+    	</article>
+    	<article class=" mb-4 text-center d-flex justify-content-center">
+    		<span class="col-3">Ville : </span> <span class="col-3"><c:out value=""></c:out></span>
+    	</article>
+    	<article class="mb-4 text-center d-flex justify-content-center">
+    		<a class="col-6 p-3 btn btn-primary" href="<c:url value="/modifierProfil" />">Modifier</a>
+    	</article>
     
-    </div>
+    
+    </session>
     
     
 </body>

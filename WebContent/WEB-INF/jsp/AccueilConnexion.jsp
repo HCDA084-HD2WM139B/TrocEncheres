@@ -32,7 +32,7 @@
             <a class="nav-link text-white" href="#">Vendre un objet</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="#">Mon Profil</a>
+            <a class="nav-link text-white" href="<c:url value="/monProfil"/>">Mon Profil</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-white" href="<c:url value="/deconnexion"/>">Déconnexion</a>
