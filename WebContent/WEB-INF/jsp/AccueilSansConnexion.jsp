@@ -1,16 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-    <%@page import="java.util.List"%>
-    <%@page import="fr.eni.encheres.bo.Categorie"%>
+<%@ page language="java" 
+		contentType="text/html; charset=UTF-8"
+    	pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
     
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@page import="java.util.List"%>
+<%@page import="fr.eni.encheres.bo.Categorie"%>
+    
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<script src="https://kit.fontawesome.com/7a045c691c.js" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
-<title>Accueil</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script src="https://kit.fontawesome.com/7a045c691c.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
+	<title>Accueil</title>
 </head>
 
 
@@ -38,19 +41,26 @@
     					<select class="col-8" name="categories" id="categories">
     						<option value"0">Toutes</option>
     						
+    						<!-- Traitement d'affichage de la liste déroulante des catégories -->
     						<c:if test="${ ! empty listeCategories }">
 								<c:forEach items="${ listeCategories }" var="categorie">
 	    						<option value ="${ categorie.noCategorie }"><c:out value="${ categorie.libelle }"></c:out></option>
     							</c:forEach>
 							</c:if>
+							
+							
     					</select>
     			</aside>
-    			 <aside class="d-none d-md-block d-lg-none mt-4 mb-4"><div class="input-group mt-1">
-				      <div class="input-group-prepend">
-				        <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
-				      </div>
-      				  <input type="text" class="form-control" placeholder="Article" aria-label="Article" aria-describedby="basic-addon1">
-    			 </div></aside>
+    			 <aside class="d-none d-md-block d-lg-none mt-4 mb-4">
+    			 	<div class="input-group mt-1">
+				     	<div class="input-group-prepend">
+				        	<span class="input-group-text" id="basic-addon1">
+				        		<i class="fas fa-search"></i>
+				        	</span>
+				     	</div>
+      				  	<input type="text" class="form-control" placeholder="Article" aria-label="Article" aria-describedby="basic-addon1">
+    			 	</div>
+    			 </aside>
     	</article>
     	<article class="col-xl-5 col-md-12">
     		<input type="submit" class="col-12 pt-3 pb-3 btn btn-primary" value="Rechercher">
@@ -60,48 +70,28 @@
     
     <div class="d-flex justify-content-between container mt-3 flex-wrap mb-5">
     
-    		<article class="card col-xl-5 col-md-12 d-flex mt-4">
-			  <div class="card-body d-flex">
-			  	<div class="col-xl-5 col-md-4">
-			  		<img alt="img-default" class="img-thumbnail" src="https://zupimages.net/up/21/06/blep.png">
-			  	</div>
-			  	<div class="col-xl-7 col-md-5 d-flex flex-column">
-				    <a href="#" class="card-title badge badge-pill badge-dark">Insérez titre ici</a>
-					<span>Prix : </span>
-					<span>Fin de l'enchère : </span>
-					<span class="mt-3">Vendeur : </span>
-			    </div>
-			  </div>
-    		</article>
-    		
-    		<article class="card col-xl-5 col-md-12 d-flex mt-4">
-			  <div class="card-body d-flex">
-			  	<div class="col-xl-5 col-md-4">
-			  		<img alt="img-default" class="img-thumbnail" src="https://zupimages.net/up/21/06/blep.png">
-			  	</div>
-			  	<div class="col-xl-7 col-md-5 d-flex flex-column">
-				    <a href="#" class="card-title badge badge-pill badge-dark">Insérez titre ici</a>
-					<span>Prix : </span>
-					<span>Fin de l'enchère : </span>
-					<span class="mt-3">Vendeur : </span>
-			    </div>
-			  </div>
-    		</article>
-    		
-    		<article class="card col-xl-5 col-md-12 d-flex mt-4">
-			  <div class="card-body d-flex">
-			  	<div class="col-xl-5 col-md-4">
-			  		<img alt="img-default" class="img-thumbnail" src="https://zupimages.net/up/21/06/blep.png">
-			  	</div>
-			  	<div class="col-xl-7 col-md-5 d-flex flex-column">
-				    <a href="#" class="card-title badge badge-pill badge-dark">Insérez titre ici</a>
-					<span>Prix : </span>
-					<span>Fin de l'enchère : </span>
-					<span class="mt-3">Vendeur : </span>
-			    </div>
-			  </div>
-    		</article>
-    		
+		<!-- Traitement d'affichage des Articles dont les enchères sont en cours -->
+    	<c:if test="${ ! empty listeArticles }">
+    		<c:forEach items="${ listeArticles }" var="article">
+	    		<article class="card col-xl-5 col-md-12 d-flex mt-4">
+				  <div class="card-body d-flex">
+				  	<div class="col-xl-5 col-md-4">
+				  		<img alt="img-default" class="img-thumbnail" src="https://zupimages.net/up/21/06/blep.png">
+				  	</div>
+				  	<div class="col-xl-7 col-md-5 d-flex flex-column">
+					    <a href="#" class="card-title badge badge-pill badge-dark">
+					    	<c:out value="${ article.nomArticle }"></c:out>
+					    </a>
+						<span>Prix : <c:out value="${ article.prixVente }"></c:out> </span>
+						<span>Fin de l'enchère : <c:out value="${ article.dateFinEchere }"></c:out> </span>
+						<span class="mt-3">Vendeur : <c:out value="${ article.vendeur.pseudo }"></c:out> </span>
+				    </div>
+				  </div>
+	    		</article>
+    		</c:forEach>
+    	</c:if>
+    
+    
     </div>
 
 </body>

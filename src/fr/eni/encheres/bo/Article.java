@@ -1,8 +1,13 @@
 package fr.eni.encheres.bo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Article {
+public class Article implements Serializable {
+	
+
+	private static final long serialVersionUID = 1L;
+	
 	private Integer noArticle;
 	private String nomArticle;
 	private String description;

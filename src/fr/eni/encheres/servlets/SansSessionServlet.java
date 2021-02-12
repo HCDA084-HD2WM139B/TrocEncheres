@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bll.CategorieManager;
+import fr.eni.encheres.bll.EnchereManager;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 
@@ -41,14 +43,30 @@ public class SansSessionServlet extends HttpServlet {
 		RequestDispatcher rd = null;
 		List<Categorie> listeCategories = null;
 		List<Article> listeArticles = null;
+		
 		// Appel à la BLL
-		CategorieManager categorieManager = new CategorieManager();
+		try {
+			CategorieManager categorieManager = new CategorieManager(); // TODO -> l'inclure dans enchereManager ? ou pas ?
+			EnchereManager enchereManager = EnchereManager.getEnchereManager();
 
-		// Recherche des articles
-		// listeArticles = categorieManager.(TODO Méthode)
+			// Recherche des articles
+			listeArticles = enchereManager.getAllSales();
 
-		// Recherche des categories
-		listeCategories = categorieManager.selectionnerToutesLesCategories();
+			// Recherche des categories
+			listeCategories = categorieManager.selectionnerToutesLesCategories();
+		} catch (BusinessException be) {
+			be.printStackTrace();
+		}
+		
+		//TEST (HJ)
+		for (Article article : listeArticles) {
+			System.out.println("-----------------------");
+			System.out.println("nom article : " + article.getNomArticle());
+			System.out.println("prix vente article : " + article.getPrixVente());
+			System.out.println("fin enchere article : " + article.getDateFinEchere().toString());
+			System.out.println("vendeur article : " + article.getVendeur().getPseudo());
+		}
+		//TEST
 
 		if (!listeCategories.isEmpty() /* && !listeArticles.isEmpty() */ ) {
 			

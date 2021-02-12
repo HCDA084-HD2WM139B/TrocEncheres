@@ -16,6 +16,12 @@
     <url-pattern>/encheres</url-pattern>
   </servlet-mapping>
   
+  <error-page>
+    <!-- Page introuvable -->
+    <error-code>404</error-code>
+    <location>/WEB-INF/jsp/Error404.jsp</location>
+  </error-page>
+  
   <session-config>
     <session-timeout>1</session-timeout>
   </session-config>
