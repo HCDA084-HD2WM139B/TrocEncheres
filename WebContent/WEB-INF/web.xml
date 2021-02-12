@@ -4,7 +4,7 @@
   <display-name>TrocEncheres</display-name>
   
   <welcome-file-list>
-    <welcome-file>/encheres</welcome-file>
+    <welcome-file>encheres</welcome-file>
   </welcome-file-list>
   
   <servlet>
