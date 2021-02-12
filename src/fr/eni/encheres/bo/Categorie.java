@@ -6,11 +6,12 @@ public class Categorie {
 	
 	public Categorie() {
 		noCategorie = null;
+		libelle = null;
 	}
 	
-	public Categorie(String libelle) {
-		super();
+	public Categorie(Integer noCategorie, String libelle) {
 		this.libelle = libelle;
+		this.noCategorie = noCategorie;
 	}
 
 	public String getLibelle() {

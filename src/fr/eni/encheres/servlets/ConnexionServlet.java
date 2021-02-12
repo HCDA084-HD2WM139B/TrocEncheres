@@ -42,13 +42,15 @@ public class ConnexionServlet extends HttpServlet {
 	private static final String MSG_ERROR_CONNEXION = "Identifiants incorrects.";
 	// redirections 
 	private static final String PAGE_CONNEXION = "WEB-INF/jsp/PageConnexion.jsp";
-	private static final String PAGE_ACCUEIL_CONNECTE = "WEB-INF/jsp/AccueilConnexion.jsp";
-
+	//private static final String PAGE_ACCUEIL_CONNECTE = "WEB-INF/jsp/AccueilConnexion.jsp";
+	private static final String SERVLET_ACCUEIL = "/encheres";
+	
 	
 	/**
 	 * Méthode GET de gestion de connexion à l'application (accès à la pageConnexion.jsp par l'URL)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		// Redirection définitive vers la pageConnexion.jsp
 		RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/jsp/PageConnexion.jsp");
 		rd.forward(request, response);
@@ -59,10 +61,11 @@ public class ConnexionServlet extends HttpServlet {
 	 * Méthode POST de gestion de connexion à l'application (accès à la page accueilConnexion.jsp par la réception des éléments du formulaire de connexion)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		// Récupération des paramètres du formulaire de connexion
 		String identifiant = request.getParameter("identifiant");
 		String motDePasse = request.getParameter("motDePasse");
-		
+
 		// Appel du manager (BLL)
 		EnchereManager manager = EnchereManager.getEnchereManager();
 		
@@ -138,9 +141,10 @@ public class ConnexionServlet extends HttpServlet {
 			// On ouvre une session :
 			HttpSession session = request.getSession();
 			// On ajoute l'Id utilisateur en attribut de session (pour pouvoir le reconnaitre)
-			session.setAttribute("utilisateurConnecte", utilisateurTrouve.getNoUtilisateur());
+			session.setAttribute("utilisateurConnecte", "connecte");
+			session.setAttribute("pseudo", utilisateurTrouve.getPseudo());
 			// Redirection définitive à la page d'accueil :
-			RequestDispatcher rd = request.getRequestDispatcher(PAGE_ACCUEIL_CONNECTE);
+			RequestDispatcher rd = request.getRequestDispatcher(SERVLET_ACCUEIL);
 			rd.forward(request, response);
 		}
 	}
