@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bll.EnchereManager;
 
@@ -35,6 +36,7 @@ public class InscriptionServlet extends HttpServlet {
 	private static final String PARAM_NOM = "nom";
 	private static final String PARAM_PSEUDO = "pseudo";
 	private static final String MOT_DE_PASSE_KO = "Le mot de passe ne correpond pas à la confirmation.";
+	private static final String EMAIL_KO = "Le format de l'email n'est pas correcte";
 	private static final String ACCUEIL_CONNEXION_JSP = "/WEB-INF/jsp/AccueilConnexion.jsp";
 	private static final String INSCRIPTION_JSP = "/WEB-INF/jsp/Inscription.jsp";
 	private static final long serialVersionUID = 1L;
@@ -60,6 +62,7 @@ public class InscriptionServlet extends HttpServlet {
 		boolean emailUtilise = true;
 		boolean erreurMotDePasse = true;
 		boolean utilisateurAjoute = false;
+		boolean formatEmail = false;
 		List<String> listErreurs = new ArrayList<String>();
 		
 		// Récupération des paramètres et stockage dans une Map pour un stockage clé / valeur
@@ -89,6 +92,17 @@ public class InscriptionServlet extends HttpServlet {
 			}
 		}
 		
+		// Vérification que le pseudo est alphanumérique
+		
+		// Vérification que le format de l'email est correcte
+		if(manager.verifFormatEmail(parametre.get(PARAM_EMAIL))) {
+			formatEmail = true;
+		} else {
+			listErreurs.add(EMAIL_KO);
+		}
+		
+		// Vérification que le code postal est numérique
+
 		// Vérification que le mot de passe est égal à la confirmation
 		try {
 			if (manager.verifMotDePasse(parametre.get(PARAM_MOT_DE_PASSE), parametre.get(PARAM_MOT_DE_PASSE_CONF))) {
@@ -126,7 +140,7 @@ public class InscriptionServlet extends HttpServlet {
 		}
 				
 		// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'utilisateur est ajouté à la base de données
-		if (tailleChamp == true && pseudoUtilise == false && emailUtilise == false && erreurMotDePasse == false) {
+		if (tailleChamp == true && pseudoUtilise == false && emailUtilise == false && erreurMotDePasse == false && formatEmail == true) {
 			try {
 				manager.getInsertUtilisateur(parametre.get(PARAM_PSEUDO), parametre.get(PARAM_PRENOM), parametre.get(PARAM_TELEPHONE), parametre.get(PARAM_CODE_POSTAL),
 						parametre.get(PARAM_MOT_DE_PASSE), parametre.get(PARAM_NOM), parametre.get(PARAM_EMAIL), parametre.get(PARAM_RUE), parametre.get(PARAM_VILLE));

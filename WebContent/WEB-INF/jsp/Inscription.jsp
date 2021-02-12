@@ -116,7 +116,7 @@
 
 <div class="d-flex justify-content-between mt-2">
 <div class="col-6"><button class="col-12 btn btn-success p-3 mt-2 mb-2" type="submit">Créer</button></div>
-<div class="col-6"><button class="col-12 btn btn-success p-3 mt-2 mb-2" onclick="window.location.replace('<%= request.getContextPath() %>/encheres')">Annuler</button></div>
+<div class="col-6"><button class="col-12 btn btn-success p-3 mt-2 mb-2" type="reset"  onclick="window.location.replace('<%= request.getContextPath() %>/encheres')">Annuler</button></div>
 </div>
 
 

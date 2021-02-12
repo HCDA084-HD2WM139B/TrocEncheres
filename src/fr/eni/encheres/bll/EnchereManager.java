@@ -197,6 +197,18 @@ public class EnchereManager {
     }
     
     /**
+     * Méthode permettant de vérifier la validé du mail
+     * @param pEmail
+     * @return True si le mail est au bon format
+     */
+    public boolean verifFormatEmail(String pEmail) {
+        Pattern p = Pattern
+                .compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
+        Matcher m = p.matcher(pEmail.toUpperCase());
+        return m.matches();
+    }
+    
+    /**
      * Méthode permettant d'ajouter un utilisateur dans la base de données
      * @param pPseudo chaîne de caractère représentant le pseudo
      * @param pPrenom chaîne de caractère représentant le prénom
