@@ -21,6 +21,9 @@ public interface UtilisateurDAO {
 	
 	// Selection de la liste des email.
 	public boolean selectAllEmail(String pEmail) throws BusinessException;
+	
+	//Mise à jour données utilisateur.
+	public void updateUtilisateur(Utilisateur utilisateur);
 
 	
 }

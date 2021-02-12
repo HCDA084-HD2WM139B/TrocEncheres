@@ -19,6 +19,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	// Constantes
 	private static final String INSERT_UTILISATEUR = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	private static final String INSERT_CREDIT = "UPDATE UTILISATEURS SET credit = ? WHERE no_utilisateur = ?";
+	private static final String UPDATE_UTILISATEUR = "UPDATE UTILISATEURS SET pseudo =?, nom =?, prenom =?, email=?, telephone=?, rue=?, code_postal=?, ville=?, mot_de_passe=?";
 	// le nom exact des colonnes dans la table utilisateur en BDD :
 	private static final String COLONNE_EMAIL = "email";
 	private static final String COLONNE_PSEUDO = "pseudo";
@@ -207,6 +208,36 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			throw businessException;
 		}	
 		return email;
+	}
+
+
+	@Override
+	public void updateUtilisateur(Utilisateur utilisateur) {
+		
+		try { 
+			
+			Connection cnx = ConnectionProvider.getConnection(); 
+		
+		PreparedStatement psmt = cnx.prepareStatement(UPDATE_UTILISATEUR);
+		
+		psmt.setString(1, utilisateur.getPseudo());
+		psmt.setString(2, utilisateur.getNom());
+		psmt.setString(3, utilisateur.getPrenom());
+		psmt.setString(4, utilisateur.getEmail());
+		psmt.setString(5, utilisateur.getTelephone());
+		psmt.setString(6, utilisateur.getRue());
+		psmt.setString(7, utilisateur.getCodePostal());
+		psmt.setString(8, utilisateur.getVille());
+		psmt.setString(8, utilisateur.getMotDePasse());
+
+		
+			psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	
+		
 	}
 
 }
