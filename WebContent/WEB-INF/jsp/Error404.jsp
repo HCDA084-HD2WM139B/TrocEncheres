@@ -1,6 +1,8 @@
 <%@ page language="java" 
 		contentType="text/html; charset=UTF-8"
     	pageEncoding="UTF-8"%>
+    	
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 
 <!DOCTYPE html>
 <html>
@@ -14,7 +16,9 @@
 <body>
 	<div class="alert alert-primary my-5 mx-5" role="alert">
 		<span class="font-weight-bold">ERROR 404 - </span>
-  		<span>Désolé... La page demandée est introuvable !</span>
+  		<span>Oups !!! ...Vous vous êtes perdu ?</span>
+  		<br>
+  		<a href="<c:url value="/encheres"/>">Retour au site : www.TrocEncheres.com</a>
 	</div>
 </body>
 </html>
