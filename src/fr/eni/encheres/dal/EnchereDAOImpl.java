@@ -37,6 +37,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 			
 			// tant que l'on a un article en retour
 			while ( rs.next() ) {
+				System.out.println("un article en enchere en cours trouvé ! (DAL)");
 				categorie = new Categorie(
 						rs.getInt("no_categorie"), 
 						rs.getString("libelle")
@@ -61,11 +62,15 @@ public class EnchereDAOImpl implements EnchereDAO {
 				psmt.setString(1, String.valueOf(rs.getInt("no_article")) );
 				rs_bis = psmt.executeQuery();
 				if(rs_bis.next()) {
-					if(rs_bis.getInt("best_enchere") > rs.getInt("prix_vente") ) {
+					System.out.println("best enchere => " + rs_bis.getInt("best_enchere"));
+					System.out.println("prix enchere => " + rs.getInt("prix_initial"));
+					if(rs_bis.getInt("best_enchere") > rs.getInt("prix_initial") ) {
 						prixVente = rs_bis.getInt("best_enchere");
 					} else {
-						prixVente = rs.getInt("prix_vente");
+						prixVente = rs.getInt("prix_initial");
 					}
+				} else {
+					prixVente = rs.getInt("prix_initial");
 				}
 				// on hydrate l'instance Article
 				article = new Article(
@@ -73,7 +78,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 						rs.getString("nom_article"), 
 						rs.getString("description"), 
 						rs.getDate("date_debut_encheres"), 
-						rs.getDate("date_fin-encheres"), 
+						rs.getDate("date_fin_encheres"), 
 						rs.getInt("prix_initial"), 
 						prixVente, 
 						categorie,

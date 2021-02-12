@@ -1,11 +1,14 @@
 package fr.eni.encheres.bll;
  
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
  
 
 import fr.eni.encheres.BusinessException;
+import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.DAOFactory;
 import fr.eni.encheres.dal.UtilisateurDAO;
@@ -20,11 +23,13 @@ public class EnchereManager {
     // Attributs d'instance
     private UtilisateurDAO DAOutilisateur;
     private Utilisateur utilisateurConnecte;
+    private List<Article> listeArticlesEnchereEnCours;
     
     // Constructeurs
     private EnchereManager() {
         this.DAOutilisateur = DAOFactory.getUtilisateurDAO();
         this.utilisateurConnecte = null;
+        this.listeArticlesEnchereEnCours = new ArrayList<Article>();
     }
     
     // Méthode static pour obtenir une instance d'EnchereManager
@@ -213,6 +218,16 @@ public class EnchereManager {
         this.utilisateurConnecte = utilisateurCree;
         return utilisateurCree;
     }
+    
+    
+    public List<Article> getAllSales() throws BusinessException {
+    	List<Article> listeArticle = null;
+    	listeArticle = DAOFactory.getEnchereDAO().selectAllSales();
+    	// état applicatif : on enregistre la liste des encheres en cours dans le manager :
+    	this.listeArticlesEnchereEnCours = listeArticle;
+    	return listeArticle;
+    }
+    
     
     // Getters & Setters
     private UtilisateurDAO getDAOUtilisateur() {
