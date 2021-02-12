@@ -24,6 +24,16 @@ import fr.eni.encheres.bll.EnchereManager;
  */
 @WebServlet("/inscription")
 public class InscriptionServlet extends HttpServlet {
+	private static final String PARAM_MOT_DE_PASSE_CONF = "motDePasseConf";
+	private static final String PARAM_MOT_DE_PASSE = "motDePasse";
+	private static final String PARAM_VILLE = "ville";
+	private static final String PARAM_CODE_POSTAL = "codePostal";
+	private static final String PARAM_RUE = "rue";
+	private static final String PARAM_TELEPHONE = "telephone";
+	private static final String PARAM_EMAIL = "email";
+	private static final String PARAM_PRENOM = "prenom";
+	private static final String PARAM_NOM = "nom";
+	private static final String PARAM_PSEUDO = "pseudo";
 	private static final String MOT_DE_PASSE_KO = "Le mot de passe ne correpond pas à la confirmation.";
 	private static final String ACCUEIL_CONNEXION_JSP = "/WEB-INF/jsp/AccueilConnexion.jsp";
 	private static final String INSCRIPTION_JSP = "/WEB-INF/jsp/Inscription.jsp";
@@ -55,16 +65,16 @@ public class InscriptionServlet extends HttpServlet {
 		// Récupération des paramètres et stockage dans une Map pour un stockage clé / valeur
 		// LinkedHashMap permet d'utiliser les clés dans l'ordre d'insertion
 		Map<String, String> parametre = new LinkedHashMap<String, String>();
-		parametre.put("pseudo", request.getParameter("pseudo"));
-		parametre.put("nom", request.getParameter("nom"));
-		parametre.put("prenom", request.getParameter("prenom"));
-		parametre.put("email", request.getParameter("email"));
-		parametre.put("telephone", request.getParameter("telephone"));
-		parametre.put("rue", request.getParameter("rue"));
-		parametre.put("codePostal", request.getParameter("codePostal"));
-		parametre.put("ville", request.getParameter("ville"));
-		parametre.put("motDePasse", request.getParameter("motDePasse"));		
-		parametre.put("motDePasseConf", request.getParameter("motDePasseConf"));
+		parametre.put(PARAM_PSEUDO, request.getParameter(PARAM_PSEUDO));
+		parametre.put(PARAM_NOM, request.getParameter(PARAM_NOM));
+		parametre.put(PARAM_PRENOM, request.getParameter(PARAM_PRENOM));
+		parametre.put(PARAM_EMAIL, request.getParameter(PARAM_EMAIL));
+		parametre.put(PARAM_TELEPHONE, request.getParameter(PARAM_TELEPHONE));
+		parametre.put(PARAM_RUE, request.getParameter(PARAM_RUE));
+		parametre.put(PARAM_CODE_POSTAL, request.getParameter(PARAM_CODE_POSTAL));
+		parametre.put(PARAM_VILLE, request.getParameter(PARAM_VILLE));
+		parametre.put(PARAM_MOT_DE_PASSE, request.getParameter(PARAM_MOT_DE_PASSE));		
+		parametre.put(PARAM_MOT_DE_PASSE_CONF, request.getParameter(PARAM_MOT_DE_PASSE_CONF));
 		
 		// Appel du manager pour appeler les méthodes
 		EnchereManager manager = EnchereManager.getEnchereManager();
@@ -73,7 +83,7 @@ public class InscriptionServlet extends HttpServlet {
 			// La taille maximum du champ est défini par la méthode valeurMax()
 			valeurMax = manager.valeurMax(entree.getKey());
 			// Vérification de la taille du champ qui doit être compris entre deux et valeurMax. (Le champ téléphone est exclu car il peut être nul
-			if (!manager.verifierTailleChamp(entree.getValue(), valeurMax) && !entree.getKey().contains("telephone") ) {
+			if (!manager.verifierTailleChamp(entree.getValue(), valeurMax) && !entree.getKey().contains(PARAM_TELEPHONE) ) {
 				listErreurs.add("Le champ " + entree.getKey() + " doit être compris entre 2 et " + valeurMax + " caractères.");
 				tailleChamp = false;
 			}
@@ -81,7 +91,7 @@ public class InscriptionServlet extends HttpServlet {
 		
 		// Vérification que le mot de passe est égal à la confirmation
 		try {
-			if (manager.verifMotDePasse(parametre.get("motDePasse"), parametre.get("motDePasseConf"))) {
+			if (manager.verifMotDePasse(parametre.get(PARAM_MOT_DE_PASSE), parametre.get(PARAM_MOT_DE_PASSE_CONF))) {
 				erreurMotDePasse = false;
 			} else {
 				listErreurs.add(MOT_DE_PASSE_KO);
@@ -93,10 +103,10 @@ public class InscriptionServlet extends HttpServlet {
 		
 		// Vérification dans la base de données si le pseudo est déjà utilisé
 		try {
-			if (!manager.getPseudoExiste(parametre.get("pseudo"))){
+			if (!manager.getPseudoExiste(parametre.get(PARAM_PSEUDO))){
 				pseudoUtilise = false;
 			} else {
-				listErreurs.add("Le pseudo " + parametre.get("pseudo") + " est déjà utilisé.");
+				listErreurs.add("Le pseudo " + parametre.get(PARAM_PSEUDO) + " est déjà utilisé.");
 			}
 		} catch (BusinessException e) {
 			// TODO Auto-generated catch block
@@ -105,10 +115,10 @@ public class InscriptionServlet extends HttpServlet {
 		
 		// Vérification dans la base de données si l'email est déjà utilisé
 		try {
-			if (!manager.getEmailExiste(parametre.get("email"))){
+			if (!manager.getEmailExiste(parametre.get(PARAM_EMAIL))){
 				emailUtilise = false;
 			} else {
-				listErreurs.add("L'email " + parametre.get("email") + " est déjà utilisé.");
+				listErreurs.add("L'email " + parametre.get(PARAM_EMAIL) + " est déjà utilisé.");
 			}
 		} catch (BusinessException e) {
 			// TODO Auto-generated catch block
@@ -118,8 +128,8 @@ public class InscriptionServlet extends HttpServlet {
 		// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'utilisateur est ajouté à la base de données
 		if (tailleChamp == true && pseudoUtilise == false && emailUtilise == false && erreurMotDePasse == false) {
 			try {
-				manager.getInsertUtilisateur(parametre.get("pseudo"), parametre.get("prenom"), parametre.get("telephone"), parametre.get("codePostal"),
-						parametre.get("motDePasse"), parametre.get("nom"), parametre.get("email"), parametre.get("rue"), parametre.get("ville"));
+				manager.getInsertUtilisateur(parametre.get(PARAM_PSEUDO), parametre.get(PARAM_PRENOM), parametre.get(PARAM_TELEPHONE), parametre.get(PARAM_CODE_POSTAL),
+						parametre.get(PARAM_MOT_DE_PASSE), parametre.get(PARAM_NOM), parametre.get(PARAM_EMAIL), parametre.get(PARAM_RUE), parametre.get(PARAM_VILLE));
 				utilisateurAjoute = true;
 			} catch (BusinessException e) {
 				// TODO Auto-generated catch block
