@@ -3,9 +3,13 @@ package fr.eni.encheres.bo;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Cette classe permet de générer un article 
+ * @author groupe 3
+ * 
+ */
 public class Article implements Serializable {
 	
-
 	private static final long serialVersionUID = 1L;
 	
 	private Integer noArticle;
@@ -23,7 +27,19 @@ public class Article implements Serializable {
 	public Article() {
 		noArticle = null;
 	}
-	
+
+	/**
+	 * Ce constructeur permet de créer un article
+	 * @param noArticle : numéro de l'article
+	 * @param nomArticle : nom de l'article 
+	 * @param description : description de l'article
+	 * @param dateDebutEnchere : date de début de l'enchère
+	 * @param dateFinEchere : date de fin de l'enchère
+	 * @param prixInitial : prix initial décidé par le vendeur
+	 * @param prixVente : prix final de l'enchère
+	 * @param categorie : catégorie à laquelle l'article appartient
+	 * @param vendeur : utilisateur 
+	 */
 	public Article(int noArticle, String nomArticle, String description, Date dateDebutEnchere, Date dateFinEchere,
 			int prixInitial, int prixVente, Categorie categorie, Utilisateur vendeur) {
 		super();

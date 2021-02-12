@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 
 /**
  * Cette classe permet de lire le contenu du fichier messages_erreur.properties
- * @author Administrator
+ * @author Groupe 3
  *
  */
 public abstract class LecteurMessage {
@@ -40,7 +40,7 @@ public abstract class LecteurMessage {
 			}
 			else
 			{
-				message="Problème à la lecture du fichier contenant les messages";
+				message="Problï¿½me ï¿½ la lecture du fichier contenant les messages";
 			}
 		}
 		catch (Exception e) {

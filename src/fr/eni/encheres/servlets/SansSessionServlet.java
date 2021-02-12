@@ -12,13 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.eni.encheres.BusinessException;
-import fr.eni.encheres.bll.CategorieManager;
 import fr.eni.encheres.bll.EnchereManager;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 
 /**
  * Servlet implementation class SansSessionServlet
+ * Servlet contrôlant l'accès aux pages non connecté (en fonction s'il y a des enchères en cours)
+ * 
  */
 @WebServlet("/sanssession")
 public class SansSessionServlet extends HttpServlet {
@@ -47,14 +48,13 @@ public class SansSessionServlet extends HttpServlet {
 		
 		// Appel à la BLL
 		try {
-			CategorieManager categorieManager = new CategorieManager(); // TODO -> l'inclure dans enchereManager ? ou pas ?
 			EnchereManager enchereManager = EnchereManager.getEnchereManager();
 
 			// Recherche des articles
 			listeArticles = enchereManager.getAllSales();
 			
 			// Recherche des categories
-			listeCategories = categorieManager.selectionnerToutesLesCategories();
+			listeCategories = enchereManager.selectionnerToutesLesCategories();
 		} catch (BusinessException be) {
 			be.printStackTrace();
 		}
@@ -71,10 +71,10 @@ public class SansSessionServlet extends HttpServlet {
 
 		if (!listeCategories.isEmpty() && !listeArticles.isEmpty() ) {
 			
-			// D�pot du r�sultat dans l'espace d'�change (contexte de requete)
+			// Dépot du résultat dans l'espace d'échange (contexte de requete)
 			request.setAttribute(ATTRIBUT_LISTE_CATEGORIES, listeCategories);
 			request.setAttribute(ATTRIBUT_LISTE_ARTICLES, listeArticles);
-			// Transfert de l'affichage � la JSP
+			// Transfert de l'affichage à la JSP
 			rd = request.getRequestDispatcher(JSP_ACCUEIL_SANS_CONNEXION);
 			rd.forward(request, response);
 		} else {
@@ -86,14 +86,13 @@ public class SansSessionServlet extends HttpServlet {
 	}
 
 	
-	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//
+		
 	}
 
 }

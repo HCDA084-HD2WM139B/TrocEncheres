@@ -15,8 +15,7 @@ import fr.eni.encheres.bo.Utilisateur;
  */
 public class UtilisateurDAOImpl implements UtilisateurDAO {
 
-	
-	// Constantes
+	// Constantes des requêtes SQL
 	private static final String INSERT_UTILISATEUR = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	private static final String INSERT_CREDIT = "UPDATE UTILISATEURS SET credit = ? WHERE no_utilisateur = ?";
 	private static final String UPDATE_UTILISATEUR = "UPDATE UTILISATEURS SET pseudo =?, nom =?, prenom =?, email=?, telephone=?, rue=?, code_postal=?, ville=?, mot_de_passe=?";
@@ -42,7 +41,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		// Sinon on lance la connexion
 		try (Connection cnx = ConnectionProvider.getConnection(); 
 				PreparedStatement psmt = cnx.prepareStatement(INSERT_UTILISATEUR, PreparedStatement.RETURN_GENERATED_KEYS); ) {
-			// On pr�pare la requ�te SQL pour ins�rer un utilisateur et on r�cup�re l'ID g�n�r� par l'insertion
+			// On prépare la requête SQL pour insérer un utilisateur et on récupère l'ID généré par l'insertion
 			psmt.setString(1, utilisateur.getPseudo());
 			psmt.setString(2, utilisateur.getNom());
 			psmt.setString(3, utilisateur.getPrenom());
@@ -73,10 +72,10 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		if (utilisateur.getNoUtilisateur() <= 100) {
 					try (Connection cnx = ConnectionProvider.getConnection(); 
 							PreparedStatement psmt = cnx.prepareStatement(INSERT_CREDIT, PreparedStatement.RETURN_GENERATED_KEYS); ) {
-						// On pr�pare la requ�te SQL pour ins�rer un utilisateur et on r�cup�re l'ID g�n�r� par l'insertion
+						// On prépare la requête SQL pour insérer un utilisateur et on récupère l'ID généré par l'insertion
 						psmt.setInt(1, 100);
 						psmt.setInt(2, utilisateur.getNoUtilisateur());
-						// On execute la requ�te
+						// On execute la requête
 						psmt.executeUpdate();
 						// S'il y a une erreur on l'enregistre dans la businessEx
 					} catch (SQLException sqle) {
@@ -103,7 +102,6 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		Utilisateur utilisateurTrouve = null;
 		// Vérification des paramètres (le type doit etre correct !)
 		if (pIdentifiant == null || pTypeRequete == null || pMotDePasse == null || ( !pTypeRequete.equals(COLONNE_EMAIL) && !pTypeRequete.equals(COLONNE_PSEUDO) ) ) {
-			// TODO changer code erreur
 			BusinessException businessException = new BusinessException();
 			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
 			throw businessException;
@@ -137,19 +135,22 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 			BusinessException businessException = new BusinessException();
-			//TODO Changer code d'erreur
 			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
 			throw businessException;
 		}	
 		return utilisateurTrouve;
 	}
 	
+	/**
+	 * Méthode sélectionnant toute la liste des pseudos des utilisateurs enregistrés en base de données 
+	 * afin de vérifier si l'utilisateur à inscrire ne choisisse pas un pseudo déjà existant.
+	 * 
+	 */
 	@Override
 	public boolean selectAllPseudo(String pPseudo) throws BusinessException {
 		boolean pseudo = false;
 		// Vérification des paramètres (le type doit etre correct !)
 		if (pPseudo == null ) {
-			// TODO changer code erreur
 			BusinessException businessException = new BusinessException();
 			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
 			throw businessException;
@@ -171,19 +172,22 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 			BusinessException businessException = new BusinessException();
-			//TODO Changer code d'erreur
 			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
 			throw businessException;
 		}	
 		return pseudo;
 	}
 	
+	/**
+	 * Méthode sélectionnant toute la liste des emails des utilisateurs enregistrés en base de données 
+	 * afin de vérifier si l'utilisateur à inscrire ne choisisse pas un email déjà existant.
+	 * 
+	 */
 	@Override
 	public boolean selectAllEmail(String pEmail) throws BusinessException {
 		boolean email = false;
 		// Vérification des paramètres (le type doit etre correct !)
 		if (pEmail == null ) {
-			// TODO changer code erreur
 			BusinessException businessException = new BusinessException();
 			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
 			throw businessException;
@@ -204,14 +208,16 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
 			BusinessException businessException = new BusinessException();
-			//TODO Changer code d'erreur
 			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
 			throw businessException;
 		}	
 		return email;
 	}
 
-
+	/**
+	 * Méthode permettant de mettre à jour le profil d'un utilisateur.
+	 */
+	//TODO écrire les commentaires 
 	@Override
 	public void updateUtilisateur(Utilisateur utilisateur) {
 		
@@ -238,6 +244,10 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		}
 	}
 	
+	/**
+	 * Méthode retournant un utilisateur par son numéro d'identifiant
+	 */
+	//TODO écrire les commentaires 
 	@Override
 	public Utilisateur afficheUtilisateurbyId(int id) {
 

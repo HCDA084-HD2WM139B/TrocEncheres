@@ -8,11 +8,16 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+/**
+ * Cette classe permet de se connecter à la base de données 
+ * @author groupe 3
+ *
+ */
 abstract class ConnectionProvider {
 	private static DataSource dataSource;
 	
 	/**
-	 * Au chargement de la classe, la DataSource est recherch�e dans l'arbre JNDI
+	 * Au chargement de la classe, la DataSource est recherchée dans l'arbre JNDI
 	 */
 	static
 	{
@@ -27,8 +32,8 @@ abstract class ConnectionProvider {
 	}
 	
 	/**
-	 * Cette m�thode retourne une connection op�rationnelle issue du pool de connexion
-	 * vers la base de donn�es. 
+	 * Cette méthode retourne une connection opérationnelle issue du pool de connexion
+	 * vers la base de données. 
 	 * @return
 	 * @throws SQLException
 	 */

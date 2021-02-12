@@ -31,7 +31,18 @@ public class Utilisateur implements Serializable {
 		noUtilisateur = null;
 	}
 
-	
+	/**
+	 * @param pPseudo : désigne le pseudo de l'utilisateur
+	 * @param pNom : désigne le nom de l'utilisateur
+	 * @param pPrenom : désigne le prénom de l'utilisateur
+	 * @param pEmail : désigne le email de l'utilisateur
+	 * @param pRue : désigne le rue de l'utilisateur
+	 * @param pCodePostal : désigne le code postal de l'utilisateur
+	 * @param pVille : désigne le ville de l'utilisateur
+	 * @param pMotDePasse : désigne le mot de passe de l'utilisateur
+	 * @param pCredit : désigne le crédit de l'utilisateur
+	 * @param pAdministrateur : précise si l'utilisateur est administrateur ou non
+	 */
 	public Utilisateur(String pPseudo, String pNom, String pPrenom, String pEmail, String pRue, String pCodePostal,
 			String pVille, String pMotDePasse, int pCredit, boolean pAdministrateur) {
 		this();
@@ -63,6 +74,9 @@ public class Utilisateur implements Serializable {
 	
 	// Méthodes
 	
+	/**
+	 * Méthode permettant d'afficher les informations de l'utilisateur
+	 */
 	@Override
 	public String toString() {
 		String utilisateur = null;

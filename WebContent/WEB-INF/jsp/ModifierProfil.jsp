@@ -1,14 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c" %>
-    
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<script src="https://kit.fontawesome.com/7a045c691c.js" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
+<%@include file="head.jsp" %>
+ 
 <title>Modifier mon Profil</title>
 </head>
 <body>
@@ -32,7 +23,7 @@
 		</article>
 		<article class="d-flex col-12 mb-4">
 			<div class="col-6">
-				<label class="col-5" for="prenom">PrÃ©nom : </label>
+				<label class="col-5" for="prenom">Prénom : </label>
 				<input class="col-6" name="prenom" id="prenom" value="<c:out value=""></c:out>">
 			</div>
 			<div class="col-6">
@@ -42,7 +33,7 @@
 		</article>
 		<article class="d-flex col-12 mb-4">
 			<div class="col-6">
-				<label class="col-5" for="tel">TÃ©lÃ©phone : </label>
+				<label class="col-5" for="tel">Téléphone : </label>
 				<input class="col-6" name="tel" id="tel" value="<c:out value=""></c:out>">
 			</div>
 			<div class="col-6">
@@ -81,7 +72,7 @@
 		
 	   <article class="d-flex col-12 mb-4">
 	   		<div class="col-6">
-	   			<span class="col-5">CrÃ©dit : </span>
+	   			<span class="col-5">Crédit : </span>
 	   			<span class="col-6"><c:out value=""></c:out></span>
 	   		</div>
 	   </article>
@@ -92,10 +83,7 @@
 		   <a class="col-6 btn btn-danger p-2 ml-2" href="<c:url value="/supprimerProfil" />">Supprimer mon compte</a>
 	   </div>
 	   </article>
-		
-		
-		
-		
+
 		</form>
 	
 	</section>

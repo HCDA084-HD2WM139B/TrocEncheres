@@ -1,13 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix = "c" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<script src="https://kit.fontawesome.com/7a045c691c.js" crossorigin="anonymous"></script>
-<script src="script.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
+<%@include file="head.jsp" %>
 <title>Accueil</title>
 </head>
 
@@ -15,7 +6,7 @@
 <body>
 <nav class="mb-4 navbar navbar-expand-lg navbar-light bg-dark">
     <div class="col-md navbar-brand">
-      <h4 class="text-white mr-4 mt-1">ENI EnchÃ¨res</h4>
+      <h4 class="text-white mr-4 mt-1">ENI Enchères</h4>
     </div>
     <div class="justify-content-end">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +17,7 @@
       <div class="col collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link text-white" href="#">EnchÃ¨res</a>
+            <a class="nav-link text-white" href="#">Enchères</a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-white" href="#">Vendre un objet</a>
@@ -35,14 +26,14 @@
             <a class="nav-link text-white" href="<c:url value="/monProfil?id=${ id_utilisateur }"/>">Mon Profil</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="<c:url value="/deconnexion"/>">DÃ©connexion</a>
+            <a class="nav-link text-white" href="<c:url value="/deconnexion"/>">Déconnexion</a>
           </li>
         </ul>
       </div>
     </nav>
 
     <div>
-    	<h1 class="container text-center mt-4 mb-3">Liste des enchÃ¨res</h1>
+    	<h1 class="container text-center mt-4 mb-3">Liste des enchères</h1>
     </div>
     
     <div class="container d-flex justify-content-between align-items-center align-self-center flex-wrap">
@@ -57,7 +48,7 @@
     			 </div></article>
     		
     			<article class="input-group mt-2 mb-2">
-    				<label class="col-4" for="categories">CatÃ©gories :</label>
+    				<label class="col-4" for="categories">Catégories :</label>
     					<select class="col-8" name="categories" id="categories">
     						<option value="toutes">Toutes</option>
     						<option value="informatique">Informatique</option>
@@ -80,9 +71,9 @@
 	  						<input id="inp_achats" name="inp_radio" type="radio">
 	    			 		<label for="inp_achats">Achats</label>
 	    			 		<div class="d-flex flex-column ml-3">
-	    			 			  <div><input type="checkbox" id="en_open" name="en_open"><label class="ml-2" for="en_open">enchÃ¨res ouvertes</label></div>
-	    			 			  <div><input type="checkbox" id="en_encours" name="en_encours"><label class="ml-2" for="en_encours">mes enchÃ¨res en cours</label></div>
-	    			 			  <div><input type="checkbox" id="en_val" name="en_val"><label class="ml-2" for="en_val">mes enchÃ¨res achevÃ©s</label></div>
+	    			 			  <div><input type="checkbox" id="en_open" name="en_open"><label class="ml-2" for="en_open">enchères ouvertes</label></div>
+	    			 			  <div><input type="checkbox" id="en_encours" name="en_encours"><label class="ml-2" for="en_encours">mes enchères en cours</label></div>
+	    			 			  <div><input type="checkbox" id="en_val" name="en_val"><label class="ml-2" for="en_val">mes enchères achevés</label></div>
 	    			 			  
 	    			 		</div>
     			 		</div>
@@ -91,8 +82,8 @@
 	    			 		<label for="vente">Mes ventes</label>
 	    			 		<div class="d-flex flex-column ml-4">
 	    			 			  <div><input type="checkbox" id="ve_encours" name="ve_encours"><label class="ml-2" for="ve_encours">mes ventes en cours</label></div>
-	    			 			  <div><input type="checkbox" id="ve_null" name="ve_null"><label class="ml-2" for="en_encours">mes ventes non dÃ©butÃ©es</label></div>
-	    			 			  <div><input type="checkbox" id="ve_over" name="ve_over"><label class="ml-2" for="ve_over">mes ventes terminÃ©es</label></div>
+	    			 			  <div><input type="checkbox" id="ve_null" name="ve_null"><label class="ml-2" for="en_encours">mes ventes non débutées</label></div>
+	    			 			  <div><input type="checkbox" id="ve_over" name="ve_over"><label class="ml-2" for="ve_over">mes ventes terminées</label></div>
 	    			 		</div>
 	    			 		
     			 		</div>
@@ -113,9 +104,9 @@
 			  		<img alt="img-default" class="img-thumbnail" src="https://zupimages.net/up/21/06/blep.png">
 			  	</div>
 			  	<div class="col-xl-7 col-md-5 d-flex flex-column">
-				    <a href="#" class="card-title badge badge-pill badge-dark">InsÃ©rez titre ici</a>
+				    <a href="#" class="card-title badge badge-pill badge-dark">Insérez titre ici</a>
 					<span>Prix : </span>
-					<span>Fin de l'enchÃ¨re : </span>
+					<span>Fin de l'enchère : </span>
 					<span class="mt-3">Vendeur : </span>
 			    </div>
 			  </div>
@@ -127,9 +118,9 @@
 			  		<img alt="img-default" class="img-thumbnail" src="https://zupimages.net/up/21/06/blep.png">
 			  	</div>
 			  	<div class="col-xl-7 col-md-5 d-flex flex-column">
-				    <a href="#" class="card-title badge badge-pill badge-dark">InsÃ©rez titre ici</a>
+				    <a href="#" class="card-title badge badge-pill badge-dark">Insérez titre ici</a>
 					<span>Prix : </span>
-					<span>Fin de l'enchÃ¨re : </span>
+					<span>Fin de l'enchère : </span>
 					<span class="mt-3">Vendeur : </span>
 			    </div>
 			  </div>
@@ -141,9 +132,9 @@
 			  		<img alt="img-default" class="img-thumbnail" src="https://zupimages.net/up/21/06/blep.png">
 			  	</div>
 			  	<div class="col-xl-7 col-md-5 d-flex flex-column">
-				    <a href="#" class="card-title badge badge-pill badge-dark">InsÃ©rez titre ici</a>
+				    <a href="#" class="card-title badge badge-pill badge-dark">Insérez titre ici</a>
 					<span>Prix : </span>
-					<span>Fin de l'enchÃ¨re : </span>
+					<span>Fin de l'enchère : </span>
 					<span class="mt-3">Vendeur : </span>
 			    </div>
 			  </div>

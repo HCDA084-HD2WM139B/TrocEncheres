@@ -1,18 +1,8 @@
-<%@ page language="java" 
-		contentType="text/html; charset=UTF-8"
-    	pageEncoding="UTF-8"%>
+<%@include file="head.jsp" %>
+ 
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-    
 <%@page import="java.util.List"%>
 <%@page import="fr.eni.encheres.bo.Categorie"%>
-    
-<!DOCTYPE html>
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<script src="https://kit.fontawesome.com/7a045c691c.js" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> 
 	<title>Accueil</title>
 </head>
 
@@ -21,7 +11,7 @@
 	<%@include file="nav.jsp" %>
     
     <div>
-    	<h1 class="container text-center mt-4 mb-3">Liste des enchÃ¨res</h1>
+    	<h1 class="container text-center mt-4 mb-3">Liste des enchères</h1>
     </div>
     
     <div class="container d-flex justify-content-between align-items-center align-self-center flex-wrap">
@@ -37,11 +27,11 @@
     			 
     		
     			<aside class="input-group mt-2 mb-1">
-    				<label class="col-4" for="categories">CatÃ©gories :</label>
+    				<label class="col-4" for="categories">Catégories :</label>
     					<select class="col-8" name="categories" id="categories">
     						<option value"0">Toutes</option>
     						
-    						<!-- Traitement d'affichage de la liste dÃ©roulante des catÃ©gories -->
+    						<!-- Traitement d'affichage de la liste déroulante des catégories -->
     						<c:if test="${ ! empty listeCategories }">
 								<c:forEach items="${ listeCategories }" var="categorie">
 	    						<option value ="${ categorie.noCategorie }"><c:out value="${ categorie.libelle }"></c:out></option>
@@ -70,7 +60,7 @@
     
     <div class="d-flex justify-content-between container mt-3 flex-wrap mb-5">
     
-		<!-- Traitement d'affichage des Articles dont les enchÃ¨res sont en cours -->
+		<!-- Traitement d'affichage des Articles dont les enchères sont en cours -->
     	<c:if test="${ ! empty listeArticles }">
     		<c:forEach items="${ listeArticles }" var="article">
 	    		<article class="card col-xl-5 col-md-12 d-flex mt-4">
@@ -83,7 +73,7 @@
 					    	<c:out value="${ article.nomArticle }"></c:out>
 					    </a>
 						<span>Prix : <c:out value="${ article.prixVente }"></c:out> </span>
-						<span>Fin de l'enchÃ¨re : <c:out value="${ article.dateFinEchere }"></c:out> </span>
+						<span>Fin de l'enchère : <c:out value="${ article.dateFinEchere }"></c:out> </span>
 						<span class="mt-3">Vendeur : <c:out value="${ article.vendeur.pseudo }"></c:out> </span>
 				    </div>
 				  </div>

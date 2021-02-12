@@ -22,9 +22,12 @@ import fr.eni.encheres.bll.EnchereManager;
 
 /**
  * Servlet implementation class InscriptionServlet
+ * Servlet contrôlant l'inscription d'un utilisateur selon différentes règles métier.
  */
 @WebServlet("/inscription")
 public class InscriptionServlet extends HttpServlet {
+	
+	//Constantes de paramètres
 	private static final String PARAM_MOT_DE_PASSE_CONF = "motDePasseConf";
 	private static final String PARAM_MOT_DE_PASSE = "motDePasse";
 	private static final String PARAM_VILLE = "ville";
@@ -35,10 +38,13 @@ public class InscriptionServlet extends HttpServlet {
 	private static final String PARAM_PRENOM = "prenom";
 	private static final String PARAM_NOM = "nom";
 	private static final String PARAM_PSEUDO = "pseudo";
+	//Constantes de messages d'erreurs
 	private static final String MOT_DE_PASSE_KO = "Le mot de passe ne correpond pas à la confirmation.";
 	private static final String EMAIL_KO = "Le format de l'email n'est pas correcte";
+	//Constantes de redirection 
 	private static final String ACCUEIL_CONNEXION_JSP = "/WEB-INF/jsp/AccueilConnexion.jsp";
 	private static final String INSCRIPTION_JSP = "/WEB-INF/jsp/Inscription.jsp";
+	
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -92,9 +98,9 @@ public class InscriptionServlet extends HttpServlet {
 			}
 		}
 		
-		// Vérification que le pseudo est alphanumérique
+		//TODO Vérification que le pseudo est alphanumérique
 		
-		// Vérification que le format de l'email est correcte
+		// Vérification que le format de l'email est correct
 		if(manager.verifFormatEmail(parametre.get(PARAM_EMAIL))) {
 			formatEmail = true;
 		} else {
@@ -111,7 +117,6 @@ public class InscriptionServlet extends HttpServlet {
 				listErreurs.add(MOT_DE_PASSE_KO);
 			}
 		} catch (BusinessException e1) {
-			// TODO Auto-generated catch blockS
 			e1.printStackTrace();
 		}
 		
@@ -123,7 +128,6 @@ public class InscriptionServlet extends HttpServlet {
 				listErreurs.add("Le pseudo " + parametre.get(PARAM_PSEUDO) + " est déjà utilisé.");
 			}
 		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -135,7 +139,6 @@ public class InscriptionServlet extends HttpServlet {
 				listErreurs.add("L'email " + parametre.get(PARAM_EMAIL) + " est déjà utilisé.");
 			}
 		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 				
@@ -146,7 +149,6 @@ public class InscriptionServlet extends HttpServlet {
 						parametre.get(PARAM_MOT_DE_PASSE), parametre.get(PARAM_NOM), parametre.get(PARAM_EMAIL), parametre.get(PARAM_RUE), parametre.get(PARAM_VILLE));
 				utilisateurAjoute = true;
 			} catch (BusinessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} 

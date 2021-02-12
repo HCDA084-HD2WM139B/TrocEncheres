@@ -1,5 +1,10 @@
 package fr.eni.encheres.bo;
 
+/**
+ * Cette classe permet de générer une catégorie d'articles pour les enchères
+ * @author groupe 3
+ *
+ */
 public class Categorie {
 	private Integer noCategorie;
 	private String libelle;
@@ -9,6 +14,10 @@ public class Categorie {
 		libelle = null;
 	}
 	
+	/**
+	 * @param noCategorie : définit le numéro de la catégorie 
+	 * @param libelle : libellé de la catégorie
+	 */
 	public Categorie(Integer noCategorie, String libelle) {
 		this.libelle = libelle;
 		this.noCategorie = noCategorie;

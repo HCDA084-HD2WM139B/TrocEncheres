@@ -12,11 +12,48 @@ import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 
+/**
+ * Cette classe implémente l'interface EnchereDAO afin d'utiliser les méthodes de cette dernière pour effectuer des requêtes SQL.
+ * @author Groupe 3
+ *
+ */
 public class EnchereDAOImpl implements EnchereDAO {
 
+	// Constantes des requêtes SQL
 	private static final String SELECT_ARTICLE = "SELECT * FROM UTILISATEURS AS u INNER JOIN ARTICLES_VENDUS AS a ON u.no_utilisateur = a.no_utilisateur INNER JOIN CATEGORIES AS c ON a.no_categorie = c.no_categorie WHERE date_fin_encheres > GETDATE() AND date_debut_encheres <= GETDATE()";
 	private static final String SELECT_MAX_ENCHERE = "SELECT MAX(montant_enchere) AS best_enchere FROM ENCHERES WHERE no_article = ? GROUP BY no_article";
+	private static final String SELECT_CATEGORIE = "SELECT * FROM categories";
 	
+	/**
+	 * Méthode qui récupére la liste de toutes les catégories d'articles
+	 */
+	public List<Categorie> selectAllCategorie() {
+		
+		List<Categorie> ListCategories = new ArrayList<Categorie>();
+		
+		try(Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_CATEGORIE);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while ( rs.next() )
+			{
+				Categorie categorie = new Categorie();
+                categorie.setnoCategorie(rs.getInt("no_categorie"));
+                categorie.setLibelle(rs.getString("libelle"));
+                ListCategories.add(categorie);
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ListCategories;
+		
+	}
+	
+	/**
+	 * Méthode rapportant toutes les enchères en cours
+	 */
 	@Override
 	public List<Article> selectAllSales() throws BusinessException {
 		PreparedStatement psmt = null;
@@ -31,7 +68,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 		// Connexion à la BDD & Préparation de la requete (leurs fermetures y sont implicite)
 		try ( Connection cnx = ConnectionProvider.getConnection() ) {
 			// Exécution de la requete
-			cnx.setAutoCommit(false);
+			//TODO cnx.setAutoCommit(false);
 			psmt = cnx.prepareStatement(SELECT_ARTICLE);
 			rs = psmt.executeQuery();
 			
@@ -86,7 +123,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 				);
 				listeArticles.add(article);
 			}
-			cnx.commit();
+			//TODO cnx.commit();
 		// S'il y a une erreur on l'enregistre dans la businessEx
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
@@ -104,8 +141,5 @@ public class EnchereDAOImpl implements EnchereDAO {
 		}
 		return listeArticles;
 	}
-
-	
-	
 
 }

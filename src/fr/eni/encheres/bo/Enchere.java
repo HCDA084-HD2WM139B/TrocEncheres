@@ -2,6 +2,11 @@ package fr.eni.encheres.bo;
 
 import java.util.Date;
 
+/**
+ * Cette classe permet de générer une enchère
+ * @author groupe 3
+ *
+ */
 public class Enchere {
 	private Date dateEnchere;
 	private int montantEnchere; 
@@ -10,6 +15,16 @@ public class Enchere {
 	
 	// --------------------------- Constructeur ---------------------------
 	
+	public Enchere() {
+		 
+	}
+	
+	/**
+	 * @param dateEnchere : désigne la date de l'enchère en cours
+	 * @param montantEnchere : désigne le montant de l'enchère
+	 * @param vendeur : désigne l'utilisateur qui vend l'article
+	 * @param articleVendu : désigne l'article vendu
+	 */
 	public Enchere(Date dateEnchere, int montantEnchere, Utilisateur vendeur, Article articleVendu) {
 		super();
 		this.dateEnchere = dateEnchere;
@@ -18,9 +33,6 @@ public class Enchere {
 		this.articleVendu = articleVendu;
 	}
 	
-	public Enchere() {
-		 
-	}
 	
 	// --------------------------- Getters & Setters ---------------------------
 

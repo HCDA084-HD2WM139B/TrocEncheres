@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
- 
-
 import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bo.Article;
+import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.DAOFactory;
+import fr.eni.encheres.dal.EnchereDAO;
 import fr.eni.encheres.dal.UtilisateurDAO;
 
 /**
@@ -22,6 +22,7 @@ public class EnchereManager {
     
     // Attributs d'instance
     private UtilisateurDAO DAOutilisateur;
+	private EnchereDAO enchereDAO;
     private Utilisateur utilisateurConnecte;
     private List<Article> listeArticlesEnchereEnCours;
     
@@ -30,8 +31,19 @@ public class EnchereManager {
         this.DAOutilisateur = DAOFactory.getUtilisateurDAO();
         this.utilisateurConnecte = null;
         this.listeArticlesEnchereEnCours = new ArrayList<Article>();
+        this.enchereDAO = DAOFactory.getEnchereDAO();
     }
     
+    /**
+ 	 * Selectionne l'ensemble des categories depuis que l'application est d�ploy�e
+ 	 * @return
+ 	 * @throws BusinessException
+ 	 */
+ 	public List<Categorie> selectionnerToutesLesCategories() {
+ 		return this.enchereDAO.selectAllCategorie();
+ 		
+ 	}
+ 	
     // Méthode static pour obtenir une instance d'EnchereManager
     public static EnchereManager getEnchereManager() {
         return new EnchereManager();
@@ -232,7 +244,7 @@ public class EnchereManager {
     }
     
     
-    public Utilisateur getUtilisateurByID(int id) {
+    public Utilisateur getUtilisateurByID(int id) throws BusinessException {
         Utilisateur utilisateurTrouve =null;
        
         utilisateurTrouve = DAOFactory.getUtilisateurDAO().afficheUtilisateurbyId(id);
@@ -249,6 +261,7 @@ public class EnchereManager {
     	return listeArticle;
     }
     
+ 
     
     // Getters & Setters
     private UtilisateurDAO getDAOUtilisateur() {

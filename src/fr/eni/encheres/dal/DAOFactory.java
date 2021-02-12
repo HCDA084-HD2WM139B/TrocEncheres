@@ -20,10 +20,10 @@ public abstract class DAOFactory {
 		return new UtilisateurDAOImpl();
 	}
 	
-	public static CategorieDAO getCategorieDAO() {
-		return new CategorieDAOImpl();
-	}
-	
+	/**
+	 * Méthode permettant d'obtenir une instance de l'entité DAO Enchere (correspond à la catégorie article et enchères)
+	 * @return (EnchereDAO) instance de la classe EnchereDAOImpl.
+	 */
 	public static EnchereDAO getEnchereDAO() {
 		return new EnchereDAOImpl();
 	}

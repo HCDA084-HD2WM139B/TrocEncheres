@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Servlet implementation class ModifierProfil
+ * Servlet qui redirige vers la page ModifieProfil.jsp
  */
 @WebServlet("/modifierProfil")
 public class ModifierProfil extends HttpServlet {
@@ -19,9 +20,14 @@ public class ModifierProfil extends HttpServlet {
 
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//Déclaration
 		RequestDispatcher rd; 
+		//Redirection vers la page permettant de modifier le profil de l'utilisateur connecté
 		rd = request.getRequestDispatcher(SERVLET_MODIF_PROFIL);
-		rd.forward(request, response);
+		
+		if(rd != null) {
+			rd.forward(request, response);
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

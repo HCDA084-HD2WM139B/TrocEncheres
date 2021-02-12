@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class DeconnexionServlet
+ * Servlet contrôlant la déconnexion de l'utilisateur
  */
 @WebServlet("/deconnexion")
 public class DeconnexionServlet extends HttpServlet {
@@ -23,20 +24,24 @@ public class DeconnexionServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		//chargement de la session
 		HttpSession session = request.getSession(true);
+		//puis destruction de la session
 		session.invalidate();		
-		
+		//redirection vers le point d'entrée de l'application
 		RequestDispatcher rd = request.getRequestDispatcher(SERVLET_ACCUEIL);
-		rd.forward(request, response);
 		
-		
+		if(rd != null) {
+			rd.forward(request, response);
+		}
+
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 
+		
 	}
 
 }
