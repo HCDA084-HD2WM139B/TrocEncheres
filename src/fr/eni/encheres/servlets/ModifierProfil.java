@@ -1,6 +1,11 @@
 package fr.eni.encheres.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,6 +28,7 @@ public class ModifierProfil extends HttpServlet {
 	private static final String SERVLET_MODIF_PROFIL = "/WEB-INF/jsp/ModifierProfil.jsp";
 	private static final String SERVLET_ACCUEIL_SERVLET = "/encheres";
 	private static final String PARAM_ID_UTILISATEUR = "id";
+
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
@@ -62,29 +68,14 @@ public class ModifierProfil extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		//Récupération des nouveaux paramètres inscrits par l'utilisateur (pour modif de profil)
-		request.getParameter("pseudo");
-		request.getParameter("nom");
-		request.getParameter("prenom");
-		request.getParameter("email");
-		request.getParameter("tel");
-		request.getParameter("rue");
-		request.getParameter("postal");
-		request.getParameter("ville");
-		request.getParameter("mdp_actuel");
-		request.getParameter("new_mdp");
-		request.getParameter("confir_mdp");
-		
-		//Appel du manager pour appeler les méthodes
-		EnchereManager manager = EnchereManager.getEnchereManager();
-		
-
-
-
-		
-		
+		doGet(request,response);
+		}
 		
 	}
+	
+	
 
-}
+		
+	
+
+

@@ -23,9 +23,12 @@ public interface UtilisateurDAO {
 	public boolean selectAllEmail(String pEmail) throws BusinessException;
 	
 	//Mise à jour données utilisateur.
-	public void updateUtilisateur(Utilisateur utilisateur) throws BusinessException;
+	public Utilisateur updateUtilisateur(Utilisateur utilisateur) throws BusinessException;
 	
 	//Affiche un utilisateur selon son numéro d'identifiant
 	public Utilisateur afficheUtilisateurbyId(int id) throws BusinessException;
+	
+	// archivage d'un utilisateur supprimé en fonction de son numéro d'identifiant
+    public boolean deleteUserById(int id) throws BusinessException;
 	
 }

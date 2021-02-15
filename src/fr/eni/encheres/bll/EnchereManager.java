@@ -151,6 +151,9 @@ public class EnchereManager {
         return resultat;
     }
     
+
+    
+ 
     /**
      * Méthode permettant d'attribuer une valeur max à la chaine de caractère en fonction du champ à vérifier
      * @param pChampAverifier chaîne de caractère
@@ -243,11 +246,12 @@ public class EnchereManager {
         return utilisateurCree;
     }
     
-    public Utilisateur getUpdatedUtilisateur(String pPseudo, String pPrenom, String pTelephone, String pCodePostal, String pMotDePasse, 
-    		String pNom, String pEmail, String pRue, String pVille) {
+    public Utilisateur getUpdatedUtilisateur(int pNo_utilisateur, String pPseudo, String pPrenom, String pTelephone, String pCodePostal, String pMotDePasse, 
+    		String pNom, String pEmail, String pRue, String pVille) throws BusinessException {
     	
-    	Utilisateur utilisateurUpdated = new Utilisateur(pPseudo, pNom, pPrenom, pEmail, pTelephone, pRue, pCodePostal, pVille, pMotDePasse, 0, false);
-    	utilisateurUpdated = DAOFactory.getUtilisateurDAO().updateUtilisateur(utilisateurUpdated);
+    	Utilisateur utilisateurUpdated = new Utilisateur(pNo_utilisateur, pPseudo, pNom, pPrenom, pEmail, pTelephone, pRue, pCodePostal, pVille, pMotDePasse, 0, false);
+    	
+    	utilisateurUpdated= DAOFactory.getUtilisateurDAO().updateUtilisateur(utilisateurUpdated);
     	
     	return utilisateurUpdated;
     }

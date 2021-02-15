@@ -9,7 +9,11 @@
 		
 		<h2 class="text-center mt-3 mb-5">Modifier mon Profil</h2>
 		
-		<form class="col-12" method="POST" action="<c:url value="/modifierProfil" />">
+		<form class="col-12" method="POST" action="<c:url value="/modificationUpdateProfil" />">
+		
+		<article class="d-none col-12 mb-4">
+			<input class="col-12" name="numero_id" readonly id="id" value="<c:out value="${ afficheUtilisateur.noUtilisateur }"></c:out>">
+		</article>
 		
 		<article class="d-flex col-12 mb-4">
 			<div class="col-6">
@@ -28,7 +32,7 @@
 			</div>
 			<div class="col-6">
 				<label class="col-5" for="email">Email : </label>
-				<input class="col-6" name="email" id="email" value="<c:out value="${ afficheUtilisateur.pseudo }"></c:out>">
+				<input class="col-6" name="email" id="email" value="<c:out value="${ afficheUtilisateur.email }"></c:out>">
 			</div>
 		</article>
 		<article class="d-flex col-12 mb-4">
@@ -84,7 +88,18 @@
 	   </div>
 	   </article>
 
+
 		</form>
+		
+		<c:if test="${ requestScope.erreurs != null }">
+			<div class="alert alert-danger mt-4" role="alert">
+				<c:forEach items="${ requestScope.erreurs }" var="erreur">
+					<p class="my-0">
+						<c:out value="${ erreur }"></c:out>
+					</p>
+				</c:forEach>
+			</div>
+		</c:if>
 	
 	</section>
 </body>

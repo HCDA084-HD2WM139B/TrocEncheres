@@ -1,5 +1,6 @@
 package fr.eni.encheres.dal;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +19,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	// Constantes des requêtes SQL
 	private static final String INSERT_UTILISATEUR = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	private static final String INSERT_CREDIT = "UPDATE UTILISATEURS SET credit = ? WHERE no_utilisateur = ?";
-	private static final String UPDATE_UTILISATEUR = "UPDATE UTILISATEURS SET pseudo =?, nom =?, prenom =?, email=?, telephone=?, rue=?, code_postal=?, ville=?, mot_de_passe=?";
+	private static final String UPDATE_UTILISATEUR = "UPDATE UTILISATEURS SET pseudo =?, nom =?, prenom =?, email=?, telephone=?, rue=?, code_postal=?, ville=?, mot_de_passe=? WHERE no_utilisateur = ?";
 	private static final String SELECT_UTILISATEUR_BY_ID = "SELECT * FROM UTILISATEURS WHERE no_utilisateur = ?";
 	// le nom exact des colonnes dans la table utilisateur en BDD :
 	private static final String COLONNE_EMAIL = "email";
@@ -219,14 +220,14 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	 */
 	//TODO écrire les commentaires 
 	@Override
-	public void updateUtilisateur(Utilisateur utilisateur) {
-
+	public Utilisateur updateUtilisateur(Utilisateur utilisateur) {
+		
 		try { 
 		// Connexion à la BDD 
 		Connection cnx = ConnectionProvider.getConnection(); 
 		// préparation de la requête (fermetures de connexion implicites)
 		PreparedStatement psmt = cnx.prepareStatement(UPDATE_UTILISATEUR);
-		
+				
 		psmt.setString(1, utilisateur.getPseudo());
 		psmt.setString(2, utilisateur.getNom());
 		psmt.setString(3, utilisateur.getPrenom());
@@ -235,7 +236,8 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		psmt.setString(6, utilisateur.getRue());
 		psmt.setString(7, utilisateur.getCodePostal());
 		psmt.setString(8, utilisateur.getVille());
-		psmt.setString(8, utilisateur.getMotDePasse());
+		psmt.setString(9, utilisateur.getMotDePasse());
+		psmt.setInt(10, utilisateur.getNoUtilisateur());
 		
 		//exécution de la requête 
 		psmt.executeUpdate();
@@ -243,6 +245,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	/**
@@ -287,4 +290,41 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		return utilisateurTrouve;
 	}
 
+	@Override
+    public boolean deleteUserById(int id) throws BusinessException {
+        boolean result = false;
+       
+        // Vérification des paramètres
+        if ( id <= 0 ) {
+            BusinessException businessException = new BusinessException();
+            businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
+            throw businessException;
+        }
+        // on appel la procédure stockée :
+        String sql = "{call Delete_Utilisateur(?,?)}";
+       
+        // Connexion à la BDD & Préparation de la requete (leurs fermetures y sont implicites)
+        try (Connection cnx = ConnectionProvider.getConnection(); CallableStatement csmt = cnx.prepareCall(sql) ) {
+            cnx.setAutoCommit(false);
+            // enregistrement du parametre de sortie comme Integer :
+            csmt.registerOutParameter("Result", java.sql.Types.INTEGER);
+            // on valorise le parametre de la procédure :
+            csmt.setInt(1, id);
+            // on execute la requete :
+            csmt.execute();
+            // on recupere si le traitement c'est bien déroulé
+            Integer reponse = csmt.getInt(2);
+            if (reponse == 1) {
+                result = true;
+                cnx.commit();
+            }
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+            BusinessException businessException = new BusinessException();
+            businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
+            throw businessException;
+        }
+        return result;
+    }
+	
 }
