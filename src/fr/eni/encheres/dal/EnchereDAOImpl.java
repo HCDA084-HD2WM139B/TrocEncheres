@@ -52,10 +52,13 @@ public class EnchereDAOImpl implements EnchereDAO {
 	}
 	
 	/**
-	 * Méthode rapportant toutes les enchères en cours
+	 * Méthode rapportant toutes les enchères en cours. 
+	 * Le prix de vente, d'un article en train d'être en cours d'enchère, est valorisé selon le prix de la meilleure enchère qui lui est faite ; sinon par defaut son prix de vente sera son prix initial (pour affichage).
+	 * @return La liste des articles en cours d'enchères.
 	 */
 	@Override
 	public List<Article> selectAllSales() throws BusinessException {
+		// declarations
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
 		ResultSet rs_bis = null;
@@ -68,13 +71,12 @@ public class EnchereDAOImpl implements EnchereDAO {
 		// Connexion à la BDD & Préparation de la requete (leurs fermetures y sont implicite)
 		try ( Connection cnx = ConnectionProvider.getConnection() ) {
 			// Exécution de la requete
-			//TODO cnx.setAutoCommit(false);
+			cnx.setAutoCommit(false);
 			psmt = cnx.prepareStatement(SELECT_ARTICLE);
 			rs = psmt.executeQuery();
 			
 			// tant que l'on a un article en retour
 			while ( rs.next() ) {
-				System.out.println("un article en enchere en cours trouvé ! (DAL)");
 				categorie = new Categorie(
 						rs.getInt("no_categorie"), 
 						rs.getString("libelle")
@@ -99,11 +101,12 @@ public class EnchereDAOImpl implements EnchereDAO {
 				psmt.setString(1, String.valueOf(rs.getInt("no_article")) );
 				rs_bis = psmt.executeQuery();
 				if(rs_bis.next()) {
-					System.out.println("best enchere => " + rs_bis.getInt("best_enchere"));
-					System.out.println("prix enchere => " + rs.getInt("prix_initial"));
+					// Si le prix d'une sur-enchère existe et qu'elle est superieur au prix initial
 					if(rs_bis.getInt("best_enchere") > rs.getInt("prix_initial") ) {
+						// prixVente es tvalorisé pas le prix de la sur-enchère
 						prixVente = rs_bis.getInt("best_enchere");
 					} else {
+						// sinon le prix de vente est valorisé par son prix initial
 						prixVente = rs.getInt("prix_initial");
 					}
 				} else {
@@ -123,7 +126,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 				);
 				listeArticles.add(article);
 			}
-			//TODO cnx.commit();
+			cnx.commit();
 		// S'il y a une erreur on l'enregistre dans la businessEx
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();

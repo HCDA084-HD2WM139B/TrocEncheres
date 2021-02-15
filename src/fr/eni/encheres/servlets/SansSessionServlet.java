@@ -58,19 +58,8 @@ public class SansSessionServlet extends HttpServlet {
 		} catch (BusinessException be) {
 			be.printStackTrace();
 		}
-		
-		//TEST (HJ)
-		for (Article article : listeArticles) {
-			System.out.println("-----------------------");
-			System.out.println("nom article : " + article.getNomArticle());
-			System.out.println("prix vente article : " + article.getPrixVente());
-			System.out.println("fin enchere article : " + article.getDateFinEchere().toString());
-			System.out.println("vendeur article : " + article.getVendeur().getPseudo());
-		}
-		//TEST
 
 		if (!listeCategories.isEmpty() && !listeArticles.isEmpty() ) {
-			
 			// Dépot du résultat dans l'espace d'échange (contexte de requete)
 			request.setAttribute(ATTRIBUT_LISTE_CATEGORIES, listeCategories);
 			request.setAttribute(ATTRIBUT_LISTE_ARTICLES, listeArticles);
@@ -78,7 +67,6 @@ public class SansSessionServlet extends HttpServlet {
 			rd = request.getRequestDispatcher(JSP_ACCUEIL_SANS_CONNEXION);
 			rd.forward(request, response);
 		} else {
-
 			// Redirection vers la connexion
 			rd = request.getRequestDispatcher(SERVLET_DEMANDE_CONNECTION);
 			rd.forward(request, response);
