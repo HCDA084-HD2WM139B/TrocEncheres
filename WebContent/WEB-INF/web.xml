@@ -16,18 +16,19 @@
     <url-pattern>/encheres</url-pattern>
   </servlet-mapping>
   
+  <!-- Page introuvable -->
   <error-page>
-    <!-- Page introuvable -->
     <error-code>404</error-code>
     <location>/WEB-INF/jsp/Error404.jsp</location>
   </error-page>
   
+  <!-- Erreur Serveur -->
   <error-page>
-    <!-- Erreur Serveur -->
     <error-code>500</error-code>
     <location>/WEB-INF/jsp/Error500.jsp</location>
   </error-page>
   
+  <!-- Config temps de session -->
   <session-config>
     <session-timeout>1</session-timeout>
   </session-config>

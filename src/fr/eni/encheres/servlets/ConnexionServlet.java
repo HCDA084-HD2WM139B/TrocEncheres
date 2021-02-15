@@ -46,12 +46,14 @@ public class ConnexionServlet extends HttpServlet {
 	private static final String SERVLET_ACCUEIL = "/encheres";
 	
 	
+
 	/**
 	 * Méthode GET de gestion de connexion à l'application (accès à la pageConnexion.jsp par l'URL)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		// Redirection définitive vers la pageConnexion.jsp
+		request.setAttribute("undisplayLinkNavBar", "none");
 		RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/jsp/PageConnexion.jsp");
 		rd.forward(request, response);
 	}
