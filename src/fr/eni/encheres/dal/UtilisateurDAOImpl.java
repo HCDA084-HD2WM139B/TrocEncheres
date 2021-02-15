@@ -220,11 +220,11 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	//TODO écrire les commentaires 
 	@Override
 	public void updateUtilisateur(Utilisateur utilisateur) {
-		
+
 		try { 
-			
-			Connection cnx = ConnectionProvider.getConnection(); 
-		
+		// Connexion à la BDD 
+		Connection cnx = ConnectionProvider.getConnection(); 
+		// préparation de la requête (fermetures de connexion implicites)
 		PreparedStatement psmt = cnx.prepareStatement(UPDATE_UTILISATEUR);
 		
 		psmt.setString(1, utilisateur.getPseudo());
@@ -236,9 +236,10 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		psmt.setString(7, utilisateur.getCodePostal());
 		psmt.setString(8, utilisateur.getVille());
 		psmt.setString(8, utilisateur.getMotDePasse());
-
 		
-			psmt.executeUpdate();
+		//exécution de la requête 
+		psmt.executeUpdate();
+		
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -250,11 +251,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	//TODO écrire les commentaires 
 	@Override
 	public Utilisateur afficheUtilisateurbyId(int id) {
-
+				
 		Utilisateur utilisateurTrouve = null;
 		try {
+			// Connexion à la BDD
 			Connection cnx = ConnectionProvider.getConnection();
-		
+			// préparation de la requête (fermetures de connexion implicites)
 			PreparedStatement psmt = cnx.prepareStatement(SELECT_UTILISATEUR_BY_ID);
 			
 			psmt.setInt(1, id);
@@ -283,8 +285,6 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			e.printStackTrace();
 		}
 		return utilisateurTrouve;
-
-		
 	}
 
 }
