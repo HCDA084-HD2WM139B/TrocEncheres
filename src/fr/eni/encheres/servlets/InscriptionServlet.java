@@ -51,7 +51,7 @@ public class InscriptionServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		request.setAttribute("undisplayLinkNavBar", "none");
 		RequestDispatcher rd = request.getRequestDispatcher(INSCRIPTION_JSP);
 		rd.forward(request, response);
 	}
@@ -155,7 +155,7 @@ public class InscriptionServlet extends HttpServlet {
 		
 		// Si l'utilisateur est ajouté, on redirige vers la page d'accueil
 		if (utilisateurAjoute) {
-			// Redirection vers la page d'inscription:
+			// Redirection vers la page d'accueil:
 			RequestDispatcher rd = request.getRequestDispatcher(ACCUEIL_CONNEXION_JSP);
 			if (rd != null) {
 				rd.forward(request, response);

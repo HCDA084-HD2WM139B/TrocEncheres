@@ -42,7 +42,7 @@ public class MonProfilServlet extends HttpServlet {
 		}
 				
 		request.setAttribute("afficheUtilisateur", utilisateurTrouve);
-
+		request.setAttribute("undisplayLinkNavBar", "none");
 		RequestDispatcher rd = request.getRequestDispatcher(AFFICHE_PROFIL_JSP);
 		rd.forward(request, response);
 		
