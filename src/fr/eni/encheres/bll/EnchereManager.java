@@ -243,6 +243,14 @@ public class EnchereManager {
         return utilisateurCree;
     }
     
+    public Utilisateur getUpdatedUtilisateur(String pPseudo, String pPrenom, String pTelephone, String pCodePostal, String pMotDePasse, 
+    		String pNom, String pEmail, String pRue, String pVille) {
+    	
+    	Utilisateur utilisateurUpdated = new Utilisateur(pPseudo, pNom, pPrenom, pEmail, pTelephone, pRue, pCodePostal, pVille, pMotDePasse, 0, false);
+    	utilisateurUpdated = DAOFactory.getUtilisateurDAO().updateUtilisateur(utilisateurUpdated);
+    	
+    	return utilisateurUpdated;
+    }
     
     public Utilisateur getUtilisateurByID(int id) throws BusinessException {
         Utilisateur utilisateurTrouve =null;
