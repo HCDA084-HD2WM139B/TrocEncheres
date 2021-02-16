@@ -1,7 +1,10 @@
 package fr.eni.encheres.bll;
  
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +45,7 @@ public class EnchereManager {
  	 * @return
  	 * @throws BusinessException
  	 */
- 	public List<Categorie> selectionnerToutesLesCategories() {
+ 	public List<Categorie> selectionnerToutesLesCategories() throws BusinessException {
  		return this.enchereDAO.selectAllCategorie();
  		
  	}
@@ -300,7 +303,7 @@ public class EnchereManager {
    public boolean verifierTailleChampOk(String pChampAverifier, int tailleChamp) {
        boolean resultat = false;
        // On vérifie que la longueur du champ à vérifier est supérieure à 0 après avoir supprimer les espaces,
-       // On vérifie que la longueur du champ à vérifier est supérieure à 2
+       // On vérifie que la longueur du champ à vérifier est supérieure à 2 
        // On vérifie que la longueur du champ à vérifier est inférieure à tailleChamp
        if( pChampAverifier.trim().length() > 0 && pChampAverifier.length() > 2 && pChampAverifier.length() <= tailleChamp) {
            resultat = true;
@@ -319,6 +322,22 @@ public class EnchereManager {
        return resultat;
    }
    
+   public Date stringVersDate(String pchampAconvertir) {
+	   
+	   DateFormat formatter;
+	   java.util.Date d1 = new java.util.Date();
+	   java.sql.Date date = new java.sql.Date(d1.getTime());
+//	   Date date = null;
+	   formatter = new SimpleDateFormat("dd-MM-yy");
+	   try {
+		   d1 = formatter.parse(pchampAconvertir);
+	} catch (ParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	return date;
+   }
+   
    /**
     * Méthode permettant d'ajouter un utilisateur dans la base de données
     * @param pPseudo chaîne de caractère représentant le pseudo
@@ -333,12 +352,69 @@ public class EnchereManager {
     * @return un utilisateur
     * @throws BusinessException
     */
-//   public Article getInsertArticle(String pPseudo, String pPrenom, String pTelephone, String pCodePostal, String pMotDePasse, 
-//   		String pNom, String pEmail, String pRue, String pVille) throws BusinessException {
-//	   Article artcileCree = new Article(pNomArticle, pDescription, pDateDebut, pDateFin, pPrixInitial, pPrixVente, pNoUtilisateur, pNoCategorie);
-//	   artcileCree = DAOFactory.getUtilisateurDAO().insertArticle(artcileCree);
-//   }
+   public Article getInsertArticle(String pNomArticle, String pDescription, Date pDateDebut, Date pDateFin, int pPrixInitial, 
+   		Categorie pNoCategorie, Utilisateur pNoUtilisateur) throws BusinessException {
+	   Article artcileCree = new Article(pNomArticle, pDescription, pDateDebut, pDateFin, pPrixInitial, pNoCategorie, pNoUtilisateur);
+	   artcileCree = DAOFactory.getEnchereDAO().insertArticle(artcileCree);
+	return artcileCree;
+   }
+   
+   public Categorie getInsetCategorie (int pNoCategorie, String pLibelle) throws BusinessException {
+	   
+	   Categorie categorie = new Categorie (pNoCategorie, pLibelle);
+	   return categorie;
+   }
  
+   
+   //**********************
+   /**
+   * Méthode pour verifier que l'ID et le Pseudo correspond dans la BDD
+   * @return boolean
+   * @throws BusinessException
+   */
+   public boolean VerifierPseudoId(String pPseudo, Integer pNo_utilisateur) throws BusinessException {
+   boolean resultat = false;
+   if ( !pPseudo.isEmpty() && pNo_utilisateur != null) {
+   resultat = DAOFactory.getUtilisateurDAO().VerifByPseudoAndId(pPseudo, pNo_utilisateur);
+   }
+   return resultat;
+   }
+   /**
+   * Méthode pour verifier que l'ID et l'Email correspond dans la BDD
+   * @return boolean
+   * @throws BusinessException
+   */
+   public boolean VerifierEmailId(String pEmail, Integer pNo_utilisateur) throws BusinessException {
+   boolean resultat = false;
+   if ( !pEmail.isEmpty() && pNo_utilisateur != null) {
+   resultat = DAOFactory.getUtilisateurDAO().VerifByEmailAndId(pEmail, pNo_utilisateur);
+   }
+   return resultat;
+   }
+   /**
+   * Méthode pour Récupérer un ID avec le Pseudo dans la BDD
+   * @return Integer
+   * @throws BusinessException
+   */
+   public Integer RecupererIdAvecPseudo(String pPseudo) throws BusinessException {
+   Integer resultat = null;
+   if ( !pPseudo.isEmpty() ) {
+   resultat = DAOFactory.getUtilisateurDAO().SelectIdWherePseudo(pPseudo);
+   }
+   return resultat;
+   }
+   /**
+   * Méthode pour Récupérer un ID avec l'email dans la BDD
+   * @return Integer
+   * @throws BusinessException
+   */
+   public Integer RecupererIdAvecEmail(String pEmail) throws BusinessException {
+   Integer resultat = null;
+   if ( !pEmail.isEmpty() ) {
+   resultat = DAOFactory.getUtilisateurDAO().SelectIdWhereEmail(pEmail);
+   }
+   return resultat;
+   }
     
     // Getters & Setters
     private UtilisateurDAO getDAOUtilisateur() {

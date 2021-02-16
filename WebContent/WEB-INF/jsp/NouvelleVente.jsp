@@ -110,7 +110,14 @@
 							<div class="form-group row">
 								<label class="col-sm-3 col-form-label">Rue:</label>
 								<div class="col-sm-4">
-									<input type="text" class="form-control" name="rue" placeholder="Rue" value="${ afficheUtilisateur.rue}">
+									<c:choose>
+										<c:when test = "${ requestScope.corrects.rue == null }">
+											<input type="text" class="form-control" name="rue" placeholder="Rue" value="${ afficheUtilisateur.rue}">
+										</c:when>
+										<c:when test = "${ requestScope.corrects.rue != null }">
+											<input type="text" class="form-control" name="rue" placeholder="Rue" value="${ requestScope.corrects.rue }">
+										</c:when>
+									</c:choose>
 								</div>
 								<div class="col-sm-4 text-danger">
 									<c:if test="${ requestScope.erreurs.rue != null }">
@@ -121,7 +128,14 @@
 							<div class="form-group row">
 								<label class="col-sm-3 col-form-label">Code postal:</label>
 								<div class="col-sm-4">
-									<input type="text" class="form-control" name="codePostal" placeholder="Code postal" value="${ afficheUtilisateur.codePostal}">
+									<c:choose>
+										<c:when test = "${ requestScope.corrects.codePostal == null }">
+											<input type="text" class="form-control" name="codePostal" placeholder="Code postal" value="${ afficheUtilisateur.codePostal}">
+										</c:when>
+										<c:when test = "${ requestScope.corrects.codePostal != null }">
+											<input type="text" class="form-control" name="codePostal" placeholder="Code postal" value="${ requestScope.corrects.codePostal }">
+										</c:when>
+									</c:choose>
 								</div>
 								<div class="col-sm-4 text-danger">
 									<c:if test="${ requestScope.erreurs.codePostal != null }">
@@ -132,7 +146,14 @@
 							<div class="form-group row">
 								<label class="col-sm-3 col-form-label">Ville:</label>
 								<div class="col-sm-4">
-									<input type="text" class="form-control" name="ville" placeholder="Ville" value="${ afficheUtilisateur.ville}">
+									<c:choose>
+										<c:when test = "${ requestScope.corrects.ville == null }">
+											<input type="text" class="form-control" name="ville" placeholder="Ville" value="${ afficheUtilisateur.ville}">
+										</c:when>
+										<c:when test = "${ requestScope.corrects.ville != null }">
+											<input type="text" class="form-control" name="ville" placeholder="Ville" value="${ requestScope.corrects.ville }">
+										</c:when>
+									</c:choose>
 								</div>
 								<div class="col-sm-4 text-danger">
 									<c:if test="${ requestScope.erreurs.ville != null }">

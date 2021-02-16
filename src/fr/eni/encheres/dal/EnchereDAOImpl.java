@@ -25,6 +25,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 	private static final String SELECT_MAX_ENCHERE = "SELECT MAX(montant_enchere) AS best_enchere FROM ENCHERES WHERE no_article = ? GROUP BY no_article";
 	private static final String SELECT_CATEGORIE = "SELECT * FROM categories";
 	private static final String INSERT_ARTICLE = "INSERT INTO ARTICLES_VENDUS (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, no_utilisateur, no_categorie ) VALUES (?, ?, ?, ?, ?, ?, ?);";
+	private static final String INSERT_ARTICLE_RETRAIT = "INSERT INTO RETRAITS (no_article, rue, code_postal, ville) VALUES (?, ?, ?, ?);";
 	
 	/**
 	 * Méthode qui récupére la liste de toutes les catégories d'articles
@@ -158,7 +159,8 @@ public class EnchereDAOImpl implements EnchereDAO {
 				}
 				// Sinon on lance la connexion
 				try (Connection cnx = ConnectionProvider.getConnection(); 
-						PreparedStatement psmt = cnx.prepareStatement(INSERT_ARTICLE, PreparedStatement.RETURN_GENERATED_KEYS); ) {
+						PreparedStatement psmt = cnx.prepareStatement(INSERT_ARTICLE, PreparedStatement.RETURN_GENERATED_KEYS);
+						PreparedStatement psmt1 = cnx.prepareStatement(INSERT_ARTICLE_RETRAIT, PreparedStatement.RETURN_GENERATED_KEYS)) {
 					// On prépare la requête SQL pour insérer un utilisateur et on récupère l'ID généré par l'insertion
 					psmt.setString(1, articleCree.getNomArticle());
 					psmt.setString(2, articleCree.getDescription());
@@ -167,13 +169,26 @@ public class EnchereDAOImpl implements EnchereDAO {
 					psmt.setInt(5, articleCree.getPrixInitial());
 					psmt.setInt(6, articleCree.getVendeur().getNoUtilisateur());
 					psmt.setInt(7, articleCree.getCategorie().getnoCategorie());
-					// On execute la requ�tes
+					// On execute la requétes
 					psmt.executeUpdate();
-					// On r�cup�re le r�sultat
+					// On récupère le résultat
 					ResultSet rs = psmt.getGeneratedKeys();
 					if (rs.next()) {
 						// On ajoute le numéro de l'article
 						articleCree.setNoArticle(rs.getInt(1));
+					}
+					// On prépare la seconde requête SQL pour insérer les informations de retrait
+					psmt1.setInt(1, articleCree.getNoArticle());
+					psmt1.setString(2, articleCree.getVendeur().getRue());
+					psmt1.setString(3, articleCree.getVendeur().getCodePostal());
+					psmt1.setString(4, articleCree.getVendeur().getVille());
+					// On execute la requétes
+					psmt1.executeUpdate();
+					// On récupère le résultat
+					ResultSet rs1 = psmt1.getGeneratedKeys();
+					if (rs1.next()) {
+						// On ajoute le numéro de l'article
+//						articleCree.setNoArticle(rs1.getInt(1));
 					}
 					// S'il y a une erreur on l'enregistre dans la businessEx
 				} catch (SQLException sqle) {
