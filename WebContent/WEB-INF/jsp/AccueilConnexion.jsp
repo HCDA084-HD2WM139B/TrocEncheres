@@ -1,5 +1,6 @@
 <%@include file="head.jsp" %>
-<title>Accueil</title>
+
+	<title>Accueil</title>
 </head>
 
 
@@ -11,10 +12,10 @@
     </div>
     
     <div class="container d-flex justify-content-between align-items-center align-self-center flex-wrap">
-    	<section class="col-xl-6 col-md-12">
-    		<h2>Les Filtres : </h2>
-    		<form method="POST" action"">
-    			 <article class="d-none d-lg-block d-md-none"><div class="input-group mt-1">
+    	<form method="POST" action"<%=request.getContextPath()%>/avecsession">
+    		<section class="col-xl-6 col-md-12">
+    			<h2>Les Filtres : </h2>
+    			<article class="d-none d-lg-block d-md-none"><div class="input-group mt-1">
 				      <div class="input-group-prepend">
 				        <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
 				      </div>
@@ -63,10 +64,10 @@
     			 		</div>
     			 	</aside>
     			 </article>
-    	</section>
-    	<section class="col-xl-5 col-md-12">
-    		<input type="submit" class="col-12 pt-4 pb-4 btn btn-primary" value="Rechercher">
-    	</section>
+	    	</section>
+	    	<section class="col-xl-5 col-md-12">
+	    		<input type="submit" class="col-12 pt-4 pb-4 btn btn-primary" value="Rechercher">
+	    	</section>
     	</form>
     </div>
     

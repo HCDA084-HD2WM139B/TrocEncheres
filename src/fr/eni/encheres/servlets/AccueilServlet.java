@@ -19,7 +19,8 @@ public class AccueilServlet extends HttpServlet {
 	// Constantes
 	private static final long serialVersionUID = 1L;
 	// routes de redirections
-	private static final String JSP_ACCUEIL_CONNECTE = "/WEB-INF/jsp/AccueilConnexion.jsp";
+	//private static final String JSP_ACCUEIL_CONNECTE = "/WEB-INF/jsp/AccueilConnexion.jsp";
+	private static final String SERVLET_AVEC_SESSION = "/avecsession";
 	private static final String SERVLET_SANS_SESSION = "/sanssession";
 
 	/**
@@ -33,7 +34,7 @@ public class AccueilServlet extends HttpServlet {
 		if (request.getSession().getAttribute("utilisateurConnecte") != null) {
 			
 			// on redirige vers la page accueil connecté
-			rd = request.getRequestDispatcher(JSP_ACCUEIL_CONNECTE);
+			rd = request.getRequestDispatcher(SERVLET_AVEC_SESSION);
 			rd.forward(request, response);
 		} else {
 			// sinon on redirige vers la servlet qui contrôle l'accès aux pages non connectées

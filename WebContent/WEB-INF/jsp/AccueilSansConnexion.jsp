@@ -1,8 +1,8 @@
 <%@include file="head.jsp" %>
  
-
 <%@page import="java.util.List"%>
 <%@page import="fr.eni.encheres.bo.Categorie"%>
+
 	<title>Accueil</title>
 </head>
 
@@ -15,46 +15,36 @@
     </div>
     
     <div class="container d-flex justify-content-between align-items-center align-self-center flex-wrap">
-    	<article class="col-xl-5 col-md-12">
-    		<h2>Les Filtres : </h2>
-    		<form method="POST" action="<%=request.getContextPath()%>/sanssession">
-    			 <aside class="d-none d-lg-block d-md-none"><div class="input-group mt-1">
-				      <div class="input-group-prepend">
-				        <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
-				      </div>
-      				  <input type="text" name="saisieArticle" class="form-control" placeholder="Article" aria-label="Article" aria-describedby="basic-addon1">
-    			 </div></aside>
-    			 
-    		
-    			<aside class="input-group mt-2 mb-1">
-    				<label class="col-4" for="categories">Categories :</label>
-    					<select class="col-8" name="categories" id="categories">
-    						<option value"0">Toutes</option>
-    						
-    						<!-- Traitement d'affichage de la liste d�roulante des cat�gories -->
-    						<c:if test="${ ! empty listeCategories }">
-								<c:forEach items="${ listeCategories }" var="categorie">
-	    						<option value ="${ categorie.noCategorie }">${ categorie.libelle }</option>
-    							</c:forEach>
-							</c:if>
-							
-							
-    					</select>
-    			</aside>
-    			 <aside class="d-none d-md-block d-lg-none mt-4 mb-4">
-    			 	<div class="input-group mt-1">
-				     	<div class="input-group-prepend">
-				        	<span class="input-group-text" id="basic-addon1">
-				        		<i class="fas fa-search"></i>
-				        	</span>
-				     	</div>
-      				  	<input type="text" class="form-control" placeholder="Article" aria-label="Article" aria-describedby="basic-addon1">
-    			 	</div>
-    			 </aside>
-    	</article>
-    	<article class="col-xl-5 col-md-12">
-    		<input type="submit" class="col-12 pt-3 pb-3 btn btn-primary" value="Rechercher">
-    	</article>
+    	<form method="POST" action="<%=request.getContextPath()%>/sanssession">
+	    	<section class="col-xl-6 col-md-12">
+	    		<h2>Les Filtres : </h2>
+	    			 <article class="d-none d-lg-block d-md-none"><div class="input-group mt-1">
+					      <div class="input-group-prepend">
+					        <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
+					      </div>
+	      				  	<input type="text" name="saisieArticle" class="form-control" placeholder="Article" aria-label="Article" aria-describedby="basic-addon1">
+	    			 	  </div>
+	    			 </article>
+	    			 
+	    			<article class="input-group mt-2 mb-2">
+	    				<label class="col-4" for="categories">Categories :</label>
+	    					<select class="col-8" name="categories" id="categories">
+	    						<option value"0">Toutes</option>
+	    						
+	    						<!-- Traitement d'affichage de la liste d�roulante des cat�gories -->
+	    						<c:if test="${ ! empty listeCategories }">
+									<c:forEach items="${ listeCategories }" var="categorie">
+		    						<option value ="${ categorie.noCategorie }">${ categorie.libelle }</option>
+	    							</c:forEach>
+								</c:if>
+								
+	    					</select>
+	    			</article>
+	    			
+	    	</section>
+	    	<section class="col-xl-5 col-md-12">
+	    		<input type="submit" class="col-12 pt-4 pb-4 btn btn-primary" value="Rechercher">
+	    	</section>
     	</form>
     </div>
     
