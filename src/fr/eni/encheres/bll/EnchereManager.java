@@ -273,6 +273,17 @@ public class EnchereManager {
     	return listeArticle;
     }
     
+    /**
+     * Méthode permettant de supprimer un utilisateur par le numero d'utilisateur passé en paramêtre.
+     * @param idUtilisateur
+     * @return (boolean) True si la suppression s'est correctement déroulée ; sinon False.
+     * @throws BusinessException
+     */
+    public boolean deleteUserById(int idUtilisateur) throws BusinessException {
+    	boolean resultSql = false;
+    	resultSql = DAOFactory.getUtilisateurDAO().deleteUserById(idUtilisateur);
+    	return resultSql;
+    }
  
     
     // Getters & Setters

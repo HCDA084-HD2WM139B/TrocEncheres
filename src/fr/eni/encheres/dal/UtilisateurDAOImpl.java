@@ -290,6 +290,19 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		return utilisateurTrouve;
 	}
 
+	
+	
+	/**
+	 * Méthode exécutant la procédure stockée servant à la suppression et l'archivage d'un utilisateur. 
+	 * La procédure stockée va enregistrer une copie de l'utilisateur dans la table "Archives_utilisateurs" ; 
+	 * puis annuler les enchères concernant l'utilisateur (acheteur) ; 
+	 * puis supprimer l'utilisateur (vendeur) avec tous ses articles qui lui sont affectés mais aussi les enchères affectés à ces mêmes articles ; 
+	 * et enfin supprimer les enchères préalablement annulées le concernant.
+	 * 
+	 * @param (int) id ; le numero d'utilisateur en base de données.
+	 * @return (boolean) True si la procédure stockée execute correctement l'archivage et la suppression, sinon False.
+	 * @throws BuisnessException.
+	 */
 	@Override
     public boolean deleteUserById(int id) throws BusinessException {
         boolean result = false;
@@ -305,6 +318,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
        
         // Connexion à la BDD & Préparation de la requete (leurs fermetures y sont implicites)
         try (Connection cnx = ConnectionProvider.getConnection(); CallableStatement csmt = cnx.prepareCall(sql) ) {
+        	// transaction (début)
             cnx.setAutoCommit(false);
             // enregistrement du parametre de sortie comme Integer :
             csmt.registerOutParameter("Result", java.sql.Types.INTEGER);
@@ -314,9 +328,14 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
             csmt.execute();
             // on recupere si le traitement c'est bien déroulé
             Integer reponse = csmt.getInt(2);
+            // Si la procédure stockée nous renvoi 1, c'est qu'elle a réussi la suppression et l'archivage !
             if (reponse == 1) {
                 result = true;
+                // transaction (fin)
                 cnx.commit();
+            } else {
+            	// transaction (annulation)
+            	cnx.rollback();
             }
         } catch (SQLException sqle) {
             sqle.printStackTrace();

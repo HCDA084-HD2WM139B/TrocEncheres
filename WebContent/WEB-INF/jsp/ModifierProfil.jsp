@@ -84,7 +84,7 @@
 	   <article class="d-flex col-12 mb-4 justify-content-center">
 	   	<div class="col-6">
 		   <input class="col-5 btn btn-success p-2 mr-2" type="submit" value="Enregistrer">
-		   <a class="col-6 btn btn-danger p-2 ml-2" href="<c:url value="/supprimerProfil" />">Supprimer mon compte</a>
+		   <a class="col-6 btn btn-danger p-2 ml-2" href="<c:url value="/supprimerProfil?id=${ sessionScope.id_utilisateur }" />">Supprimer mon compte</a>
 	   </div>
 	   </article>
 
