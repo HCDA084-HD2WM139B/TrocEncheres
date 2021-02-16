@@ -1,6 +1,7 @@
 package fr.eni.encheres.dal;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,6 +24,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 	private static final String SELECT_ARTICLE = "SELECT * FROM UTILISATEURS AS u INNER JOIN ARTICLES_VENDUS AS a ON u.no_utilisateur = a.no_utilisateur INNER JOIN CATEGORIES AS c ON a.no_categorie = c.no_categorie WHERE date_fin_encheres > GETDATE() AND date_debut_encheres <= GETDATE()";
 	private static final String SELECT_MAX_ENCHERE = "SELECT MAX(montant_enchere) AS best_enchere FROM ENCHERES WHERE no_article = ? GROUP BY no_article";
 	private static final String SELECT_CATEGORIE = "SELECT * FROM categories";
+	private static final String INSERT_ARTICLE = "INSERT INTO ARTICLES_VENDUS (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, no_utilisateur, no_categorie ) VALUES (?, ?, ?, ?, ?, ?, ?);";
 	
 	/**
 	 * Méthode qui récupére la liste de toutes les catégories d'articles
@@ -143,6 +145,44 @@ public class EnchereDAOImpl implements EnchereDAO {
 			}
 		}
 		return listeArticles;
+	}
+
+	@Override
+	public Article insertArticle(Article articleCree) throws BusinessException {
+		
+		// Si l'objet utilisateur est null, on enregistre un message d'erreur dans la businessException
+				if (articleCree == null) {
+					BusinessException businessException = new BusinessException();
+					businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_NULL);
+					throw businessException;
+				}
+				// Sinon on lance la connexion
+				try (Connection cnx = ConnectionProvider.getConnection(); 
+						PreparedStatement psmt = cnx.prepareStatement(INSERT_ARTICLE, PreparedStatement.RETURN_GENERATED_KEYS); ) {
+					// On prépare la requête SQL pour insérer un utilisateur et on récupère l'ID généré par l'insertion
+					psmt.setString(1, articleCree.getNomArticle());
+					psmt.setString(2, articleCree.getDescription());
+					psmt.setDate(3, (Date)(articleCree.getDateDebutEnchere()));
+					psmt.setDate(4, (Date)(articleCree.getDateFinEchere()));
+					psmt.setInt(5, articleCree.getPrixInitial());
+					psmt.setInt(6, articleCree.getVendeur().getNoUtilisateur());
+					psmt.setInt(7, articleCree.getCategorie().getnoCategorie());
+					// On execute la requ�tes
+					psmt.executeUpdate();
+					// On r�cup�re le r�sultat
+					ResultSet rs = psmt.getGeneratedKeys();
+					if (rs.next()) {
+						// On ajoute le numéro de l'article
+						articleCree.setNoArticle(rs.getInt(1));
+					}
+					// S'il y a une erreur on l'enregistre dans la businessEx
+				} catch (SQLException sqle) {
+					sqle.printStackTrace();
+					BusinessException businessException = new BusinessException();
+					businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
+					throw businessException;
+				}
+		return null;
 	}
 
 }

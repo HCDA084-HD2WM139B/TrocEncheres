@@ -4,9 +4,7 @@
 <body>
 
 	<%@include file="nav.jsp" %>
-	
-	<session class="container d-flex justify-content-center flex-column" id="profil">
-	
+		
 	<div class="container">
 		<h2 class="text-center">Nouvelle Vente</h2>
 		
@@ -51,8 +49,10 @@
 							<div class="col-sm-6">
 								<select class="form-control" name="categorie">
 								    <option value="0">Choisir une catégorie</option>
-								    <option value="1">Catégorie 1</option>
-								    <option value="2">Catégorie 2</option>
+								    <option value="1">Informatique</option>
+								    <option value="2">Ameublement</option>
+								    <option value="3">Vêtement</option>
+								    <option value="4">Sport & Loisirs</option>								    
 								</select>
 							</div>
 							<div class="col-sm-4 text-danger">

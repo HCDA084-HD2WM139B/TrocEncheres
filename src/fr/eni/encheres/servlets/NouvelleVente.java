@@ -1,14 +1,9 @@
 package fr.eni.encheres.servlets;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bll.EnchereManager;
+import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 
 /**
@@ -62,6 +58,7 @@ public class NouvelleVente extends HttpServlet {
 	private static String paramRue = "";
 	private static String paramcodePostal = "";
 	private static String paramVille = "";
+	private static String paramId ="";
 	//Constantes de redirection 
 	private static final String NOUVELLE_VENTE_JSP = "/WEB-INF/jsp/NouvelleVente.jsp";
 	private static final String ACCUEIL_CONNEXION_JSP = "/WEB-INF/jsp/AccueilConnexion.jsp";
@@ -71,6 +68,14 @@ public class NouvelleVente extends HttpServlet {
 	private static int compareDateMax = 0;
 	private static final String PARAM_ID_UTILISATEUR = "id";
 	private static boolean articleAjoute = false;
+	private static boolean paramArticleBoolean = false;
+	private static Date paramDebutEnchereDate;
+	private static Date paramFinEnchereDate;
+	private static int paramPrixInt = 0;
+	private static Categorie categorie;
+	private static Utilisateur utilisateur;
+	private static int paramIdInt;
+	private static int no_utilisateur;
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -83,7 +88,7 @@ public class NouvelleVente extends HttpServlet {
 		String sNo_utilisateur = request.getParameter(PARAM_ID_UTILISATEUR);
 		
 		//Transforme le type Vue en type Modele pour préparer l'appel au Modele.
-		int no_utilisateur = Integer.parseInt(sNo_utilisateur);
+		no_utilisateur = Integer.parseInt(sNo_utilisateur);
 		//Appel à la BLL
 		EnchereManager manager = EnchereManager.getEnchereManager();
 		try {
@@ -102,7 +107,7 @@ public class NouvelleVente extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+			
 		// Récupération des paramètres sur le fichier NouvelleVente.jsp
 		paramArticle = request.getParameter(PARAM_ARTICLE);
 		paramDescription = request.getParameter(PARAM_DESCRIPTION);
@@ -126,6 +131,7 @@ public class NouvelleVente extends HttpServlet {
 		if (!manager.verifierTailleChampOk(paramArticle, NBR_CAR_ARTICLE)) {
 			messageErreurMap.put(PARAM_ARTICLE, ERR_TAILLE + NBR_CAR_ARTICLE);
 		} else {
+			paramArticleBoolean = true;
 			messageOkMap.put(PARAM_ARTICLE, paramArticle);
 		}
 		
@@ -141,6 +147,13 @@ public class NouvelleVente extends HttpServlet {
 		intCategorie = Integer.parseInt(paramCategorie);
 		if (intCategorie <= 0) {
 			messageErreurMap.put(PARAM_CATEGORIE, ERR_CATEGORIE);
+		} else {
+			try {
+				categorie = manager.getInsetCategorie(intCategorie, "");
+			} catch (BusinessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		// Photo de l'article
@@ -152,6 +165,7 @@ public class NouvelleVente extends HttpServlet {
 			messageErreurMap.put(PARAM_PRIX, ERR_PRIX);
 		} else {
 			messageOkMap.put(PARAM_PRIX, paramPrix);
+			paramPrixInt = Integer.parseInt(paramPrix);
 		}
 		
 		// Contrôle du paramètre date de début d'enchère
@@ -162,6 +176,7 @@ public class NouvelleVente extends HttpServlet {
 			messageErreurMap.put(PARAM_DEBUT_ENCHERE, ERR_DATE);
 		} else {
 			messageOkMap.put(PARAM_DEBUT_ENCHERE, paramDebutEnchere);
+			paramDebutEnchereDate = manager.stringVersDate(paramDebutEnchere);
 		}
 		
 		// Contrôle du paramètre date de fin d'enchère
@@ -172,6 +187,7 @@ public class NouvelleVente extends HttpServlet {
 			messageErreurMap.put(PARAM_FIN_ENCHERE, ERR_DATE);
 		} else {
 			messageOkMap.put(PARAM_FIN_ENCHERE, paramFinEnchere);
+			paramFinEnchereDate = manager.stringVersDate(paramFinEnchere);
 		}
 		
 		// Contrôle du paramètre rue
@@ -197,15 +213,16 @@ public class NouvelleVente extends HttpServlet {
 			messageOkMap.put(PARAM_VILLE, paramVille);
 		}
 		
-//		// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'article est ajouté à la base de données
-//		if () {
-//			try {
-//				manager.getInsertUtilisateur());
-//				articleAjoute = true;
-//			} catch (BusinessException e) {
-//				e.printStackTrace();
-//			}
-//		}
+		// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'article est ajouté à la base de données
+		if (paramArticleBoolean == true) {
+			try {
+				utilisateur = manager.getUtilisateurByID(no_utilisateur);
+				manager.getInsertArticle(paramArticle, paramDescription, paramDebutEnchereDate, paramFinEnchereDate, paramPrixInt, categorie, utilisateur);
+				articleAjoute = true;
+			} catch (BusinessException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		
 		// Si l'article est ajouté, on redirige vers la page d'accueil

@@ -54,6 +54,18 @@ public class Article implements Serializable {
 		this.vendeur = vendeur;
 	}
 	
+	public Article(String pNomArticle, String pDescription, Date pDateDebut, Date pDateFin, int pPrixInitial,
+			Categorie pNoCategorie, Utilisateur pNoUtilisateur) {
+		super();
+		this.nomArticle = pNomArticle;
+		this.description = pDescription;
+		this.dateDebutEnchere = pDateDebut;
+		this.dateFinEchere = pDateFin;
+		this.prixInitial = pPrixInitial;
+		this.categorie = pNoCategorie;
+		this.vendeur = pNoUtilisateur;
+	}
+	
 	// ---------------------------- Getter & Settter ---------------------------- 
 
 	public Integer getNoArticle() {

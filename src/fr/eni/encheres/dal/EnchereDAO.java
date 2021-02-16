@@ -17,7 +17,10 @@ public interface EnchereDAO {
 	public List<Article> selectAllSales() throws BusinessException;
 	
 	// Sélection de tous les articles
-	public List<Categorie> selectAllCategorie();
+	public List<Categorie> selectAllCategorie() throws BusinessException;
+	
+    // Création d'un article à vendre
+	public Article insertArticle(Article artcileCree) throws BusinessException;
 
 
 }
