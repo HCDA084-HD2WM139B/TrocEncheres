@@ -1,6 +1,9 @@
 package fr.eni.encheres.bll;
  
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -284,6 +287,57 @@ public class EnchereManager {
     	resultSql = DAOFactory.getUtilisateurDAO().deleteUserById(idUtilisateur);
     	return resultSql;
     }
+    
+    // TODO à commenter
+	public String dateJour() {
+		 Date actuelle = new Date();
+		 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		 String dat = dateFormat.format(actuelle);
+		 return dat;
+	}
+	
+	// TODO à commenter
+   public boolean verifierTailleChampOk(String pChampAverifier, int tailleChamp) {
+       boolean resultat = false;
+       // On vérifie que la longueur du champ à vérifier est supérieure à 0 après avoir supprimer les espaces,
+       // On vérifie que la longueur du champ à vérifier est supérieure à 2
+       // On vérifie que la longueur du champ à vérifier est inférieure à tailleChamp
+       if( pChampAverifier.trim().length() > 0 && pChampAverifier.length() > 2 && pChampAverifier.length() <= tailleChamp) {
+           resultat = true;
+       }
+       return resultat;
+   }
+   
+// TODO à commenter
+   public boolean verifierSiEntier (String pchampAverifier) {
+   	boolean resultat = true;
+       try {
+       	Integer.parseInt(pchampAverifier);
+       } catch (NumberFormatException e) {
+           resultat = false;
+       }
+       return resultat;
+   }
+   
+   /**
+    * Méthode permettant d'ajouter un utilisateur dans la base de données
+    * @param pPseudo chaîne de caractère représentant le pseudo
+    * @param pPrenom chaîne de caractère représentant le prénom
+    * @param pTelephone chaîne de caractère représentant le téléphone
+    * @param pCodePostal chaîne de caractère représentant le code postal
+    * @param pMotDePasse chaîne de caractère représentant le mot de passe
+    * @param pNom  chaîne de caractère représentant le nom
+    * @param pEmail chaîne de caractère représentant l'email
+    * @param pRue chaîne de caractère représentant la rue
+    * @param pVille chaîne de caractère représentant la ville
+    * @return un utilisateur
+    * @throws BusinessException
+    */
+//   public Article getInsertArticle(String pPseudo, String pPrenom, String pTelephone, String pCodePostal, String pMotDePasse, 
+//   		String pNom, String pEmail, String pRue, String pVille) throws BusinessException {
+//	   Article artcileCree = new Article(pNomArticle, pDescription, pDateDebut, pDateFin, pPrixInitial, pPrixVente, pNoUtilisateur, pNoCategorie);
+//	   artcileCree = DAOFactory.getUtilisateurDAO().insertArticle(artcileCree);
+//   }
  
     
     // Getters & Setters

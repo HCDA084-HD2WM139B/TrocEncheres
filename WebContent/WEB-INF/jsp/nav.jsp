@@ -37,7 +37,7 @@
 					<a class="nav-link text-white" href="#">Enchères</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link text-white" href="#">Vendre un objet</a>
+					<a class="nav-link text-white" href="<c:url value="//NouvelleVente?id=${ id_utilisateur }"/>">Vendre un objet</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link text-white"	href="<c:url value="/monProfil?id=${ id_utilisateur }"/>">Mon Profil</a>
