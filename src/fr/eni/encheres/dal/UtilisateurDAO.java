@@ -1,5 +1,7 @@
 package fr.eni.encheres.dal;
 
+import java.util.List;
+
 import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bo.Utilisateur;
 
@@ -30,5 +32,17 @@ public interface UtilisateurDAO {
 	
 	// archivage d'un utilisateur supprimé en fonction de son numéro d'identifiant
     public boolean deleteUserById(int id) throws BusinessException;
+	
+	//Retourne True si l'ID et le Pseudo correspondent (BDD)
+	public boolean VerifByPseudoAndId(String pPseudo, Integer pNo_utilisateur) throws BusinessException;
+	
+	//Retourne True si l'ID et l'email correspondent (BDD)
+	public boolean VerifByEmailAndId(String pEmail, Integer pNo_utilisateur) throws BusinessException; 
+	
+	//Retourne un ID avec le Pseudo 
+	public Integer SelectIdWherePseudo(String pPseudo) throws BusinessException;
+	
+	//Retourne un ID avec le Pseudo 
+	public Integer SelectIdWhereEmail(String pEmail) throws BusinessException;
 	
 }

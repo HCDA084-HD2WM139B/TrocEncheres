@@ -59,7 +59,7 @@
 		<article class="d-flex col-12 mb-4">
 			<div class="col-6">
 				<label class="col-5" for="mdp_actuel">Mot de passe actuel : </label>
-				<input class="col-6" type="password" name="mdp_actuel" id="mdp_actuel" value="<c:out value="${ afficheUtilisateur.motDePasse }"></c:out>">
+				<input readonly class="col-6" type="password" name="mdp_actuel" id="mdp_actuel" value="<c:out value="${ afficheUtilisateur.motDePasse }"></c:out>">
 			</div>
 		</article>
 		

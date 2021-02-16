@@ -5,8 +5,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.eni.encheres.BusinessException;
+import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Utilisateur;
 
 /**
@@ -140,6 +143,159 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			throw businessException;
 		}	
 		return utilisateurTrouve;
+	}
+	
+	
+	/**
+	 * Méthode qui recherche un utilisateur avec l'ID ET le Pseudo correspondant ou non
+	 * @param pPseudo (String) Le pseudo de l'utilisateur.
+	 * @param pNo_utilisateur (Integer) Le numéro de l'utilisateur.
+	 * @return (Boolean) si un utilisateur correspond à l'ID et au Pseudo.
+	 */
+	
+	public boolean VerifByPseudoAndId(String pPseudo, Integer pNo_utilisateur) throws BusinessException {
+		boolean verif = false; 
+		if (pPseudo == null && pNo_utilisateur == null ) {
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
+			throw businessException;
+		}
+		
+		// on établit la requete SQL en fonction du pseudo et du numéro
+		String sql = "SELECT * FROM UTILISATEURS WHERE pseudo = ? AND no_utilisateur = ?";
+		// Connexion à la BDD & Préparation de la requete (leurs fermetures y sont implicite)
+		try (Connection cnx = ConnectionProvider.getConnection(); PreparedStatement psmt = cnx.prepareStatement(sql) ) {
+			psmt.setString(1, pPseudo);
+			psmt.setInt(2, pNo_utilisateur);
+			// Exécution de la requete
+			ResultSet rs = psmt.executeQuery();
+			// Si la requête fonctionne : on renvoie true
+			if (rs.next()) {
+				verif = true;
+			}
+			
+		// S'il y a une erreur on l'enregistre dans la businessEx
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
+			throw businessException;
+		}	
+		
+		return verif;
+	}
+	
+	/**
+	 * Méthode qui recherche un utilisateur avec l'ID ET le Pseudo correspondant ou non
+	 * @param pEmail (String) L'email de l'utilisateur.
+	 * @param pNo_utilisateur (Integer) Le numéro de l'utilisateur.
+	 * @return (Boolean) si un utilisateur correspond à l'ID et à l'email.
+	 */
+	
+	public boolean VerifByEmailAndId(String pEmail, Integer pNo_utilisateur) throws BusinessException {
+		boolean verif = false; 
+		if (pEmail == null && pNo_utilisateur == null ) {
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
+			throw businessException;
+		}
+		
+		// on établit la requete SQL en fonction du pseudo et du numéro
+		String sql = "SELECT * FROM UTILISATEURS WHERE email = ? AND no_utilisateur = ?";
+		// Connexion à la BDD & Préparation de la requete (leurs fermetures y sont implicite)
+		try (Connection cnx = ConnectionProvider.getConnection(); PreparedStatement psmt = cnx.prepareStatement(sql) ) {
+			psmt.setString(1, pEmail);
+			psmt.setInt(2, pNo_utilisateur);
+			// Exécution de la requete
+			ResultSet rs = psmt.executeQuery();
+			// Si la requête fonctionne : on renvoie true
+			if (rs.next()) {
+				verif = true;
+			}
+			
+		// S'il y a une erreur on l'enregistre dans la businessEx
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
+			throw businessException;
+		}	
+		
+		return verif;
+	}
+	
+	/**
+	 * Méthode qui retourne un identifiant selon le pseudo
+	 * @param pPseudo (String) Le pseudo de l'utilisateur.
+	 * @return (Integer) la requête retourne le numéro de l'utilisateur.
+	 */
+	
+	public Integer SelectIdWherePseudo(String pPseudo) throws BusinessException {
+		Integer verif = null; 
+		if (pPseudo == null ) {
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
+			throw businessException;
+		}
+		
+		// on récupère l'ID avec la requete SQL en fonction du pseudo
+		String sql = "SELECT no_utilisateur FROM UTILISATEURS WHERE pseudo = ?";
+		// Connexion à la BDD & Préparation de la requete (leurs fermetures y sont implicite)
+		try (Connection cnx = ConnectionProvider.getConnection(); PreparedStatement psmt = cnx.prepareStatement(sql) ) {
+			psmt.setString(1, pPseudo);
+			// Exécution de la requete
+			ResultSet rs = psmt.executeQuery();
+			// Si la requête fonctionne on insère l'ID dans notre variable
+			if (rs.next()) {
+				verif = rs.getInt("no_utilisateur");
+			}
+			
+		// S'il y a une erreur on l'enregistre dans la businessEx
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
+			throw businessException;
+		}	
+		
+		return verif;
+	}
+	
+	/**
+	 * Méthode qui retourne un identifiant selon le pseudo
+	 * @param pEmail (String) L'email de l'utilisateur.
+	 * @return (Integer) la requête retourne le numéro de l'utilisateur.
+	 */
+	
+	public Integer SelectIdWhereEmail(String pEmail) throws BusinessException {
+		Integer verif = null; 
+		if (pEmail == null ) {
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_NULL);
+			throw businessException;
+		}
+		
+		// on récupère l'ID avec la requete SQL en fonction du pseudo
+		String sql = "SELECT no_utilisateur FROM UTILISATEURS WHERE email = ?";
+		// Connexion à la BDD & Préparation de la requete (leurs fermetures y sont implicite)
+		try (Connection cnx = ConnectionProvider.getConnection(); PreparedStatement psmt = cnx.prepareStatement(sql) ) {
+			psmt.setString(1, pEmail);
+			// Exécution de la requete
+			ResultSet rs = psmt.executeQuery();
+			// Si la requête fonctionne on insère l'ID dans notre variable
+			if (rs.next()) {
+				verif = rs.getInt("no_utilisateur");
+			}
+			
+		// S'il y a une erreur on l'enregistre dans la businessEx
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
+			throw businessException;
+		}	
+		
+		return verif;
 	}
 	
 	/**

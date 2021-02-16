@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bll.EnchereManager;
+import fr.eni.encheres.bo.Utilisateur;
 
 /**
  * Servlet implementation class ModificationUpdateProfil
@@ -45,6 +46,10 @@ public class ModificationUpdateProfil extends HttpServlet {
 	//Constantes de redirection
 	private static final String REDIRECTION_SUCCESS = "/monProfil?id=";
 	private static final String REDIRECTION_FAIL_UPDATE = "/modifierProfil?id=";
+	
+	// Constante de valeur max & min
+	private static final int VALEURMAX_MDP = 8;
+	private static final int VALEURMIN_MDP = 2;
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -58,10 +63,8 @@ public class ModificationUpdateProfil extends HttpServlet {
 				boolean tailleChamp = true;
 				boolean formatEmail = false;
 				boolean erreurMotDePasse = true;
-				boolean pseudoUtilise = true;
-				boolean emailUtilise = true;
-				boolean motDePasseModifie = false;
 				boolean utilisateurUpdated = false;
+				boolean ModifPseudoOk = false;
 				
 
 				List<String> listErreurs = new ArrayList<String>();
@@ -100,16 +103,42 @@ public class ModificationUpdateProfil extends HttpServlet {
 					//La taille maximum du champ est défini par la méthode valeurMax()
 					valeurMax = manager.valeurMax(entree.getKey());
 					// Vérification de la taille du champ qui doit être compris entre deux et valeurMax. (Le champ téléphone est exclu car il peut être null et la taille du champ ID peut-être inférieur à 2)
-					if (!manager.verifierTailleChamp(entree.getValue(), valeurMax) && !entree.getKey().contains(PARAM_TELEPHONE) && !entree.getKey().contains(PARAM_ID_POST)) {
+					if (!manager.verifierTailleChamp(entree.getValue(), valeurMax) && !entree.getKey().contains(PARAM_TELEPHONE) && !entree.getKey().contains(PARAM_ID_POST) && !entree.getKey().contains(PARAM_NEW_MOT_DE_PASSE) && !entree.getKey().contains(PARAM_CONFIRM_MOT_DE_PASSE)) {
 						listErreurs.add("Le champ " + entree.getKey() + " doit être compris entre 2 et " + valeurMax + " caractères.");
 						tailleChamp = false;
-					} else if (parametre.get(PARAM_NEW_MOT_DE_PASSE).isEmpty() && (parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).isEmpty())) {
-						tailleChamp = true;
 					}
 				}	
 				
-					//TODO Si l'ID de l'utilisateur contenant ce nouveau pseudo et email est le même que l'ancien pseudo, on valide 
 					
+					// VERIFICATION DE LA MODIFICATION DU PSEUDO 
+					try {
+							// Cas où le pseudo n'existe pas en base : Return true
+							if (!manager.getPseudoExiste(parametre.get(PARAM_PSEUDO))) {
+								ModifPseudoOk = true;								
+							} 
+
+							// Cas où le pseudo existe en BDD mais que l'IDSession est égale à l'ID de la BDD ET que le pseudo est égal au champ "pseudo"
+							else if (manager.getPseudoExiste(parametre.get(PARAM_PSEUDO)) && manager.VerifierPseudoId(parametre.get(PARAM_PSEUDO), IdSession)) {
+								ModifPseudoOk = true;
+							} 
+							
+							// Cas où le pseudo existe en BDD mais que l'ID de la BDD est différent de l'IDSession
+							else if (manager.getPseudoExiste(parametre.get(PARAM_PSEUDO)) && manager.RecupererIdAvecPseudo(parametre.get(PARAM_PSEUDO)) != IdSession) {
+								ModifPseudoOk = false;
+								listErreurs.add("Le pseudo " + parametre.get(PARAM_PSEUDO) + " existe déjà.");
+							} 
+							
+							else  {
+								ModifPseudoOk = false;
+								listErreurs.add("Le pseudo " + parametre.get(PARAM_PSEUDO) + " est erronné.");
+							}
+							
+						
+					} catch (BusinessException e) {
+						e.printStackTrace();
+					}
+				
+
 				
 					// Vérification que le format de l'email est correct
 					if(manager.verifFormatEmail(parametre.get(PARAM_EMAIL))) {
@@ -120,63 +149,75 @@ public class ModificationUpdateProfil extends HttpServlet {
 						listErreurs.add(EMAIL_KO);
 					}
 					
+					// Vérification que l'email n'est pas déjà utilisé 
+					
+					boolean ModifEmailOk = false;
+					try {
+						System.out.println(" ID récupéré : " + manager.RecupererIdAvecEmail(parametre.get(PARAM_EMAIL)));
+						System.out.println(" Vérification : " + manager.VerifierEmailId(parametre.get(PARAM_EMAIL), IdSession));
+							// Cas où l'email n'existe pas en base : Return true
+							if (!manager.getEmailExiste(parametre.get(PARAM_EMAIL))) {
+								ModifEmailOk = true;								
+							} 
+
+							// Cas où l'email existe en BDD mais que l'IDSession est égale à l'ID de la BDD ET que le pseudo est égal au champ "email"
+							else if (manager.getEmailExiste(parametre.get(PARAM_EMAIL)) && manager.VerifierEmailId(parametre.get(PARAM_EMAIL), IdSession)) {
+								ModifEmailOk = true;
+							} 
+							
+							// Cas où l'email existe en BDD mais que l'ID de la BDD est différent de l'IDSession
+							else if (manager.getEmailExiste(parametre.get(PARAM_EMAIL)) && manager.RecupererIdAvecEmail(parametre.get(PARAM_EMAIL)) != IdSession) {
+								ModifEmailOk = false;
+								listErreurs.add("L'email " + parametre.get(PARAM_EMAIL) + " existe déjà.");
+							} 
+							
+							else  {
+								ModifEmailOk = false;
+								listErreurs.add("L'email " + parametre.get(PARAM_EMAIL) + " est erronné.");
+							}
+							
+						
+					} catch (BusinessException e) {
+						e.printStackTrace();
+					}
+					
 					//Vérification que le nouveau mot de passe est égal à la confirmation
 					//TODO Vérifier que si un des deux champs est null --> erreur, sinon c'est bon
+					String password = parametre.get(PARAM_MOT_DE_PASSE_ACTUEL);
 					try {
-						if (manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_CONFIRM_MOT_DE_PASSE))) {
+						if (manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_CONFIRM_MOT_DE_PASSE)) && parametre.get(PARAM_NEW_MOT_DE_PASSE).isEmpty() && parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).isEmpty()) {
 							erreurMotDePasse = false;
+							password = parametre.get(PARAM_MOT_DE_PASSE_ACTUEL);
 
+						} else if (parametre.get(PARAM_NEW_MOT_DE_PASSE).isEmpty() || parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).isEmpty() )  {
+							erreurMotDePasse = true;
+							listErreurs.add("Un des deux champs du nouveau mot de passe est vide");
+							
+						} else if (manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_CONFIRM_MOT_DE_PASSE)) 
+										&& !parametre.get(PARAM_NEW_MOT_DE_PASSE).isEmpty() && !parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).isEmpty()
+										&& manager.verifierTailleChamp(parametre.get(PARAM_NEW_MOT_DE_PASSE), VALEURMAX_MDP)
+										&& !manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_MOT_DE_PASSE_ACTUEL))) {
+							password = parametre.get(PARAM_NEW_MOT_DE_PASSE);
+							
+						} else if (parametre.get(PARAM_NEW_MOT_DE_PASSE).length() < 2 || parametre.get(PARAM_NEW_MOT_DE_PASSE).length() > VALEURMAX_MDP
+									|| parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).length() < 2 || parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).length() > VALEURMAX_MDP) {
+							listErreurs.add("Le mot de passe doit être compris entre 2 et 8 caractères");
+						
+						} else if (manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_MOT_DE_PASSE_ACTUEL))) {
+							listErreurs.add("Le nouveau mot de passe est identique à l'ancien");
 						} else {
 							listErreurs.add(MOT_DE_PASSE_KO);
 						}
-					} catch (BusinessException e1) {
-						e1.printStackTrace();
-					}
-					
-					// Vérification dans la base de données si le pseudo est déjà utilisé
-					//TODO 
-					try {
-						if (!manager.getPseudoExiste(parametre.get(PARAM_PSEUDO))){
-							pseudoUtilise = false;
-							System.out.println("Le pseudo existe déjà : " + pseudoUtilise);
-
-						} else {
-							listErreurs.add("Le pseudo " + parametre.get(PARAM_PSEUDO) + " est déjà utilisé.");
-						}
+						
+						
 					} catch (BusinessException e) {
 						e.printStackTrace();
 					}
-					
-					// Vérification dans la base de données si l'email est déjà utilisé
-					//TODO
-					try {
-						if (!manager.getEmailExiste(parametre.get(PARAM_EMAIL))){
-							emailUtilise = false;
-							System.out.println("L'email existe déjà " + emailUtilise);
-
-						} else {
-							listErreurs.add("L'email " + parametre.get(PARAM_EMAIL) + " est déjà utilisé.");
-						}
-					} catch (BusinessException e) {
-						e.printStackTrace();
-					}
-					
-						//Vérification que le new mdp soit différent de l'ancien ou si les deux champs sont vides
-						if(parametre.get(PARAM_MOT_DE_PASSE_ACTUEL) != parametre.get(PARAM_NEW_MOT_DE_PASSE) || ( parametre.get(PARAM_NEW_MOT_DE_PASSE).isEmpty() && parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).isEmpty() ) ) {
-							motDePasseModifie = true;
-							
-						} else if(parametre.get(PARAM_NEW_MOT_DE_PASSE).isEmpty() || parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).isEmpty()){
-							listErreurs.add("Un des deux champs du mot de passe est vide");
-						} else {
-							listErreurs.add("Le nouveau mot de passe est identique à l'ancien.");
-
-						}
 				
-
 						// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'utilisateur est ajouté à la base de données
-						if (tailleChamp == true && pseudoUtilise == false && emailUtilise == false && erreurMotDePasse == false && formatEmail == true && motDePasseModifie == true) {
+						if (tailleChamp == true && ModifPseudoOk == true && ModifEmailOk == true && erreurMotDePasse == false && formatEmail == true /* && motDePasseModifie == true */) {
 							try {
-								manager.getUpdatedUtilisateur(no_utilisateur, parametre.get(PARAM_PSEUDO), parametre.get(PARAM_PRENOM), parametre.get(PARAM_TELEPHONE), parametre.get(PARAM_CODE_POSTAL), parametre.get(PARAM_NEW_MOT_DE_PASSE),
+								manager.getUpdatedUtilisateur(no_utilisateur, parametre.get(PARAM_PSEUDO), parametre.get(PARAM_PRENOM), parametre.get(PARAM_TELEPHONE), parametre.get(PARAM_CODE_POSTAL), password,
 										parametre.get(PARAM_NOM), parametre.get(PARAM_EMAIL), parametre.get(PARAM_RUE), parametre.get(PARAM_VILLE));
 								utilisateurUpdated = true;
 							} catch (BusinessException e) {
