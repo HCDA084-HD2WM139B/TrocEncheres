@@ -19,9 +19,9 @@ import fr.eni.encheres.bo.Utilisateur;
  *
  */
 public class EnchereDAOImpl implements EnchereDAO {
-
+// WHERE date_fin_encheres > GETDATE() AND date_debut_encheres <= GETDATE()
 	// Constantes des requêtes SQL
-	private static final String SELECT_ARTICLE = "SELECT * FROM UTILISATEURS AS u INNER JOIN ARTICLES_VENDUS AS a ON u.no_utilisateur = a.no_utilisateur INNER JOIN CATEGORIES AS c ON a.no_categorie = c.no_categorie WHERE date_fin_encheres > GETDATE() AND date_debut_encheres <= GETDATE()";
+	private static final String SELECT_ARTICLE = "SELECT * FROM UTILISATEURS AS u INNER JOIN ARTICLES_VENDUS AS a ON u.no_utilisateur = a.no_utilisateur INNER JOIN CATEGORIES AS c ON a.no_categorie = c.no_categorie";
 	private static final String SELECT_MAX_ENCHERE = "SELECT MAX(montant_enchere) AS best_enchere FROM ENCHERES WHERE no_article = ? GROUP BY no_article";
 	private static final String SELECT_CATEGORIE = "SELECT * FROM categories";
 	private static final String INSERT_ARTICLE = "INSERT INTO ARTICLES_VENDUS (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, no_utilisateur, no_categorie ) VALUES (?, ?, ?, ?, ?, ?, ?);";

@@ -176,6 +176,10 @@ public class AccueilServlet extends HttpServlet {
 								listSalesTemp.add(article);
 							}
 						}
+						// si aucunes des cases "Mes ventes ..." sont cochées (par defaut on affiche toutes les ventes de l'utilisateur)
+						if ( !"on".equals(selectMySalesInProgress) && !"on".equals(selectMySalesNotStarted) && !"on".equals(selectMySalesDone)) {
+							listSalesTemp.add(article);
+						}
 					}
 				}
 				// Sinon si le type de recherche correspond à "achats"

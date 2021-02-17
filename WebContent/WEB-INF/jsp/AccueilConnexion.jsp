@@ -77,15 +77,15 @@
 							<label for="vente">Mes ventes</label>
 							<div class="d-flex flex-column ml-4">
 								<div>
-									<input type="checkbox" id="ve_encours" name="ve_encours">
+									<input type="checkbox" id="ve_encours" name="ve_encours" disabled>
 									<label class="ml-2" for="ve_encours">mes ventes en cours</label>
 								</div>
 								<div>
-									<input type="checkbox" id="ve_null" name="ve_null">
+									<input type="checkbox" id="ve_null" name="ve_null" disabled>
 									<label class="ml-2" for="en_encours">mes ventes non debutees</label>
 								</div>
 								<div>
-									<input type="checkbox" id="ve_over" name="ve_over">
+									<input type="checkbox" id="ve_over" name="ve_over" disabled>
 									<label class="ml-2" for="ve_over">mes ventes terminees</label>
 								</div>
 							</div>
