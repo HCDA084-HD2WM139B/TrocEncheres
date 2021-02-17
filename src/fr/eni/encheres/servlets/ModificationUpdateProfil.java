@@ -23,6 +23,11 @@ import fr.eni.encheres.bo.Utilisateur;
  */
 @WebServlet("/modificationUpdateProfil")
 public class ModificationUpdateProfil extends HttpServlet {
+
+
+
+	private static final String PROBLEM_ID = "Un problème est survenu, veuillez rafraichir la page";
+
 	private static final long serialVersionUID = 1L;
 
 	//Constantes de paramètres
@@ -42,6 +47,9 @@ public class ModificationUpdateProfil extends HttpServlet {
 	//Constantes de messages d'erreur
 	private static final String EMAIL_KO = "Le format de l'email n'est pas correct";
 	private static final String MOT_DE_PASSE_KO = "Le mot de passe ne correpond pas à la confirmation.";
+	private static final String ERREUR_UN_CHAMP_MDP_VIDE = "Un des deux champs du nouveau mot de passe est vide";
+	private static final String LE_NEW_MDP_IDENTIQUE_ANCIEN_MDP = "Le nouveau mot de passe est identique à l'ancien";
+	private static final String LE_MDP_ENTRE_2_ET_8_CARACTERES = "Le mot de passe doit être compris entre 2 et 8 caractères";
  
 	//Constantes de redirection
 	private static final String REDIRECTION_SUCCESS = "/monProfil?id=";
@@ -65,6 +73,7 @@ public class ModificationUpdateProfil extends HttpServlet {
 				boolean erreurMotDePasse = true;
 				boolean utilisateurUpdated = false;
 				boolean ModifPseudoOk = false;
+				boolean IdPostOk = false; 
 				
 
 				List<String> listErreurs = new ArrayList<String>();
@@ -84,6 +93,9 @@ public class ModificationUpdateProfil extends HttpServlet {
 				parametre.put(PARAM_MOT_DE_PASSE_ACTUEL, request.getParameter(PARAM_MOT_DE_PASSE_ACTUEL));		
 				parametre.put(PARAM_NEW_MOT_DE_PASSE, request.getParameter(PARAM_NEW_MOT_DE_PASSE));
 				parametre.put(PARAM_CONFIRM_MOT_DE_PASSE, request.getParameter(PARAM_CONFIRM_MOT_DE_PASSE));
+				
+				// Variable du mot de passe ( par défaut, on gardera l'ancien ) 
+				String password = parametre.get(PARAM_MOT_DE_PASSE_ACTUEL);
 
 				//Modification du type de l'id de la session en String pour l'intégrer dans l'URL
 				int IdSession = (int) request.getSession().getAttribute("id_utilisateur");
@@ -109,8 +121,15 @@ public class ModificationUpdateProfil extends HttpServlet {
 					}
 				}	
 				
+				// Vérification de l'ID présent dans le formulaire est le même que l'ID de la session
+				if (parametre.get(PARAM_ID_POST).equals(sIdSession)) {
+					IdPostOk = true;
+				} else {
+					listErreurs.add(PROBLEM_ID);
+				}
+				
 					
-					// VERIFICATION DE LA MODIFICATION DU PSEUDO 
+					// Vérifier que le pseudo a été modifié et qu'il n'existe pas déjà dans la BDD 
 					try {
 							// Cas où le pseudo n'existe pas en base : Return true
 							if (!manager.getPseudoExiste(parametre.get(PARAM_PSEUDO))) {
@@ -127,7 +146,7 @@ public class ModificationUpdateProfil extends HttpServlet {
 								ModifPseudoOk = false;
 								listErreurs.add("Le pseudo " + parametre.get(PARAM_PSEUDO) + " existe déjà.");
 							} 
-							
+							// Autres cas 
 							else  {
 								ModifPseudoOk = false;
 								listErreurs.add("Le pseudo " + parametre.get(PARAM_PSEUDO) + " est erronné.");
@@ -143,7 +162,6 @@ public class ModificationUpdateProfil extends HttpServlet {
 					// Vérification que le format de l'email est correct
 					if(manager.verifFormatEmail(parametre.get(PARAM_EMAIL))) {
 						formatEmail = true;
-						System.out.println("Le format email du champ est " + formatEmail);
 
 					} else {
 						listErreurs.add(EMAIL_KO);
@@ -153,8 +171,6 @@ public class ModificationUpdateProfil extends HttpServlet {
 					
 					boolean ModifEmailOk = false;
 					try {
-						System.out.println(" ID récupéré : " + manager.RecupererIdAvecEmail(parametre.get(PARAM_EMAIL)));
-						System.out.println(" Vérification : " + manager.VerifierEmailId(parametre.get(PARAM_EMAIL), IdSession));
 							// Cas où l'email n'existe pas en base : Return true
 							if (!manager.getEmailExiste(parametre.get(PARAM_EMAIL))) {
 								ModifEmailOk = true;								
@@ -182,40 +198,52 @@ public class ModificationUpdateProfil extends HttpServlet {
 					}
 					
 					//Vérification que le nouveau mot de passe est égal à la confirmation
-					//TODO Vérifier que si un des deux champs est null --> erreur, sinon c'est bon
-					String password = parametre.get(PARAM_MOT_DE_PASSE_ACTUEL);
 					try {
+						// Verifier si le new_mdp et confirm_mdp sont identiques et les deux champs sont vides
+						// Cas où l'utilisateur ne modifie pas le mdp ( on garde le mot de passe actuel dans la variable )
 						if (manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_CONFIRM_MOT_DE_PASSE)) && parametre.get(PARAM_NEW_MOT_DE_PASSE).isEmpty() && parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).isEmpty()) {
 							erreurMotDePasse = false;
 							password = parametre.get(PARAM_MOT_DE_PASSE_ACTUEL);
-
-						} else if (parametre.get(PARAM_NEW_MOT_DE_PASSE).isEmpty() || parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).isEmpty() )  {
+						} 
+						
+						//  Cas où un des deux champs pour remplacer le MDP est vide 
+						else if (parametre.get(PARAM_NEW_MOT_DE_PASSE).isEmpty() || parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).isEmpty() )  {
 							erreurMotDePasse = true;
-							listErreurs.add("Un des deux champs du nouveau mot de passe est vide");
-							
-						} else if (manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_CONFIRM_MOT_DE_PASSE)) 
+							listErreurs.add(ERREUR_UN_CHAMP_MDP_VIDE);					
+						} 
+						
+						// Vérifier si le new_mdp et confirm_mdp sont identiques, que les deux champs ne sont pas vides et que la taille des champs est respectée 
+						// Vérifie que le new_mdp est différent du mdp actuel
+						// Cas où l'utilisateur modifie correctement son mdp ( on met le nouveau mot de passe dans la variable ) 
+						else if (manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_CONFIRM_MOT_DE_PASSE)) 
 										&& !parametre.get(PARAM_NEW_MOT_DE_PASSE).isEmpty() && !parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).isEmpty()
 										&& manager.verifierTailleChamp(parametre.get(PARAM_NEW_MOT_DE_PASSE), VALEURMAX_MDP)
 										&& !manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_MOT_DE_PASSE_ACTUEL))) {
-							password = parametre.get(PARAM_NEW_MOT_DE_PASSE);
 							
-						} else if (parametre.get(PARAM_NEW_MOT_DE_PASSE).length() < 2 || parametre.get(PARAM_NEW_MOT_DE_PASSE).length() > VALEURMAX_MDP
-									|| parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).length() < 2 || parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).length() > VALEURMAX_MDP) {
-							listErreurs.add("Le mot de passe doit être compris entre 2 et 8 caractères");
+							password = parametre.get(PARAM_NEW_MOT_DE_PASSE);
+						} 
 						
-						} else if (manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_MOT_DE_PASSE_ACTUEL))) {
-							listErreurs.add("Le nouveau mot de passe est identique à l'ancien");
-						} else {
+						// Cas où les deux champs new_mdp dont identiques mais pas compris entre 2 et 8 caractères
+						else if (parametre.get(PARAM_NEW_MOT_DE_PASSE).length() < VALEURMIN_MDP || parametre.get(PARAM_NEW_MOT_DE_PASSE).length() > VALEURMAX_MDP
+									|| parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).length() < VALEURMIN_MDP || parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).length() > VALEURMAX_MDP) {
+							listErreurs.add(LE_MDP_ENTRE_2_ET_8_CARACTERES);
+						} 
+						
+						// Cas où le nouveau MDP est identique à l'ancien
+						else if (manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_MOT_DE_PASSE_ACTUEL))) {
+							listErreurs.add(LE_NEW_MDP_IDENTIQUE_ANCIEN_MDP);
+						} 
+						// Autres cas
+						else {
 							listErreurs.add(MOT_DE_PASSE_KO);
 						}
-						
-						
+
 					} catch (BusinessException e) {
 						e.printStackTrace();
 					}
 				
 						// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'utilisateur est ajouté à la base de données
-						if (tailleChamp == true && ModifPseudoOk == true && ModifEmailOk == true && erreurMotDePasse == false && formatEmail == true /* && motDePasseModifie == true */) {
+						if (IdPostOk == true && tailleChamp == true && ModifPseudoOk == true && ModifEmailOk == true && erreurMotDePasse == false && formatEmail == true /* && motDePasseModifie == true */) {
 							try {
 								manager.getUpdatedUtilisateur(no_utilisateur, parametre.get(PARAM_PSEUDO), parametre.get(PARAM_PRENOM), parametre.get(PARAM_TELEPHONE), parametre.get(PARAM_CODE_POSTAL), password,
 										parametre.get(PARAM_NOM), parametre.get(PARAM_EMAIL), parametre.get(PARAM_RUE), parametre.get(PARAM_VILLE));
