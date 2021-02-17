@@ -5,11 +5,11 @@
     <welcome-file>encheres</welcome-file>
   </welcome-file-list>
   <servlet>
-    <servlet-name>AccueilNonConnecte</servlet-name>
+    <servlet-name>Accueil</servlet-name>
     <servlet-class>fr.eni.encheres.servlets.AccueilServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>AccueilNonConnecte</servlet-name>
+    <servlet-name>Accueil</servlet-name>
     <url-pattern>/encheres</url-pattern>
   </servlet-mapping>
   <error-page>

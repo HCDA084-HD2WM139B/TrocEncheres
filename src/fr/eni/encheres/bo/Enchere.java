@@ -8,35 +8,48 @@ import java.util.Date;
  *
  */
 public class Enchere {
+	
+	private Integer id;
 	private Date dateEnchere;
-	private int montantEnchere; 
-	private Utilisateur vendeur;
+	private Integer montantEnchere; 
+	private Utilisateur acheteur;
 	private Article articleVendu;
 	
-	// --------------------------- Constructeur ---------------------------
+	// Constructeurs
 	
 	public Enchere() {
-		 
+		 this.id = null;
+		 this.dateEnchere = null;
+		 this.montantEnchere = null;
+		 this.acheteur = null;
+		 this.articleVendu = null;
 	}
 	
 	/**
+	 * @param id : identifiant de l'enchere
 	 * @param dateEnchere : désigne la date de l'enchère en cours
 	 * @param montantEnchere : désigne le montant de l'enchère
 	 * @param vendeur : désigne l'utilisateur qui vend l'article
 	 * @param articleVendu : désigne l'article vendu
 	 */
-	public Enchere(Date dateEnchere, int montantEnchere, Utilisateur vendeur, Article articleVendu) {
-		super();
+	public Enchere(Integer id, Date dateEnchere, Integer montantEnchere, Utilisateur acheteur, Article articleVendu) {
+		this.id = id;
 		this.dateEnchere = dateEnchere;
 		this.montantEnchere = montantEnchere;
-		this.vendeur = vendeur;
+		this.acheteur = acheteur;
 		this.articleVendu = articleVendu;
 	}
-	
-	
-	// --------------------------- Getters & Setters ---------------------------
 
+	// Getters & setters
 	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public Date getDateEnchere() {
 		return dateEnchere;
 	}
@@ -45,20 +58,20 @@ public class Enchere {
 		this.dateEnchere = dateEnchere;
 	}
 
-	public int getMontantEnchere() {
+	public Integer getMontantEnchere() {
 		return montantEnchere;
 	}
 
-	public void setMontantEnchere(int montantEnchere) {
+	public void setMontantEnchere(Integer montantEnchere) {
 		this.montantEnchere = montantEnchere;
 	}
 
-	public Utilisateur getVendeur() {
-		return vendeur;
+	public Utilisateur getAcheteur() {
+		return acheteur;
 	}
 
-	public void setVendeur(Utilisateur vendeur) {
-		this.vendeur = vendeur;
+	public void setAcheteur(Utilisateur acheteur) {
+		this.acheteur = acheteur;
 	}
 
 	public Article getArticleVendu() {
@@ -68,7 +81,6 @@ public class Enchere {
 	public void setArticleVendu(Article articleVendu) {
 		this.articleVendu = articleVendu;
 	}
-	
 	
 	
 }

@@ -42,7 +42,8 @@ public class InscriptionServlet extends HttpServlet {
 	private static final String MOT_DE_PASSE_KO = "Le mot de passe ne correpond pas à la confirmation.";
 	private static final String EMAIL_KO = "Le format de l'email n'est pas correcte";
 	//Constantes de redirection 
-	private static final String ACCUEIL_CONNEXION_JSP = "/WEB-INF/jsp/AccueilConnexion.jsp";
+//	private static final String ACCUEIL_CONNEXION_JSP = "/WEB-INF/jsp/AccueilConnexion.jsp";
+	private static final String ACCUEIL_SERVLET = "/encheres";
 	private static final String INSCRIPTION_JSP = "/WEB-INF/jsp/Inscription.jsp";
 	
 	private static final long serialVersionUID = 1L;
@@ -156,7 +157,7 @@ public class InscriptionServlet extends HttpServlet {
 		// Si l'utilisateur est ajouté, on redirige vers la page d'accueil
 		if (utilisateurAjoute) {
 			// Redirection vers la page d'accueil:
-			RequestDispatcher rd = request.getRequestDispatcher(ACCUEIL_CONNEXION_JSP);
+			RequestDispatcher rd = request.getRequestDispatcher(ACCUEIL_SERVLET);
 			if (rd != null) {
 				rd.forward(request, response);
 			}
