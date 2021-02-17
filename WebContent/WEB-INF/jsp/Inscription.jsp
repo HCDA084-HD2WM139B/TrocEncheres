@@ -7,8 +7,7 @@
 	<%@include file="nav.jsp" %>
 
 	<div class="container">
-		<h2>Mon profil</h2>
-		<br />
+		<h2 class="text-center">Mon profil</h2>
 		<form action="<%=request.getContextPath()%>/inscription"
 			method="post">
 
