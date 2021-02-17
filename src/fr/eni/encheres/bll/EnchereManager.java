@@ -291,15 +291,23 @@ public class EnchereManager {
     	return resultSql;
     }
     
-    // TODO à commenter
+    /**
+     * Méthode permettant de connaître la date du jour
+     * @return String date
+     */
 	public String dateJour() {
 		 Date actuelle = new Date();
 		 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		 String dat = dateFormat.format(actuelle);
-		 return dat;
+		 String date = dateFormat.format(actuelle);
+		 return date;
 	}
 	
-	// TODO à commenter
+	/**
+	 * Méthode permettant de vérifier si la taille du champ est correcte
+	 * @param pChampAverifier: String où la taille doit être vérifiée
+	 * @param tailleChamp: int taille maximum du champs
+	 * @return boolean true si la longueur du String est correcte
+	 */
    public boolean verifierTailleChampOk(String pChampAverifier, int tailleChamp) {
        boolean resultat = false;
        // On vérifie que la longueur du champ à vérifier est supérieure à 0 après avoir supprimer les espaces,
@@ -311,7 +319,11 @@ public class EnchereManager {
        return resultat;
    }
    
-// TODO à commenter
+   /**
+    * Méthode permettant de vérifier si le type String est composé uniquement de type int
+    * @param pchampAverifier: String à vérifier
+    * @return: boolean true si le String est composé uniquement de chiffre
+    */
    public boolean verifierSiEntier (String pchampAverifier) {
    	boolean resultat = true;
        try {
@@ -322,17 +334,21 @@ public class EnchereManager {
        return resultat;
    }
    
+   /**
+    * Méthode permettant de convertir un type String vers un type Date
+    * @param pchampAconvertir: le champ à convertir
+    * @return: type Date
+    */
    public Date stringVersDate(String pchampAconvertir) {
 	   
 	   DateFormat formatter;
 	   java.util.Date d1 = new java.util.Date();
 	   java.sql.Date date = new java.sql.Date(d1.getTime());
-//	   Date date = null;
 	   formatter = new SimpleDateFormat("dd-MM-yy");
 	   try {
 		   d1 = formatter.parse(pchampAconvertir);
 	} catch (ParseException e) {
-		// TODO Auto-generated catch block
+		// TODO à supprimer
 		e.printStackTrace();
 	}
 	return date;
@@ -359,14 +375,19 @@ public class EnchereManager {
 	return artcileCree;
    }
    
-   public Categorie getInsetCategorie (int pNoCategorie, String pLibelle) throws BusinessException {
+   /**
+    * Méthode permettant d'ajouter un entier et un libellé à une catégorie
+    * @param pNoCategorie: int numéro de la catégorie
+    * @param pLibelle: String libellé de la catégorie
+    * @return: un type categorie
+    * @throws BusinessException
+    */
+   public Categorie getInsertCategorie (int pNoCategorie, String pLibelle) throws BusinessException {
 	   
 	   Categorie categorie = new Categorie (pNoCategorie, pLibelle);
 	   return categorie;
    }
  
-   
-   //**********************
    /**
    * Méthode pour verifier que l'ID et le Pseudo correspond dans la BDD
    * @return boolean

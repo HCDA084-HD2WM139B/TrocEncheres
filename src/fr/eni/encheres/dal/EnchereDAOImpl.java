@@ -147,7 +147,11 @@ public class EnchereDAOImpl implements EnchereDAO {
 		}
 		return listeArticles;
 	}
-
+	
+	/**
+	 * Méthode permettant d'insérer un article dans la table ARTICLES_VENDUS et d'insérer une adresse dans la table RETRAITS en respectant
+	 * la foreign key sur le no_article
+	 */
 	@Override
 	public Article insertArticle(Article articleCree) throws BusinessException {
 		
@@ -161,6 +165,8 @@ public class EnchereDAOImpl implements EnchereDAO {
 				try (Connection cnx = ConnectionProvider.getConnection(); 
 						PreparedStatement psmt = cnx.prepareStatement(INSERT_ARTICLE, PreparedStatement.RETURN_GENERATED_KEYS);
 						PreparedStatement psmt1 = cnx.prepareStatement(INSERT_ARTICLE_RETRAIT, PreparedStatement.RETURN_GENERATED_KEYS)) {
+					// On place l'autocommit sur false
+					cnx.setAutoCommit(false);
 					// On prépare la requête SQL pour insérer un utilisateur et on récupère l'ID généré par l'insertion
 					psmt.setString(1, articleCree.getNomArticle());
 					psmt.setString(2, articleCree.getDescription());
@@ -190,6 +196,8 @@ public class EnchereDAOImpl implements EnchereDAO {
 						// On ajoute le numéro de l'article
 //						articleCree.setNoArticle(rs1.getInt(1));
 					}
+					// Si tout se passe bien on commit
+					cnx.commit();
 					// S'il y a une erreur on l'enregistre dans la businessEx
 				} catch (SQLException sqle) {
 					sqle.printStackTrace();

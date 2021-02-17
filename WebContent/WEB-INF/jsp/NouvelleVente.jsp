@@ -6,6 +6,7 @@
 	<%@include file="nav.jsp" %>
 		
 	<div class="container">
+			
 		<h2 class="text-center">Nouvelle Vente</h2>
 		
 			<form action="<%=request.getContextPath()%>/NouvelleVente" method="post">
@@ -52,7 +53,8 @@
 								    <option value="1">Informatique</option>
 								    <option value="2">Ameublement</option>
 								    <option value="3">Vêtement</option>
-								    <option value="4">Sport & Loisirs</option>								    
+								    <option value="4">Sport & Loisirs</option>
+								    <option value="5">Erreur</option>								    
 								</select>
 							</div>
 							<div class="col-sm-4 text-danger">
@@ -162,10 +164,20 @@
 								</div>
 							</div>
 						</fieldset>
-						
-						<button class="mr-2 col-2 btn btn-success p-3 mt-2 mb-2" type="submit">Enregistrer</button>
-						<button class="ml-2 col-2  btn btn-success p-3 mt-2 mb-2" type="reset" onclick="window.location.replace('<%= request.getContextPath() %>/encheres')">Annuler</button>
-					
+					<div class="row">
+						<button class="ml-3 mr-2 col-2 btn btn-success p-3 mt-3 mb-2" type="submit">Enregistrer</button>
+						<button class="ml-2 col-2  btn btn-success p-3 mt-3 mb-2" type="reset" onclick="window.location.replace('<%= request.getContextPath() %>/encheres')">Annuler</button>
+				
+						<c:choose>
+							<c:when test = "${ requestScope.erreurs.insertion == null }">
+							</c:when>
+							<c:when test = "${ requestScope.erreurs.insertion != null }">
+								<p class="col-6 text-danger text-center p-3 mt-2 mb-2">
+										<c:out value="${ requestScope.erreurs.insertion }"></c:out>
+								</p>
+							</c:when>
+						</c:choose>
+				</div>
 					</div>
 					
 				</div>

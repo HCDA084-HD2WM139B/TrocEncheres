@@ -28,13 +28,14 @@ public class NouvelleVente extends HttpServlet {
 	private static final String PARAM_ARTICLE = "article";
 	private static final String PARAM_DESCRIPTION = "description";
 	private static final String PARAM_CATEGORIE = "categorie";
-	private static final String PARAM_PHOTO = "photo";
 	private static final String PARAM_PRIX = "prix";
 	private static final String PARAM_DEBUT_ENCHERE = "debutEnchere";
 	private static final String PARAM_FIN_ENCHERE = "finEnchere";
 	private static final String PARAM_RUE = "rue";
 	private static final String PARAM_CODE_POSTAL = "codePostal";
 	private static final String PARAM_VILLE = "ville";
+	private static final String PARAM_ID_UTILISATEUR = "id";
+	private static final String PARAM_INSERTION = "insertion";
 	// Constantes sur le nombre de caractère
 	private static final int NBR_CAR_ARTICLE = 50;
 	private static final int NBR_CAR_DESCRIPTION = 200;
@@ -45,37 +46,30 @@ public class NouvelleVente extends HttpServlet {
 	private static final String ERR_PRIX = "Le prix doit être positif";
 	private static final String ERR_DATE = "Vérifier la date";
 	private static final String ERR_CODE_POSTAL = "Doit être numérique";
-	// Variables message erreur
-	private static String messageErreur = "";
-	// Variables de paramètres
-	private static String paramArticle = "";
-	private static String paramDescription = "";
-	private static String paramCategorie = "";
-	private static String paramPhoto = "";
-	private static String paramPrix = "";
-	private static String paramDebutEnchere = "";
-	private static String paramFinEnchere = "";
-	private static String paramRue = "";
-	private static String paramcodePostal = "";
-	private static String paramVille = "";
-	private static String paramId ="";
+	private static final String ERR_INSERTION = "Erreur lors de l'insertion. Merci de réessayer";
 	//Constantes de redirection 
 	private static final String NOUVELLE_VENTE_JSP = "/WEB-INF/jsp/NouvelleVente.jsp";
 	private static final String ACCUEIL_CONNEXION_JSP = "/WEB-INF/jsp/AccueilConnexion.jsp";
+	// Variables de paramètres
+	private static String paramArticle = "", paramDescription = "", paramCategorie = "", paramPrix = "";
+	private static String paramDebutEnchere = "", paramFinEnchere = "", paramRue = "", paramcodePostal = "";
+	private static String paramVille = "";
+	// Variables de validation des paramètres
+	private static boolean paramArticleBoolean = false, paramDescriptionBoolean = false, paramCategorieBoolean = false;
+	private static boolean paramPrixBoolean = false, paramDebutEnchereBoolean = false, paramFinEnchereBoolean = false;
+	private static boolean paramRueBoolean = false, paramcodePostalBoolean = false, paramVilleBoolean = false;
+	private static boolean articleAjoute = false;
 	// Variables
 	private static int intCategorie = 0;
 	private static int compareDateMin = 0;
 	private static int compareDateMax = 0;
-	private static final String PARAM_ID_UTILISATEUR = "id";
-	private static boolean articleAjoute = false;
-	private static boolean paramArticleBoolean = false;
+	private static int paramPrixInt = 0;
+	private static int no_utilisateur = 0;
 	private static Date paramDebutEnchereDate;
 	private static Date paramFinEnchereDate;
-	private static int paramPrixInt = 0;
 	private static Categorie categorie;
 	private static Utilisateur utilisateur;
-	private static int paramIdInt;
-	private static int no_utilisateur;
+	
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -112,7 +106,6 @@ public class NouvelleVente extends HttpServlet {
 		paramArticle = request.getParameter(PARAM_ARTICLE);
 		paramDescription = request.getParameter(PARAM_DESCRIPTION);
 		paramCategorie = request.getParameter(PARAM_CATEGORIE);
-		paramPhoto = request.getParameter(PARAM_PHOTO);
 		paramPrix = request.getParameter(PARAM_PRIX);
 		paramDebutEnchere = request.getParameter(PARAM_DEBUT_ENCHERE);
 		paramFinEnchere = request.getParameter(PARAM_FIN_ENCHERE);
@@ -131,8 +124,8 @@ public class NouvelleVente extends HttpServlet {
 		if (!manager.verifierTailleChampOk(paramArticle, NBR_CAR_ARTICLE)) {
 			messageErreurMap.put(PARAM_ARTICLE, ERR_TAILLE + NBR_CAR_ARTICLE);
 		} else {
-			paramArticleBoolean = true;
 			messageOkMap.put(PARAM_ARTICLE, paramArticle);
+			paramArticleBoolean = true;
 		}
 		
 		// Contrôle du paramètre description
@@ -140,6 +133,7 @@ public class NouvelleVente extends HttpServlet {
 			messageErreurMap.put(PARAM_DESCRIPTION, ERR_TAILLE + NBR_CAR_DESCRIPTION);
 		} else {
 			messageOkMap.put(PARAM_DESCRIPTION, paramDescription);
+			paramDescriptionBoolean = true;
 		}
 		
 		// Contrôle du paramètre catégorie
@@ -149,10 +143,10 @@ public class NouvelleVente extends HttpServlet {
 			messageErreurMap.put(PARAM_CATEGORIE, ERR_CATEGORIE);
 		} else {
 			try {
-				categorie = manager.getInsetCategorie(intCategorie, "");
+				categorie = manager.getInsertCategorie(intCategorie, "");
+				paramCategorieBoolean = true;
 			} catch (BusinessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				messageErreurMap.put(PARAM_CATEGORIE, ERR_CATEGORIE);
 			}
 		}
 		
@@ -166,6 +160,7 @@ public class NouvelleVente extends HttpServlet {
 		} else {
 			messageOkMap.put(PARAM_PRIX, paramPrix);
 			paramPrixInt = Integer.parseInt(paramPrix);
+			paramPrixBoolean = true;
 		}
 		
 		// Contrôle du paramètre date de début d'enchère
@@ -177,6 +172,7 @@ public class NouvelleVente extends HttpServlet {
 		} else {
 			messageOkMap.put(PARAM_DEBUT_ENCHERE, paramDebutEnchere);
 			paramDebutEnchereDate = manager.stringVersDate(paramDebutEnchere);
+			paramDebutEnchereBoolean = true;
 		}
 		
 		// Contrôle du paramètre date de fin d'enchère
@@ -188,6 +184,7 @@ public class NouvelleVente extends HttpServlet {
 		} else {
 			messageOkMap.put(PARAM_FIN_ENCHERE, paramFinEnchere);
 			paramFinEnchereDate = manager.stringVersDate(paramFinEnchere);
+			paramFinEnchereBoolean = true;
 		}
 		
 		// Contrôle du paramètre rue
@@ -195,6 +192,7 @@ public class NouvelleVente extends HttpServlet {
 			messageErreurMap.put(PARAM_RUE, ERR_TAILLE + NBR_CAR_ARTICLE);
 		} else {
 			messageOkMap.put(PARAM_RUE, paramRue);
+			paramRueBoolean = true;
 		}
 		
 		// Contrôle du paramètre code postal
@@ -204,6 +202,7 @@ public class NouvelleVente extends HttpServlet {
 			messageErreurMap.put(PARAM_CODE_POSTAL, ERR_CODE_POSTAL);
 		} else {
 			messageOkMap.put(PARAM_CODE_POSTAL, paramcodePostal);
+			paramcodePostalBoolean = true;
 		}
 		
 		// Contrôle du paramètre ville
@@ -211,19 +210,21 @@ public class NouvelleVente extends HttpServlet {
 			messageErreurMap.put(PARAM_VILLE, ERR_TAILLE + NBR_CAR_ARTICLE);
 		} else {
 			messageOkMap.put(PARAM_VILLE, paramVille);
+			paramVilleBoolean = true;
 		}
 		
 		// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'article est ajouté à la base de données
-		if (paramArticleBoolean == true) {
+		if (paramArticleBoolean == true && paramDescriptionBoolean == true && paramCategorieBoolean == true && paramPrixBoolean == true &&
+				paramDebutEnchereBoolean == true && paramFinEnchereBoolean == true && paramRueBoolean == true && paramcodePostalBoolean == true &&
+				paramVilleBoolean == true) {
 			try {
 				utilisateur = manager.getUtilisateurByID(no_utilisateur);
 				manager.getInsertArticle(paramArticle, paramDescription, paramDebutEnchereDate, paramFinEnchereDate, paramPrixInt, categorie, utilisateur);
 				articleAjoute = true;
 			} catch (BusinessException e) {
-				e.printStackTrace();
+				messageErreurMap.put(PARAM_INSERTION, ERR_INSERTION);
 			}
 		}
-		
 		
 		// Si l'article est ajouté, on redirige vers la page d'accueil
 		if (articleAjoute) {
