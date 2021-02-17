@@ -53,8 +53,7 @@
 								    <option value="1">Informatique</option>
 								    <option value="2">Ameublement</option>
 								    <option value="3">Vêtement</option>
-								    <option value="4">Sport & Loisirs</option>
-								    <option value="5">Erreur</option>								    
+								    <option value="4">Sport & Loisirs</option>							    
 								</select>
 							</div>
 							<div class="col-sm-4 text-danger">
