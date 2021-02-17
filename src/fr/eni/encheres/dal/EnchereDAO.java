@@ -21,6 +21,11 @@ public interface EnchereDAO {
 	
     // Création d'un article à vendre
 	public Article insertArticle(Article artcileCree) throws BusinessException;
-
+	
+	// Affiche les détails d'un article selon son ID 
+	public Article selectDetailArticle(int noArticle) throws BusinessException; 
+	
+	// Selection de tous les numero d'articles des encheres en cours ou gagnées d'un utilisateur
+	public List<Integer> getEncheresEnCoursOuRemportesById(int noUtilisateur, int typeDeRequete) throws BusinessException;
 
 }

@@ -436,6 +436,27 @@ public class EnchereManager {
    }
    return resultat;
    }
+   
+   public Article selectArticleById(int pIdArticle) throws BusinessException {
+	   Article articleTrouve = null;
+	   
+	   articleTrouve = DAOFactory.getEnchereDAO().selectDetailArticle(pIdArticle);
+	   
+	   return articleTrouve;
+   }
+   
+   public List<Integer> getNoArticleEncheresRemporteesOuEnCoursById(Integer idUser, Integer typeRqt) throws BusinessException {
+	   
+	   List<Integer> listeNumeroArticles = new ArrayList<>();
+	   
+	   if (idUser != null && typeRqt != null && (typeRqt == 1 || typeRqt == 2) ) {
+		   listeNumeroArticles = DAOFactory.getEnchereDAO().getEncheresEnCoursOuRemportesById(idUser, typeRqt);
+	   } else {
+			listeNumeroArticles = null;
+			
+	   } return listeNumeroArticles;
+   }
+
     
     // Getters & Setters
     private UtilisateurDAO getDAOUtilisateur() {
