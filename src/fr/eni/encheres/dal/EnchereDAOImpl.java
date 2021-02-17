@@ -19,13 +19,25 @@ import fr.eni.encheres.bo.Utilisateur;
  *
  */
 public class EnchereDAOImpl implements EnchereDAO {
-// WHERE date_fin_encheres > GETDATE() AND date_debut_encheres <= GETDATE()
+
 	// Constantes des requêtes SQL
-	private static final String SELECT_ARTICLE = "SELECT * FROM UTILISATEURS AS u INNER JOIN ARTICLES_VENDUS AS a ON u.no_utilisateur = a.no_utilisateur INNER JOIN CATEGORIES AS c ON a.no_categorie = c.no_categorie";
+	private static final String SELECT_ARTICLE = "SELECT * FROM UTILISATEURS AS u INNER JOIN ARTICLES_VENDUS AS a ON u.no_utilisateur = a.no_utilisateur INNER JOIN CATEGORIES AS c ON a.no_categorie = c.no_categorie WHERE date_fin_encheres > GETDATE() AND date_debut_encheres <= GETDATE()";
 	private static final String SELECT_MAX_ENCHERE = "SELECT MAX(montant_enchere) AS best_enchere FROM ENCHERES WHERE no_article = ? GROUP BY no_article";
 	private static final String SELECT_CATEGORIE = "SELECT * FROM categories";
 	private static final String INSERT_ARTICLE = "INSERT INTO ARTICLES_VENDUS (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, no_utilisateur, no_categorie ) VALUES (?, ?, ?, ?, ?, ?, ?);";
 	private static final String INSERT_ARTICLE_RETRAIT = "INSERT INTO RETRAITS (no_article, rue, code_postal, ville) VALUES (?, ?, ?, ?);";
+	
+	private static final String SELECT_DETAIL_ARTICLE = "SELECT * FROM ARTICLES_VENDUS AS a    INNER JOIN CATEGORIES AS c ON a.no_categorie = c.no_categorie\r\n" + 
+			                                    "INNER JOIN ENCHERES AS e ON e.no_article = a.no_article\r\n" + 
+			                                    "INNER JOIN RETRAITS AS r ON r.no_article = a.no_article\r\n" + 
+			                                    "INNER JOIN UTILISATEURS AS u ON u.no_utilisateur = a.no_utilisateur\r\n" + 
+			                                    "WHERE a.no_article = ?;";
+	
+	private static final String SELECT_NO_ARTICLE_ENCHERES_BY_ID_START = "SELECT e.no_article FROM UTILISATEURS AS u INNER JOIN ARTICLES_VENDUS AS a ON u.no_utilisateur = a.no_utilisateur INNER JOIN CATEGORIES AS c ON a.no_categorie = c.no_categorie INNER JOIN ENCHERES AS e ON e.no_article = a.no_article WHERE e.no_utilisateur = ?";
+	private static final String SELECT_NO_ARTICLE_ENCHERES_EN_COURS_BY_ID_END = "AND e.date_enchere < a.date_fin_encheres AND e.date_enchere > a.date_debut_encheres AND a.date_fin_encheres > GETDATE() AND a.date_debut_encheres < GETDATE() GROUP BY e.no_article";
+	private static final String SELECT_NO_ARTICLE_ENCHERES_REMPORTES_BY_ID_END = "AND a.prix_vente = e.montant_enchere GROUP BY e.no_article";
+	
+	
 	
 	/**
 	 * Méthode qui récupére la liste de toutes les catégories d'articles
@@ -200,12 +212,137 @@ public class EnchereDAOImpl implements EnchereDAO {
 					cnx.commit();
 					// S'il y a une erreur on l'enregistre dans la businessEx
 				} catch (SQLException sqle) {
-					sqle.printStackTrace();
 					BusinessException businessException = new BusinessException();
 					businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
 					throw businessException;
 				}
 		return null;
+	}
+
+
+	@Override
+	public Article selectDetailArticle(int noArticle) throws BusinessException {
+		
+		Article articleTrouve = null;
+		Categorie categorie = null;
+		Utilisateur utilisateurVendeur = null;
+		ResultSet rs = null;
+		ResultSet rs_bis = null;
+		Integer prixVente = null;
+		PreparedStatement psmt = null;
+
+		
+		try // Connexion à la BDD
+		(Connection cnx = ConnectionProvider.getConnection())
+		// préparation de la requête (fermetures de connexion implicites)
+		 
+			{
+			psmt= cnx.prepareStatement(SELECT_DETAIL_ARTICLE);
+			psmt.setInt(1, noArticle);
+			rs = psmt.executeQuery();
+						
+			if(rs.next()) {
+						categorie = new Categorie(
+								rs.getInt("no_categorie"), 
+								rs.getString("libelle"));
+						
+						utilisateurVendeur = new Utilisateur(
+								rs.getInt("no_utilisateur"), 
+								rs.getString("pseudo"), 
+								rs.getString("nom"), 
+								rs.getString("prenom"), 
+								rs.getString("email"), 
+								rs.getString("telephone"), 
+								rs.getString("rue"), 
+								rs.getString("code_postal"), 
+								rs.getString("ville"), 
+								rs.getString("mot_de_passe"), 
+								rs.getInt("credit"), 
+								rs.getBoolean("administrateur")
+								);
+
+						// requete imbriqué
+						// on cherche à afficher le prix de vente ou le prix d'enchere le plus élevé
+				psmt= cnx.prepareStatement(SELECT_MAX_ENCHERE);
+				psmt.setInt(1, (rs.getInt("no_article")) );
+				rs_bis = psmt.executeQuery();
+						
+					if(rs_bis.next()) {
+						// Si le prix d'une sur-enchère existe et qu'elle est superieur au prix initial
+						if(rs_bis.getInt("best_enchere") > rs.getInt("prix_initial") ) {
+							// prixVente es tvalorisé pas le prix de la sur-enchère
+							prixVente = rs_bis.getInt("best_enchere");
+						} else {
+							// sinon le prix de vente est valorisé par son prix initial
+							prixVente = rs.getInt("prix_initial");
+						}
+					} else {
+						prixVente = rs.getInt("prix_initial");
+					}
+						System.out.println(prixVente);
+						articleTrouve = new Article (
+								rs.getInt("no_article"),
+								rs.getString("nom_article"),
+								rs.getString("description"),
+								rs.getDate("date_debut_encheres"),
+								rs.getDate("date_fin_encheres"),
+								rs.getInt("prix_initial"),
+								prixVente,
+								categorie,
+								utilisateurVendeur
+								);
+						
+			}
+			psmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
+			throw businessException;
+		} 
+		
+		return articleTrouve;
+
+	}
+	
+	public List<Integer> getEncheresEnCoursOuRemportesById(int noUtilisateur, int typeDeRequete)
+			throws BusinessException {
+		// declarations
+		List<Integer> listeNumeroArticles = new ArrayList<>();
+		String rqtSql = SELECT_NO_ARTICLE_ENCHERES_BY_ID_START;
+		ResultSet rs = null;
+		// Selection de la requete SQL
+		switch (typeDeRequete) {
+		case 1:
+			rqtSql += " " + SELECT_NO_ARTICLE_ENCHERES_EN_COURS_BY_ID_END;
+			break;
+		case 2:
+			rqtSql += " " + SELECT_NO_ARTICLE_ENCHERES_REMPORTES_BY_ID_END;
+			break;
+		default:
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
+			throw businessException;
+		}
+		// Connexion à la BDD & Préparation de la requete (leurs fermetures y sont
+		// implicite)
+		try (Connection cnx = ConnectionProvider.getConnection();
+				PreparedStatement psmt = cnx.prepareStatement(rqtSql);) {
+			// Exécution de la requete
+			psmt.setInt(1, noUtilisateur);
+			rs = psmt.executeQuery();
+			// tant que l'on a un article en retour
+			while (rs.next()) {
+				listeNumeroArticles.add(rs.getInt("no_article"));
+			}
+			// S'il y a une erreur on l'enregistre dans la businessEx
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
+			throw businessException;
+		}
+		return listeNumeroArticles;
 	}
 
 }

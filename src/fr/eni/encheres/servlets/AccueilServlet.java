@@ -105,6 +105,7 @@ public class AccueilServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// Declarations
 		RequestDispatcher rd = null;
+		EnchereManager enchereManager = null;
 		String saisieArticle = null;
 		String selectionCategories = null;
 		String selectionInpRadio = null;
@@ -119,6 +120,8 @@ public class AccueilServlet extends HttpServlet {
 		Date today = new Date(System.currentTimeMillis());
 		List<Article> listSalesTemp = new ArrayList<Article>();
 		List<Article> listSalesTempFilter = new ArrayList<Article>();
+		List<Integer> listeArticlesEnCours = new ArrayList<>();
+		List<Integer> listeArticlesGagnes = new ArrayList<>();
 
 		// test de session ou non
 		isItConnected = (request.getSession().getAttribute("utilisateurConnecte") != null) ? true : false;
@@ -136,7 +139,7 @@ public class AccueilServlet extends HttpServlet {
 
 		// Appel à la BLL
 		try {
-			EnchereManager enchereManager = EnchereManager.getEnchereManager();
+			enchereManager = EnchereManager.getEnchereManager();			
 			// Recherche des articles
 			listCompleteOfSales = enchereManager.getAllSales();
 		} catch (BusinessException be) {
@@ -184,28 +187,67 @@ public class AccueilServlet extends HttpServlet {
 				}
 				// Sinon si le type de recherche correspond à "achats"
 			} else if ("achat".equals(selectionInpRadio)) {
-				// si la case "encheres ouvertes" est cochée
-				if ("on".equals(selectAllSales)) {
-					listSalesTemp = listCompleteOfSales;
+				// on récupère les articles correspondant à l'utilisateur
+				try {
+					listeArticlesEnCours = enchereManager.getNoArticleEncheresRemporteesOuEnCoursById(idUser, 1);
+					listeArticlesGagnes = enchereManager.getNoArticleEncheresRemporteesOuEnCoursById(idUser, 2);
+System.out.println(listeArticlesEnCours.toString());
+System.out.println(listeArticlesGagnes.toString());
+System.out.println("listeSalesTemp : " + listSalesTemp.toString());
+System.out.println("listSalesToDisplay : " + listSalesToDisplay.toString());
+
+				} catch (BusinessException e) {
+					e.printStackTrace();
 				}
-				if ("on".equals(selectMyOfferInProgress)) {
-					//
-				}
-				if ("on".equals(selectMyOfferDone)) {
-					//
-				}
-			} else {
+				// on parcours la liste totale des ventes
+				for (Article article : listCompleteOfSales) {
+					// si la case "encheres ouvertes" est cochée OU par defaut :
+					if ("on".equals(selectAllSales) || 
+							(!"on".equals(selectAllSales) && !"on".equals(selectMyOfferInProgress) && !"on".equals(selectMyOfferDone)) ) {
+						if (article.getDateDebutEnchere().compareTo(today) < 0 && article.getDateFinEchere().compareTo(today) > 0) {
+							listSalesTemp.add(article);
+System.out.println("+1 toutes enchere en cours - " + article.getNoArticle());
+						}
+					}
+					// si la case "Mes encheres en cours" est cochée :
+					if ("on".equals(selectMyOfferInProgress)) {
+						// on cherche les articles correspondant
+						for (Integer noArticle : listeArticlesEnCours) {
+							if (noArticle.equals(article.getNoArticle())) {
+System.out.println("+1 enchere en cours - " + article.getNoArticle());
+								listSalesTemp.add(article);
+							}
+						}
+
+						
+					}
+					// si la case "Mes encheres achevées" est cochée :
+					if ("on".equals(selectMyOfferDone)) {
+						//
+						for (Integer noArticle : listeArticlesGagnes) {
+							if (noArticle == article.getNoArticle()) {
+System.out.println("+1 enchere finit - " + article.getNoArticle());
+								listSalesTemp.add(article);
+							}
+						}
+					}
+				}	
+			} 
+			else {
+System.out.println("init de la page");
 				// erreur
 				// TODO
 				// à l'initialisation lors de la connexion par defaut ce sont les cases "achats" et "encheres ouvertes" qui sont selectionees
-				listSalesTemp = listCompleteOfSales;
+				listSalesTemp = getListeArticlesEncheresEnCours(listCompleteOfSales);
 			}
+			
 		// sinon, mode déconnecté
 		} else {
+System.out.println("mode deconnecté");
 			// on ne prend en compte uniquement la liste complete des ventes
 			listSalesTemp = listCompleteOfSales;
 		}
-
+System.out.println("listSalesTemp : " + listSalesTemp.toString());
 		// en mode connecté ou non :
 		// si on a une categorie en filtre on agit sur listSalesTemp
 		if (!(CATEGORIE_PAR_DEFAUT).equals(selectionCategories) && selectionCategories != null ) {
@@ -217,7 +259,7 @@ public class AccueilServlet extends HttpServlet {
 				}
 			}
 		} else {
-
+System.out.println("pas de controle de categories");
 			listSalesTempFilter = listSalesTemp;
 		}
 		// si on a une saisie de recherche, on affine la recherche
@@ -230,9 +272,11 @@ public class AccueilServlet extends HttpServlet {
 				}
 			}
 		} else {
+System.out.println("pas de controle de saisies");
 			listSalesToDisplay = listSalesTempFilter;
 		}
-		
+System.out.println("listSalesTemp : " + listSalesTemp.toString());
+System.out.println("listSalesToDisplay : " + listSalesToDisplay.toString());
 		// on redirige vers la jsp 
 		// Dépot du résultat dans l'espace d'échange (contexte de requete)
 		request.setAttribute(ATTRIBUT_LISTE_CATEGORIES, listeCategories);
@@ -243,5 +287,20 @@ public class AccueilServlet extends HttpServlet {
 		
 
 	}
+	
+	
+	private List<Article> getListeArticlesEncheresEnCours(List<Article> listeToutesVentes) {
+		List<Article> listeArticleAfficher = new ArrayList<>();
+		Date today = new Date(System.currentTimeMillis());
+		for (Article article : listeToutesVentes) {
+			if (article.getDateDebutEnchere().compareTo(today) < 0
+					&& article.getDateFinEchere().compareTo(today) > 0) {
+				listeArticleAfficher.add(article);
+			}
+		}
+		return listeArticleAfficher;
+	}
+	
+	
 
 }
