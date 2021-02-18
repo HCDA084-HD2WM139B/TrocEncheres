@@ -49,7 +49,7 @@ public class NouvelleVente extends HttpServlet {
 	private static final String ERR_INSERTION = "Erreur lors de l'insertion. Merci de réessayer";
 	//Constantes de redirection 
 	private static final String NOUVELLE_VENTE_JSP = "/WEB-INF/jsp/NouvelleVente.jsp";
-	private static final String ACCUEIL_CONNEXION_JSP = "/WEB-INF/jsp/AccueilConnexion.jsp";
+	private static final String ACCUEIL_SERVLET = "/encheres";
 	// Variables de paramètres
 	private static String paramArticle = "", paramDescription = "", paramCategorie = "", paramPrix = "";
 	private static String paramDebutEnchere = "", paramFinEnchere = "", paramRue = "", paramcodePostal = "";
@@ -167,10 +167,8 @@ public class NouvelleVente extends HttpServlet {
 			messageErreurMap.put(PARAM_DEBUT_ENCHERE, ERR_DATE);
 		} else {
 			messageOkMap.put(PARAM_DEBUT_ENCHERE, paramDebutEnchere);
-			System.out.println(paramDebutEnchere);
 			paramDebutEnchereDate = manager.stringVersDate(paramDebutEnchere);
 			paramDebutEnchereBoolean = true;
-			System.out.println(paramDebutEnchereDate);
 		}
 		
 		// Contrôle du paramètre date de fin d'enchère
@@ -180,11 +178,9 @@ public class NouvelleVente extends HttpServlet {
 		} else if (compareDateMax < 0 ) {
 			messageErreurMap.put(PARAM_FIN_ENCHERE, ERR_DATE);
 		} else {
-			System.out.println(paramFinEnchereDate);
 			messageOkMap.put(PARAM_FIN_ENCHERE, paramFinEnchere);
 			paramFinEnchereDate = manager.stringVersDate(paramFinEnchere);
 			paramFinEnchereBoolean = true;
-			System.out.println(paramFinEnchereDate);
 		}
 		
 		// Contrôle du paramètre rue
@@ -232,7 +228,7 @@ public class NouvelleVente extends HttpServlet {
 		// Si l'article est ajouté, on redirige vers la page d'accueil
 		if (articleAjoute) {
 			// Redirection vers la page d'accueil:
-			RequestDispatcher rd = request.getRequestDispatcher(ACCUEIL_CONNEXION_JSP);
+			RequestDispatcher rd = request.getRequestDispatcher(ACCUEIL_SERVLET);
 			if (rd != null) {
 				rd.forward(request, response);
 			}
