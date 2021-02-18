@@ -28,4 +28,7 @@ public interface EnchereDAO {
 	// Selection de tous les numero d'articles des encheres en cours ou gagnées d'un utilisateur
 	public List<Integer> getEncheresEnCoursOuRemportesById(int noUtilisateur, int typeDeRequete) throws BusinessException;
 
+	public boolean updateCredit(int pCreditAcheteur, int idUtilisateur) throws BusinessException;
+	
+	
 }

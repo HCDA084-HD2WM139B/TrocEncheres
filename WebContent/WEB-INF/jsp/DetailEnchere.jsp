@@ -56,8 +56,7 @@
 				<a href="<c:url value="/monProfil?id=${ detailArticle.vendeur.noUtilisateur }"></c:url>">${ detailArticle.vendeur.pseudo }</a>
 			</div>
 			
-			<form class="d-flex" action="/DetailEnchereServlet" method="post">
-				<input class="d-none" readonly id="article" name="article" value="${ detailArticle.prixVente }"/>
+			<form class="d-flex" action="<%=request.getContextPath()%>/DetailEnchereServlet" method="post">
 				<label class="col-5" for="proposition">Ma proposition : </label>
 				<input class="col-2" type="number" name="proposition" id="proposition"/>
 				<input class="btn ml-3 btn-primary col-5"  type="submit" value="Enchérir"/>

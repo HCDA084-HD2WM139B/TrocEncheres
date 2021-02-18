@@ -27,8 +27,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 	private static final String INSERT_ARTICLE = "INSERT INTO ARTICLES_VENDUS (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, no_utilisateur, no_categorie ) VALUES (?, ?, ?, ?, ?, ?, ?);";
 	private static final String INSERT_ARTICLE_RETRAIT = "INSERT INTO RETRAITS (no_article, rue, code_postal, ville) VALUES (?, ?, ?, ?);";
 	
-	private static final String SELECT_DETAIL_ARTICLE = "SELECT * FROM ARTICLES_VENDUS AS a    INNER JOIN CATEGORIES AS c ON a.no_categorie = c.no_categorie\r\n" + 
-			                                    "INNER JOIN ENCHERES AS e ON e.no_article = a.no_article\r\n" + 
+	private static final String SELECT_DETAIL_ARTICLE = "SELECT * FROM ARTICLES_VENDUS AS a    INNER JOIN CATEGORIES AS c ON a.no_categorie = c.no_categorie\r\n" +  
 			                                    "INNER JOIN RETRAITS AS r ON r.no_article = a.no_article\r\n" + 
 			                                    "INNER JOIN UTILISATEURS AS u ON u.no_utilisateur = a.no_utilisateur\r\n" + 
 			                                    "WHERE a.no_article = ?;";
@@ -36,7 +35,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 	private static final String SELECT_NO_ARTICLE_ENCHERES_BY_ID_START = "SELECT e.no_article FROM UTILISATEURS AS u INNER JOIN ARTICLES_VENDUS AS a ON u.no_utilisateur = a.no_utilisateur INNER JOIN CATEGORIES AS c ON a.no_categorie = c.no_categorie INNER JOIN ENCHERES AS e ON e.no_article = a.no_article WHERE e.no_utilisateur = ?";
 	private static final String SELECT_NO_ARTICLE_ENCHERES_EN_COURS_BY_ID_END = "AND e.date_enchere < a.date_fin_encheres AND e.date_enchere > a.date_debut_encheres AND a.date_fin_encheres > GETDATE() AND a.date_debut_encheres < GETDATE() GROUP BY e.no_article";
 	private static final String SELECT_NO_ARTICLE_ENCHERES_REMPORTES_BY_ID_END = "AND a.prix_vente = e.montant_enchere GROUP BY e.no_article";
-	
+	private static final String UPDATE_CREDIT = "UPDATE UTILISATEURS SET credit = ? WHERE no_utilisateur = ?";
 	
 	
 	/**
@@ -219,7 +218,10 @@ public class EnchereDAOImpl implements EnchereDAO {
 		return null;
 	}
 
-
+/*
+ * Requête qui récupère le détail d'un Article selon son Id ainsi que son vendeur et sa catégorie
+ * @return l'article trouvé
+ */
 	@Override
 	public Article selectDetailArticle(int noArticle) throws BusinessException {
 		
@@ -279,7 +281,6 @@ public class EnchereDAOImpl implements EnchereDAO {
 					} else {
 						prixVente = rs.getInt("prix_initial");
 					}
-						System.out.println(prixVente);
 						articleTrouve = new Article (
 								rs.getInt("no_article"),
 								rs.getString("nom_article"),
@@ -344,5 +345,37 @@ public class EnchereDAOImpl implements EnchereDAO {
 		}
 		return listeNumeroArticles;
 	}
+
+	/**
+	 * Requête permettant de créditer ou débiter un Utilisateur selon son ID
+	 * @return si l'update s'est bien faite
+	 */
+	@Override
+	public boolean updateCredit(int pCreditAcheteur, int pIdUtilisateur) throws BusinessException {
+		boolean UpdateOK = false;
+		
+		try {
+			//Connexion à la BDD
+			Connection cnx = ConnectionProvider.getConnection();
+			//Préparation de la requête
+			PreparedStatement psmt = cnx.prepareStatement(UPDATE_CREDIT);
+			
+			psmt.setInt(1, pCreditAcheteur);
+			psmt.setInt(2, pIdUtilisateur);
+			
+			//Execution de la requête
+			psmt.executeUpdate();
+			
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
+			throw businessException;
+		}
+		
+		return UpdateOK;
+	}
+	
+	
 
 }

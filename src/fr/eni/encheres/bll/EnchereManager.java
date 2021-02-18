@@ -438,6 +438,12 @@ public class EnchereManager {
    return resultat;
    }
    
+   /**
+    * Méthode qui affiche le détail de l'article selon son ID
+    * @param pIdArticle : id de l'article 
+    * @return articleTrouve
+    * @throws BusinessException
+    */
    public Article selectArticleById(int pIdArticle) throws BusinessException {
 	   Article articleTrouve = null;
 	   
@@ -457,20 +463,80 @@ public class EnchereManager {
 			
 	   } return listeNumeroArticles;
    }
-	//Vérifier que l'enchère est supérieure au prixVente ou au prixInitial si pas d'enchères
    /**
-    * Méthode qui vérifie que la proposition d'enchère soit supérieur au prixVente ou au prixInitial si pas d'enchères
-    * @return Integer
+    * Méthode qui vérifie que la proposition d'enchère soit supérieur au prixVente ou au prixInitial si pas d'enchères et que le crédit de l'acheteur soit supérieur au prixVente ou au prixInitial si pas d'enchères
+    * @return boolean
     * @throws BusinessException
     */
-   public boolean propEnchereSup(int pProposition, int pPrixInitial) {
+   public boolean propEnchereSup(int pCreditAcheteur, int pProposition, int pPrixEnchere) throws BusinessException {
 		boolean resultat = false;
-			if(pProposition > pPrixInitial) {
+			if(pProposition > pPrixEnchere && pCreditAcheteur > pPrixEnchere) {
 				resultat = true;
 			}
 	
 			return resultat;
    		}
+	   
+   /**
+    * Méthode qui vérifie si la date de fin de l'enchère est supérieure à la date du jour
+    * @param pDateFinEnchere : date de fin de l'enchère
+    * @param pDateDuJour : date du jour
+    * @return
+    */
+   public boolean verifDateEnchereNonFinie(Date pDateFinEnchere, Date pDateDuJour) {
+	   boolean resultat = false; 
+
+	   if(pDateFinEnchere.compareTo(pDateDuJour) >= 0 ) {
+		   resultat = true;
+	   }
+	   
+	   return resultat; 
+   }
+	
+   /**
+	* Méthode qui vérifie que l'enchérisseur ne soit pas l'acquéreur   
+    * @param pDateDuJour : date du jour
+    * @return
+    */
+   	public boolean VerifStatutUtilisateur(int idUtilisateurAcheteur, int idUtilisateurVendeur) {
+   		boolean resultat = false;
+   		
+   		if(idUtilisateurAcheteur != idUtilisateurVendeur) {
+   			resultat = true; 
+   		}
+   		
+   		return resultat; 
+   	}
+ 
+   	/**
+   	 * Méthode qui met à jour le crédit de l'enchérisseur
+   	 * @param pCreditUtilisateur : crédit de l'utilisateur
+   	 * @param idUtilisateur : id de l'acheteur
+   	 * @return si le credit a été mis à jour ou pas 
+   	 * @throws BusinessException
+   	 */
+   	public boolean creditUpdated(int pCreditUtilisateur, int idUtilisateur) throws BusinessException {
+   		
+   		boolean creditUpdated = false;
+   		
+   		creditUpdated = DAOFactory.getEnchereDAO().updateCredit(pCreditUtilisateur, idUtilisateur);
+   	
+   		return creditUpdated;
+   	}
+   	
+   	/**
+   	 * Méthode qui soustrait le crédit de l'acheteur selon le prix de l'enchère
+   	 * @param pCreditAcheteur
+   	 * @param prixEnchere
+   	 * @return le nouveau crédit 
+   	 */
+   	public int calculNouveauCreditAcheteur(int pCreditAcheteur, int prixEnchere) {
+   		int nouveauCredit = ( pCreditAcheteur  - prixEnchere );
+   
+   		return nouveauCredit;
+   	}
+   	
+   	
 
     
     // Getters & Setters
