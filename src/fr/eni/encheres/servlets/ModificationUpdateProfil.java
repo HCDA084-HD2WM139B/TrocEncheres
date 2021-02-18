@@ -223,7 +223,7 @@ public class ModificationUpdateProfil extends HttpServlet {
 					}
 				
 						// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'utilisateur est modifié dans la base de données
-						if (tailleChamp == true && ModifPseudoOk == true && ModifEmailOk == true && erreurMotDePasse == false && formatEmail == true /* && motDePasseModifie == true */) {
+						if (tailleChamp == true && ModifPseudoOk == true && ModifEmailOk == true && erreurMotDePasse == false && formatEmail == true) {
 							try {
 								manager.getUpdatedUtilisateur(IdSession, parametre.get(PARAM_PSEUDO), parametre.get(PARAM_PRENOM), parametre.get(PARAM_TELEPHONE), parametre.get(PARAM_CODE_POSTAL), password,
 										parametre.get(PARAM_NOM), parametre.get(PARAM_EMAIL), parametre.get(PARAM_RUE), parametre.get(PARAM_VILLE));
