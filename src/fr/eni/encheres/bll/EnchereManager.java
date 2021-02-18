@@ -370,17 +370,17 @@ public class EnchereManager {
     */
    public Date stringVersDate(String pchampAconvertir) {
 	   
-	   DateFormat formatter;
-	   java.util.Date d1 = new java.util.Date();
-	   java.sql.Date date = new java.sql.Date(d1.getTime());
-	   formatter = new SimpleDateFormat("dd-MM-yy");
-	   try {
-		   d1 = formatter.parse(pchampAconvertir);
+       SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+       Date parsed;
+       java.sql.Date dateSql = null;
+       
+	try {
+		parsed = format.parse(pchampAconvertir);
+		dateSql = new java.sql.Date(parsed.getTime());
 	} catch (ParseException e) {
-		// TODO à supprimer
-		e.printStackTrace();
-	}
-	return date;
+
+	}       
+	return dateSql;
    }
    
    /**

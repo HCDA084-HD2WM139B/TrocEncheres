@@ -167,8 +167,10 @@ public class NouvelleVente extends HttpServlet {
 			messageErreurMap.put(PARAM_DEBUT_ENCHERE, ERR_DATE);
 		} else {
 			messageOkMap.put(PARAM_DEBUT_ENCHERE, paramDebutEnchere);
+			System.out.println(paramDebutEnchere);
 			paramDebutEnchereDate = manager.stringVersDate(paramDebutEnchere);
 			paramDebutEnchereBoolean = true;
+			System.out.println(paramDebutEnchereDate);
 		}
 		
 		// Contrôle du paramètre date de fin d'enchère
@@ -178,9 +180,11 @@ public class NouvelleVente extends HttpServlet {
 		} else if (compareDateMax < 0 ) {
 			messageErreurMap.put(PARAM_FIN_ENCHERE, ERR_DATE);
 		} else {
+			System.out.println(paramFinEnchereDate);
 			messageOkMap.put(PARAM_FIN_ENCHERE, paramFinEnchere);
 			paramFinEnchereDate = manager.stringVersDate(paramFinEnchere);
 			paramFinEnchereBoolean = true;
+			System.out.println(paramFinEnchereDate);
 		}
 		
 		// Contrôle du paramètre rue
