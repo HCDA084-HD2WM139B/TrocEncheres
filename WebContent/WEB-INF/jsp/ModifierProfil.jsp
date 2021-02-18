@@ -11,10 +11,6 @@
 		
 		<form class="col-12" method="POST" action="<c:url value="/modificationUpdateProfil" />">
 		
-		<article class="d-none col-12 mb-4">
-			<input class="col-12" name="numero_id" readonly id="id" value="<c:out value="${ afficheUtilisateur.noUtilisateur }"></c:out>">
-		</article>
-		
 		<article class="d-flex col-12 mb-4">
 			<div class="col-6">
 				<label class="col-5" for="pseudo">Pseudo : </label>

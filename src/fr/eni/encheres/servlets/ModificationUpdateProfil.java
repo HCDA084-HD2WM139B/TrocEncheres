@@ -73,7 +73,6 @@ public class ModificationUpdateProfil extends HttpServlet {
 				boolean erreurMotDePasse = true;
 				boolean utilisateurUpdated = false;
 				boolean ModifPseudoOk = false;
-				boolean IdPostOk = false; 
 				
 
 				List<String> listErreurs = new ArrayList<String>();
@@ -81,7 +80,6 @@ public class ModificationUpdateProfil extends HttpServlet {
 				
 				//Récupération des nouveaux paramètres inscrits par l'utilisateur (pour modification de profil)
 				Map<String, String> parametre = new LinkedHashMap<String, String>();
-				parametre.put(PARAM_ID_POST, request.getParameter(PARAM_ID_POST));
 				parametre.put(PARAM_PSEUDO, request.getParameter(PARAM_PSEUDO));
 				parametre.put(PARAM_NOM, request.getParameter(PARAM_NOM));
 				parametre.put(PARAM_PRENOM, request.getParameter(PARAM_PRENOM));
@@ -101,12 +99,6 @@ public class ModificationUpdateProfil extends HttpServlet {
 				int IdSession = (int) request.getSession().getAttribute("id_utilisateur");
 				String sIdSession = String.valueOf(IdSession);
 				
-				//Récupération du paramètre URL de type String
-				String sNo_utilisateur = request.getParameter(PARAM_ID_POST);
-				
-				//Transforme le type String sNo_utilisateur en type Modele (Integer) pour préparer l'appel au Modele.
-				Integer no_utilisateur = Integer.parseInt(sNo_utilisateur);
-				
 				//Appel du manager pour appeler les méthodes
 				EnchereManager manager = EnchereManager.getEnchereManager();
 				
@@ -115,18 +107,11 @@ public class ModificationUpdateProfil extends HttpServlet {
 					//La taille maximum du champ est défini par la méthode valeurMax()
 					valeurMax = manager.valeurMax(entree.getKey());
 					// Vérification de la taille du champ qui doit être compris entre deux et valeurMax. (Le champ téléphone est exclu car il peut être null et la taille du champ ID peut-être inférieur à 2)
-					if (!manager.verifierTailleChamp(entree.getValue(), valeurMax) && !entree.getKey().contains(PARAM_TELEPHONE) && !entree.getKey().contains(PARAM_ID_POST) && !entree.getKey().contains(PARAM_NEW_MOT_DE_PASSE) && !entree.getKey().contains(PARAM_CONFIRM_MOT_DE_PASSE)) {
+					if (!manager.verifierTailleChamp(entree.getValue(), valeurMax) && !entree.getKey().contains(PARAM_TELEPHONE) && !entree.getKey().contains(PARAM_NEW_MOT_DE_PASSE) && !entree.getKey().contains(PARAM_CONFIRM_MOT_DE_PASSE)) {
 						listErreurs.add("Le champ " + entree.getKey() + " doit être compris entre 2 et " + valeurMax + " caractères.");
 						tailleChamp = false;
 					}
 				}	
-				
-				// Vérification de l'ID présent dans le formulaire est le même que l'ID de la session
-				if (parametre.get(PARAM_ID_POST).equals(sIdSession)) {
-					IdPostOk = true;
-				} else {
-					listErreurs.add(PROBLEM_ID);
-				}
 				
 					
 					// Vérifier que le pseudo a été modifié et qu'il n'existe pas déjà dans la BDD 
@@ -243,9 +228,9 @@ public class ModificationUpdateProfil extends HttpServlet {
 					}
 				
 						// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'utilisateur est ajouté à la base de données
-						if (IdPostOk == true && tailleChamp == true && ModifPseudoOk == true && ModifEmailOk == true && erreurMotDePasse == false && formatEmail == true /* && motDePasseModifie == true */) {
+						if (tailleChamp == true && ModifPseudoOk == true && ModifEmailOk == true && erreurMotDePasse == false && formatEmail == true /* && motDePasseModifie == true */) {
 							try {
-								manager.getUpdatedUtilisateur(no_utilisateur, parametre.get(PARAM_PSEUDO), parametre.get(PARAM_PRENOM), parametre.get(PARAM_TELEPHONE), parametre.get(PARAM_CODE_POSTAL), password,
+								manager.getUpdatedUtilisateur(IdSession, parametre.get(PARAM_PSEUDO), parametre.get(PARAM_PRENOM), parametre.get(PARAM_TELEPHONE), parametre.get(PARAM_CODE_POSTAL), password,
 										parametre.get(PARAM_NOM), parametre.get(PARAM_EMAIL), parametre.get(PARAM_RUE), parametre.get(PARAM_VILLE));
 								utilisateurUpdated = true;
 							} catch (BusinessException e) {
