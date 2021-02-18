@@ -424,6 +424,7 @@ public class EnchereManager {
    }
    return resultat;
    }
+   
    /**
    * Méthode pour Récupérer un ID avec l'email dans la BDD
    * @return Integer
@@ -456,6 +457,20 @@ public class EnchereManager {
 			
 	   } return listeNumeroArticles;
    }
+	//Vérifier que l'enchère est supérieure au prixVente ou au prixInitial si pas d'enchères
+   /**
+    * Méthode qui vérifie que la proposition d'enchère soit supérieur au prixVente ou au prixInitial si pas d'enchères
+    * @return Integer
+    * @throws BusinessException
+    */
+   public boolean propEnchereSup(int pProposition, int pPrixInitial) {
+		boolean resultat = false;
+			if(pProposition > pPrixInitial) {
+				resultat = true;
+			}
+	
+			return resultat;
+   		}
 
     
     // Getters & Setters
