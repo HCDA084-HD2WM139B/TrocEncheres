@@ -549,11 +549,11 @@ public class EnchereManager {
    		return enchere;
    	}
    	
-   	public void insertEnchere(int idUtilisateur, Date date, int noArticle, int propositionEnchere) throws BusinessException {
+   	public void insertEnchere(int idUtilisateur, java.sql.Date date, int noArticle, int propositionEnchere) throws BusinessException {
    		DAOFactory.getEnchereDAO().insertEnchere( idUtilisateur, date, propositionEnchere, noArticle);
    	}
    	
-   	public void updateEnchere( int idUtilisateur, Date dateEnchere, int montant, int noArticle ) throws BusinessException {
+   	public void updateEnchere( int idUtilisateur, java.sql.Date dateEnchere, int montant, int noArticle ) throws BusinessException {
    		DAOFactory.getEnchereDAO().updateEnchere(idUtilisateur, dateEnchere, montant, noArticle);
    	}
     

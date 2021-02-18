@@ -117,6 +117,7 @@ public class DetailEnchereServlet extends HttpServlet {
 
 			}
 			
+
 			// si toutes les conditions sont validées
 			if(statutUtilisateur == true && encherePossible == true && propEnchere == true) {
 				try {
@@ -124,22 +125,16 @@ public class DetailEnchereServlet extends HttpServlet {
 					creditUpdated = manager.creditUpdated(nouveauCredit, idAcheteur);
 					// s'il n'y a pas d'encherisseur
 					if (pxVente == pxInitial) {
-						manager.insertEnchere( IdSession, manager.stringVersDate(manager.dateJour()), propositionEnchere, articleTrouve.getNoArticle());
+						manager.insertEnchere( IdSession, (java.sql.Date) manager.stringVersDate(manager.dateJour()), propositionEnchere, articleTrouve.getNoArticle());
 					} else {
 						enchereEnCours = manager.selectAcheteurByIdArticle(articleTrouve.getNoArticle());
-					
 						// calculer le nouveau credit de l'ancien acheteur 
 						creditAncienAcheteur = manager.calculNouveauCreditAncienAcheteur(enchereEnCours.getAcheteur().getCredit(), enchereEnCours.getMontantEnchere());
-						
 						// Mise à jour du credit de l'ancien acheteur pour remboursement de credit
 						creditUpdated = manager.creditUpdated(creditAncienAcheteur, enchereEnCours.getAcheteur().getNoUtilisateur());
-						
 						// 
-						manager.updateEnchere( IdSession, manager.stringVersDate(manager.dateJour()), propositionEnchere, articleTrouve.getNoArticle());
-					}
-					
-					
-					
+						manager.updateEnchere( IdSession, (java.sql.Date) manager.stringVersDate(manager.dateJour()), propositionEnchere, articleTrouve.getNoArticle());
+					}					
 					
 				} catch (BusinessException e) {
 					e.printStackTrace();

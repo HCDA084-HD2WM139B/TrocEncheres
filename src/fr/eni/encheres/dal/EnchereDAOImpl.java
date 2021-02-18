@@ -39,7 +39,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 	private static final String SELECT_NO_ARTICLE_ENCHERES_REMPORTES_BY_ID_END = "AND a.prix_vente = e.montant_enchere GROUP BY e.no_article";
 	private static final String UPDATE_CREDIT = "UPDATE UTILISATEURS SET credit = ? WHERE no_utilisateur = ?";
 	private static final String SELECT_NO_UTILISATEUR_BEST_ENCHERE = "SELECT * FROM ENCHERES AS e INNER JOIN UTILISATEURS AS u ON e.no_utilisateur = u.no_utilisateur WHERE no_article = ?";
-	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERES (no_utilisateur, no_article, date_enchere, montant_enchere) VALUES (?, ?, ?, ? )";
+	private static final String INSERT_ENCHERE = "INSERT INTO ENCHERES (no_utilisateur, no_article, date_enchere, montant_enchere) VALUES (?, ?, ?, ? );";
 	private static final String UPDATE_ENCHERE = "UPDATE ENCHERES SET no_utilisateur = ? , date_enchere = ? , montant_enchere = ? WHERE no_article = ?";
 	
 	/**
@@ -357,7 +357,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 			psmt.setInt(1, idArticle);
 
 			// Execution de la requête
-			psmt.executeQuery();
+			rs = psmt.executeQuery();
 			// on considere qu'il y a qu'une enchere d'ouverte
 			if (rs.next()) {
 				utilisateur = new Utilisateur(rs.getInt("no_utilisateur"), rs.getString("pseudo"), rs.getString("nom"),
@@ -380,15 +380,15 @@ public class EnchereDAOImpl implements EnchereDAO {
 
 	@Override
 	public void insertEnchere( int idUtilisateur, Date dateEnchere, int montant, int noArticle ) throws BusinessException {
-		
+
 		try (Connection cnx = ConnectionProvider.getConnection();
 				PreparedStatement psmt = cnx.prepareStatement(INSERT_ENCHERE)) {
 			
 			//
 			psmt.setInt(1, idUtilisateur);
-			psmt.setInt(2, noArticle);
+			psmt.setInt(2, montant);
 			psmt.setDate(3, dateEnchere);
-			psmt.setInt(4, montant);
+			psmt.setInt(4, noArticle);
 			
 			// On execute la requétes
 			psmt.executeUpdate();
