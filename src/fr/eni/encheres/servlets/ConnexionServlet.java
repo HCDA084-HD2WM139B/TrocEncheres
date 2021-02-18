@@ -129,7 +129,6 @@ public class ConnexionServlet extends HttpServlet {
 		} catch (BusinessException be) {
 			// en cas d'erreur de la requete, on signale une erreur
 			listErreurs.add(MSG_ERROR_REQUETE);
-			be.printStackTrace();
 		}
 		
 		// Si la requete nous renvoi un utilisateur ou non : 

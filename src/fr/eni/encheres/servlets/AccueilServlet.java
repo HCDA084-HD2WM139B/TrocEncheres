@@ -146,7 +146,7 @@ public class AccueilServlet extends HttpServlet {
 			// Recherche des articles
 			listCompleteOfSales = enchereManager.getAllSales();
 		} catch (BusinessException be) {
-			be.printStackTrace();
+
 		}
 		
 		// on re-initialise la liste à afficher car c'est une nouvelle recherche
@@ -207,7 +207,7 @@ public class AccueilServlet extends HttpServlet {
 					listeArticlesEnCours = enchereManager.getNoArticleEncheresRemporteesOuEnCoursById(idUser, 1);
 					listeArticlesGagnes = enchereManager.getNoArticleEncheresRemporteesOuEnCoursById(idUser, 2);
 				} catch (BusinessException e) {
-					e.printStackTrace();
+					
 				}
 				
 				// on parcours la liste totale des ventes
@@ -298,7 +298,11 @@ public class AccueilServlet extends HttpServlet {
 
 	}
 	
-	
+	/**
+	 * Méthode permettant de retourner la liste des articles dont l'enchère est en cours
+	 * @param listeToutesVentes: list
+	 * @return la liste d'article à afficher pour les enchères en cours
+	 */
 	private List<Article> getListeArticlesEncheresEnCours(List<Article> listeToutesVentes) {
 		List<Article> listeArticleAfficher = new ArrayList<>();
 		Date today = new Date(System.currentTimeMillis());

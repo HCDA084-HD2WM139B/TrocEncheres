@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import fr.eni.encheres.BusinessException;
-import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.UtilisateurDAO;
 import fr.eni.encheres.dal.UtilisateurDAOImpl;
 

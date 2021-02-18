@@ -48,7 +48,7 @@ public class DetailEnchereServlet extends HttpServlet {
 		try {
 			articleTrouve = manager.selectArticleById(no_Article);
 		} catch (BusinessException e) {
-			e.printStackTrace();
+			
 		}
 
 
@@ -68,7 +68,6 @@ public class DetailEnchereServlet extends HttpServlet {
 		int creditAncienAcheteur = 0;
 		int idAcheteur = 0;
 		Enchere enchereEnCours = null;
-		Utilisateur ancienAcheteur = null;
 		
 		//Récupération des paramètres 
 		String sPropositionEnchere = request.getParameter(PARAM_PROPOSITION_ENCHERE);
@@ -93,7 +92,7 @@ public class DetailEnchereServlet extends HttpServlet {
 			creditAcheteur = manager.getUtilisateurByID(IdSession).getCredit();
 			idAcheteur = manager.getUtilisateurByID(IdSession).getNoUtilisateur();
 		} catch (BusinessException e) {
-			e.printStackTrace();
+			
 		}
 		
 			//Vérification si l'ID de l'utilisateur est différent de celui de l'acheteur 
@@ -137,15 +136,8 @@ public class DetailEnchereServlet extends HttpServlet {
 					}					
 					
 				} catch (BusinessException e) {
-					e.printStackTrace();
+					
 				}
-			}
-			
-			// 
-			
-			
-			
+			}			
 		}
-		
-
 }
