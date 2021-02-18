@@ -2,12 +2,10 @@ package fr.eni.encheres.dal;
 
 import java.sql.Date;
 import java.util.List;
-
 import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
-import fr.eni.encheres.bo.Utilisateur;
 
 /**
  * Interface de la couche DAL permettant de lister les méthodes (CRUD) des requetes à la base de données concernant l'entité enchères (articles, retrait, et encheres).

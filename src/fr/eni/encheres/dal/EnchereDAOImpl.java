@@ -61,7 +61,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 		return ListCategories;
@@ -129,17 +129,12 @@ public class EnchereDAOImpl implements EnchereDAO {
 			cnx.commit();
 			// S'il y a une erreur on l'enregistre dans la businessEx
 		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			// TODO Changer code d'erreur
-			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
-			throw businessException;
+			throw new BusinessException(sqle.getMessage());
 		} finally {
 			try {
 				psmt.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new BusinessException(e.getMessage());
 			}
 		}
 		return listeArticles;
@@ -156,9 +151,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 		// Si l'objet utilisateur est null, on enregistre un message d'erreur dans la
 		// businessException
 		if (articleCree == null) {
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_NULL);
-			throw businessException;
+			throw new BusinessException();
 		}
 		// Sinon on lance la connexion
 		try (Connection cnx = ConnectionProvider.getConnection();
@@ -201,14 +194,12 @@ public class EnchereDAOImpl implements EnchereDAO {
 			cnx.commit();
 			// S'il y a une erreur on l'enregistre dans la businessEx
 		} catch (SQLException sqle) {
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
-			throw businessException;
+			throw new BusinessException(sqle.getMessage());
 		}
 		return null;
 	}
 
-	/*
+	/**
 	 * Requête qui récupère le détail d'un Article selon son Id ainsi que son
 	 * vendeur et sa catégorie
 	 * 
@@ -267,16 +258,16 @@ public class EnchereDAOImpl implements EnchereDAO {
 			}
 			psmt.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
-			throw businessException;
+			throw new BusinessException(e.getMessage());
 		}
 
 		return articleTrouve;
 
 	}
 
+	/**
+	 * Méthode retournant la liste des numeros d'article dont la vente est remporté par l'utilisateur donné en parametre.
+	 */
 	public List<Integer> getEncheresEnCoursOuRemportesById(int noUtilisateur, int typeDeRequete)
 			throws BusinessException {
 		// declarations
@@ -292,9 +283,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 			rqtSql += " " + SELECT_NO_ARTICLE_ENCHERES_REMPORTES_BY_ID_END;
 			break;
 		default:
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
-			throw businessException;
+			throw new BusinessException();
 		}
 		// Connexion à la BDD & Préparation de la requete (leurs fermetures y sont
 		// implicite)
@@ -309,10 +298,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 			}
 			// S'il y a une erreur on l'enregistre dans la businessEx
 		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
-			throw businessException;
+			throw new BusinessException(sqle.getMessage());
 		}
 		return listeNumeroArticles;
 	}
@@ -336,15 +322,15 @@ public class EnchereDAOImpl implements EnchereDAO {
 			psmt.executeUpdate();
 
 		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
-			throw businessException;
+			throw new BusinessException(sqle.getMessage());
 		}
 
 		return UpdateOK;
 	}
 
+	/**
+	 * Méthode retournant une enchere en fonction de l'id article donné en paramètre.
+	 */
 	@Override
 	public Enchere selectEnchereByIdArticle(int idArticle) throws BusinessException {
 		Enchere enchere = null;
@@ -369,15 +355,14 @@ public class EnchereDAOImpl implements EnchereDAO {
 			}
 
 		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
-			throw businessException;
+			throw new BusinessException(sqle.getMessage());
 		}
 		return enchere;
 	}
 
-
+	/**
+	 * Méthode permettant d'insérer une enchère en base de données
+	 */
 	@Override
 	public void insertEnchere( int idUtilisateur, Date dateEnchere, int montant, int noArticle ) throws BusinessException {
 
@@ -395,13 +380,13 @@ public class EnchereDAOImpl implements EnchereDAO {
 			
 			// S'il y a une erreur on l'enregistre dans la businessEx
 		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_ECHEC);
-			throw businessException;
+			throw new BusinessException(sqle.getMessage());
 		}
 	}
 	
+	/**
+	 * Méthode mettant à jour une enchere.
+	 */
 	@Override
 	public void updateEnchere( int idUtilisateur, Date dateEnchere, int montant, int noArticle ) throws BusinessException {
 		try (Connection cnx = ConnectionProvider.getConnection();
@@ -416,10 +401,7 @@ public class EnchereDAOImpl implements EnchereDAO {
 			psmt.executeUpdate();
 
 		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			BusinessException businessException = new BusinessException();
-			businessException.ajouterErreur(CodesResultatDAL.SELECT_OBJET_ECHEC);
-			throw businessException;
+			throw new BusinessException(sqle.getMessage());
 		}
 	}
 	

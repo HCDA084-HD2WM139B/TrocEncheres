@@ -1,9 +1,6 @@
 package fr.eni.encheres.dal;
 
-import java.util.List;
 
-import fr.eni.encheres.BusinessException;
-import fr.eni.encheres.bo.Article;
 
 /**
  * Classe Abstraite DAOFactory (couche DAL) permettant de distribuer les entitées DAO de l'applications
