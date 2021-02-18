@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bll.EnchereManager;
 import fr.eni.encheres.bo.Article;
+import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
 
 @WebServlet("/DetailEnchereServlet")
@@ -20,7 +21,7 @@ public class DetailEnchereServlet extends HttpServlet {
 	
 	//Constante de paramètre
 	private static final String PARAM_PROPOSITION_ENCHERE = "proposition";
-	private static final String PARAM_ID_ARTICLE = "idArticle";
+	private static final String PARAM_ID_ARTICLE = "Article";
 	
 	//Constante de redirection
 	private static final String DETAIL_ENCHERE_JSP = "/WEB-INF/jsp/DetailEnchere.jsp";
@@ -64,7 +65,10 @@ public class DetailEnchereServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Déclarations de variables
 		int creditAcheteur = 0;
+		int creditAncienAcheteur = 0;
 		int idAcheteur = 0;
+		Enchere enchereEnCours = null;
+		Utilisateur ancienAcheteur = null;
 		
 		//Récupération des paramètres 
 		String sPropositionEnchere = request.getParameter(PARAM_PROPOSITION_ENCHERE);
@@ -103,30 +107,48 @@ public class DetailEnchereServlet extends HttpServlet {
 			} 
 			
 			//Si il n'y a pas d'enchères alors on vérifie la proposition de l'acheteur est supérieure à l'enchère (prixVente)
-			if(pxVente == 0) {
-				try {
-					propEnchere = manager.propEnchereSup(creditAcheteur, propositionEnchere, pxInitial);
-					nouveauCredit = manager.calculNouveauCreditAcheteur(creditAcheteur, pxInitial);
-				} catch (BusinessException e) {
-					e.printStackTrace();
-				}
+			if(pxVente == pxInitial) {
+				propEnchere = manager.propEnchereSup(creditAcheteur, propositionEnchere, pxInitial);
+				nouveauCredit = manager.calculNouveauCreditAcheteur(creditAcheteur, pxInitial);
 
 			} else {
+				propEnchere = manager.propEnchereSup(creditAcheteur, propositionEnchere, pxVente);
+				nouveauCredit = manager.calculNouveauCreditAcheteur(creditAcheteur, pxVente);
+
+			}
+			
+			// si toutes les conditions sont validées
+			if(statutUtilisateur == true && encherePossible == true && propEnchere == true) {
 				try {
-					propEnchere = manager.propEnchereSup(creditAcheteur, propositionEnchere, pxVente);
-					nouveauCredit = manager.calculNouveauCreditAcheteur(creditAcheteur, pxVente);
+					// Mise à jour du credit du nouveau acheteur pour retirer les credits
+					creditUpdated = manager.creditUpdated(nouveauCredit, idAcheteur);
+					// s'il n'y a pas d'encherisseur
+					if (pxVente == pxInitial) {
+						manager.insertEnchere( IdSession, manager.stringVersDate(manager.dateJour()), propositionEnchere, articleTrouve.getNoArticle());
+					} else {
+						enchereEnCours = manager.selectAcheteurByIdArticle(articleTrouve.getNoArticle());
+					
+						// calculer le nouveau credit de l'ancien acheteur 
+						creditAncienAcheteur = manager.calculNouveauCreditAncienAcheteur(enchereEnCours.getAcheteur().getCredit(), enchereEnCours.getMontantEnchere());
+						
+						// Mise à jour du credit de l'ancien acheteur pour remboursement de credit
+						creditUpdated = manager.creditUpdated(creditAncienAcheteur, enchereEnCours.getAcheteur().getNoUtilisateur());
+						
+						// 
+						manager.updateEnchere( IdSession, manager.stringVersDate(manager.dateJour()), propositionEnchere, articleTrouve.getNoArticle());
+					}
+					
+					
+					
+					
 				} catch (BusinessException e) {
 					e.printStackTrace();
 				}
 			}
 			
-			if(statutUtilisateur == true && encherePossible == true && propEnchere == true) {
-				try {
-					creditUpdated = manager.creditUpdated(nouveauCredit, idAcheteur);
-				} catch (BusinessException e) {
-					e.printStackTrace();
-				}
-			}
+			// 
+			
+			
 			
 		}
 		

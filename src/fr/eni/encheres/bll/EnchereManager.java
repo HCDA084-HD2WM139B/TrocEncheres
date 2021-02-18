@@ -3,8 +3,6 @@ package fr.eni.encheres.bll;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.regex.Pattern;
 import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
+import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.DAOFactory;
 import fr.eni.encheres.dal.EnchereDAO;
@@ -468,7 +467,7 @@ public class EnchereManager {
     * @return boolean
     * @throws BusinessException
     */
-   public boolean propEnchereSup(int pCreditAcheteur, int pProposition, int pPrixEnchere) throws BusinessException {
+   public boolean propEnchereSup(int pCreditAcheteur, int pProposition, int pPrixEnchere) {
 		boolean resultat = false;
 			if(pProposition > pPrixEnchere && pCreditAcheteur > pPrixEnchere) {
 				resultat = true;
@@ -537,7 +536,26 @@ public class EnchereManager {
    	}
    	
    	
-
+   	public int calculNouveauCreditAncienAcheteur(int pCreditAcheteur, int prixEnchere) {
+   		int nouveauCredit = ( pCreditAcheteur  + prixEnchere );
+   
+   		return nouveauCredit;
+   	}
+   	
+   	
+   	public Enchere selectAcheteurByIdArticle(int idArticle) throws BusinessException {
+   		Enchere enchere = null;
+   		enchere = DAOFactory.getEnchereDAO().selectEnchereByIdArticle(idArticle);
+   		return enchere;
+   	}
+   	
+   	public void insertEnchere(int idUtilisateur, Date date, int noArticle, int propositionEnchere) throws BusinessException {
+   		DAOFactory.getEnchereDAO().insertEnchere( idUtilisateur, date, propositionEnchere, noArticle);
+   	}
+   	
+   	public void updateEnchere( int idUtilisateur, Date dateEnchere, int montant, int noArticle ) throws BusinessException {
+   		DAOFactory.getEnchereDAO().updateEnchere(idUtilisateur, dateEnchere, montant, noArticle);
+   	}
     
     // Getters & Setters
     private UtilisateurDAO getDAOUtilisateur() {
