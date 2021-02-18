@@ -215,6 +215,9 @@ public class NouvelleVente extends HttpServlet {
 				paramVilleBoolean == true) {
 			try {
 				utilisateur = manager.getUtilisateurByID(no_utilisateur);
+				utilisateur.setVille(paramVille);
+				utilisateur.setCodePostal(paramcodePostal);
+				utilisateur.setRue(paramRue);
 				manager.getInsertArticle(paramArticle, paramDescription, paramDebutEnchereDate, paramFinEnchereDate, paramPrixInt, categorie, utilisateur);
 				articleAjoute = true;
 			} catch (BusinessException e) {
