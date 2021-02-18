@@ -26,12 +26,6 @@ public class SuppressionProfilServlet extends HttpServlet {
 	private static final String NAME_USER_SESSION_ID = "id_utilisateur";
 	private static final String SERVLET_DECONNEXION = "/deconnexion";
 	
-	
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -61,11 +55,9 @@ public class SuppressionProfilServlet extends HttpServlet {
 		} catch (NumberFormatException nfe) {
 			// erreur si l'id en parametre n'est pas un chiffre
 			erreur = true;
-			nfe.printStackTrace();
 		} catch (BusinessException e) {
 			// erreur si un problème survient lors de la requete 
 			erreur = true;
-			e.printStackTrace();
 		}
 		
 		// si l'id de l'URL correspond à l'id en session et que l'id est bien un numero

@@ -16,7 +16,6 @@ public class Enchere {
 	private Article articleVendu;
 	
 	// Constructeurs
-	
 	public Enchere() {
 		 this.id = null;
 		 this.dateEnchere = null;

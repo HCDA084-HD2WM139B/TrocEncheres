@@ -10,7 +10,6 @@ import java.io.Serializable;
 public class Utilisateur implements Serializable {
 
 	// Attributs d'instance
-
 	private static final long serialVersionUID = 1L;
 	private Integer noUtilisateur;
 	private String pseudo;
@@ -25,8 +24,7 @@ public class Utilisateur implements Serializable {
 	private int credit;
 	private boolean administrateur;
 
-	// surcharge de Constructeurs
-	
+	//Constructeurs
 	public Utilisateur() {
 		noUtilisateur = null;
 	}
@@ -72,10 +70,9 @@ public class Utilisateur implements Serializable {
 		setNoUtilisateur(pNoUtilisateur);
 	}
 	
-	// Méthodes
 	
 	/**
-	 * Méthode permettant d'afficher les informations de l'utilisateur
+	 * Méthode toString() permettant d'afficher les informations de l'utilisateur
 	 */
 	@Override
 	public String toString() {

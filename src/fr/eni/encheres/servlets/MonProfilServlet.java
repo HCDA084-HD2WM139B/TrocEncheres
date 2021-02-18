@@ -8,14 +8,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bll.EnchereManager;
 import fr.eni.encheres.bo.Utilisateur;
 
 /**
- * Servlet implementation class MonProfilServlet
  * Servlet qui contrôle l'affichage des profils
  */
 @WebServlet("/monProfil")
@@ -38,7 +36,7 @@ public class MonProfilServlet extends HttpServlet {
 		try {
 			utilisateurTrouve = manager.getUtilisateurByID(no_utilisateur);
 		} catch (BusinessException e) {
-			e.printStackTrace();
+
 		}
 				
 		request.setAttribute("afficheUtilisateur", utilisateurTrouve);
@@ -48,11 +46,8 @@ public class MonProfilServlet extends HttpServlet {
 		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

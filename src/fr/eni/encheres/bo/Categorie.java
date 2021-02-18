@@ -9,6 +9,8 @@ public class Categorie {
 	private Integer noCategorie;
 	private String libelle;
 	
+	
+	//Constructeurs 
 	public Categorie() {
 		noCategorie = null;
 		libelle = null;
@@ -27,6 +29,7 @@ public class Categorie {
 		this.libelle = libelle;
 	}
 
+	//Getters & Setters
 	public String getLibelle() {
 		return libelle;
 	}

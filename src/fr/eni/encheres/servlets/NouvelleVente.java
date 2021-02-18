@@ -71,9 +71,6 @@ public class NouvelleVente extends HttpServlet {
 	private static Utilisateur utilisateur;
 	
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Déclarations
 		Utilisateur utilisateurTrouve= null;
@@ -88,18 +85,17 @@ public class NouvelleVente extends HttpServlet {
 		try {
 			utilisateurTrouve = manager.getUtilisateurByID(no_utilisateur);
 		} catch (BusinessException e) {
-			e.printStackTrace();
+			
 		}
 				
 		request.setAttribute("afficheUtilisateur", utilisateurTrouve);
 		request.setAttribute("undisplayLinkNavBar", "none");
+		
 		RequestDispatcher rd = request.getRequestDispatcher(NOUVELLE_VENTE_JSP);
 		rd.forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			
 		// Récupération des paramètres sur le fichier NouvelleVente.jsp

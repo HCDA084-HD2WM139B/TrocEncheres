@@ -2,12 +2,11 @@ package fr.eni.encheres.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,7 +20,6 @@ import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bll.EnchereManager;
 
 /**
- * Servlet implementation class InscriptionServlet
  * Servlet contrôlant l'inscription d'un utilisateur selon différentes règles métier.
  */
 @WebServlet("/inscription")
@@ -42,24 +40,19 @@ public class InscriptionServlet extends HttpServlet {
 	private static final String MOT_DE_PASSE_KO = "Le mot de passe ne correpond pas à la confirmation.";
 	private static final String EMAIL_KO = "Le format de l'email n'est pas correcte";
 	//Constantes de redirection 
-//	private static final String ACCUEIL_CONNEXION_JSP = "/WEB-INF/jsp/AccueilConnexion.jsp";
 	private static final String ACCUEIL_SERVLET = "/encheres";
 	private static final String INSCRIPTION_JSP = "/WEB-INF/jsp/Inscription.jsp";
 	
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setAttribute("undisplayLinkNavBar", "none");
 		RequestDispatcher rd = request.getRequestDispatcher(INSCRIPTION_JSP);
 		rd.forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		// Déclaration des variables
@@ -118,7 +111,7 @@ public class InscriptionServlet extends HttpServlet {
 				listErreurs.add(MOT_DE_PASSE_KO);
 			}
 		} catch (BusinessException e1) {
-			e1.printStackTrace();
+			
 		}
 		
 		// Vérification dans la base de données si le pseudo est déjà utilisé
@@ -129,7 +122,7 @@ public class InscriptionServlet extends HttpServlet {
 				listErreurs.add("Le pseudo " + parametre.get(PARAM_PSEUDO) + " est déjà utilisé.");
 			}
 		} catch (BusinessException e) {
-			e.printStackTrace();
+			
 		}
 		
 		// Vérification dans la base de données si l'email est déjà utilisé
@@ -140,7 +133,7 @@ public class InscriptionServlet extends HttpServlet {
 				listErreurs.add("L'email " + parametre.get(PARAM_EMAIL) + " est déjà utilisé.");
 			}
 		} catch (BusinessException e) {
-			e.printStackTrace();
+			
 		}
 				
 		// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'utilisateur est ajouté à la base de données
@@ -150,7 +143,7 @@ public class InscriptionServlet extends HttpServlet {
 						parametre.get(PARAM_MOT_DE_PASSE), parametre.get(PARAM_NOM), parametre.get(PARAM_EMAIL), parametre.get(PARAM_RUE), parametre.get(PARAM_VILLE));
 				utilisateurAjoute = true;
 			} catch (BusinessException e) {
-				e.printStackTrace();
+				
 			}
 		} 
 		

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import fr.eni.encheres.BusinessException;
 import fr.eni.encheres.bll.EnchereManager;
-import fr.eni.encheres.bo.Utilisateur;
+
 
 /**
  * Servlet implementation class ModificationUpdateProfil
@@ -24,14 +24,9 @@ import fr.eni.encheres.bo.Utilisateur;
 @WebServlet("/modificationUpdateProfil")
 public class ModificationUpdateProfil extends HttpServlet {
 
-
-
-	private static final String PROBLEM_ID = "Un problème est survenu, veuillez rafraichir la page";
-
 	private static final long serialVersionUID = 1L;
 
 	//Constantes de paramètres
-	private static final String PARAM_ID_POST = "numero_id";
 	private static final String PARAM_NEW_MOT_DE_PASSE = "new_mdp";
 	private static final String PARAM_CONFIRM_MOT_DE_PASSE = "confir_mdp";
 	private static final String PARAM_MOT_DE_PASSE_ACTUEL = "mdp_actuel";
@@ -55,7 +50,7 @@ public class ModificationUpdateProfil extends HttpServlet {
 	private static final String REDIRECTION_SUCCESS = "/monProfil?id=";
 	private static final String REDIRECTION_FAIL_UPDATE = "/modifierProfil?id=";
 	
-	// Constante de valeur max & min
+	// Constantes de valeur max & min du mot de passe
 	private static final int VALEURMAX_MDP = 8;
 	private static final int VALEURMIN_MDP = 2;
 
@@ -74,12 +69,13 @@ public class ModificationUpdateProfil extends HttpServlet {
 				boolean utilisateurUpdated = false;
 				boolean ModifPseudoOk = false;
 				
-
+				
 				List<String> listErreurs = new ArrayList<String>();
 
 				
-				//Récupération des nouveaux paramètres inscrits par l'utilisateur (pour modification de profil)
+				//Récupération des nouveaux paramètres inscrits par l'utilisateur (pour faire la modification du profil)
 				Map<String, String> parametre = new LinkedHashMap<String, String>();
+				
 				parametre.put(PARAM_PSEUDO, request.getParameter(PARAM_PSEUDO));
 				parametre.put(PARAM_NOM, request.getParameter(PARAM_NOM));
 				parametre.put(PARAM_PRENOM, request.getParameter(PARAM_PRENOM));
@@ -95,7 +91,7 @@ public class ModificationUpdateProfil extends HttpServlet {
 				// Variable du mot de passe ( par défaut, on gardera l'ancien ) 
 				String password = parametre.get(PARAM_MOT_DE_PASSE_ACTUEL);
 
-				//Modification du type de l'id de la session en String pour l'intégrer dans l'URL
+				//Modification du type de l'id utilisateur en String pour l'intégrer dans l'URL
 				int IdSession = (int) request.getSession().getAttribute("id_utilisateur");
 				String sIdSession = String.valueOf(IdSession);
 				
@@ -139,7 +135,7 @@ public class ModificationUpdateProfil extends HttpServlet {
 							
 						
 					} catch (BusinessException e) {
-						e.printStackTrace();
+					
 					}
 				
 
@@ -153,10 +149,9 @@ public class ModificationUpdateProfil extends HttpServlet {
 					}
 					
 					// Vérification que l'email n'est pas déjà utilisé 
-					
 					boolean ModifEmailOk = false;
 					try {
-							// Cas où l'email n'existe pas en base : Return true
+							// Cas où l'email n'existe pas en base de données : Return true
 							if (!manager.getEmailExiste(parametre.get(PARAM_EMAIL))) {
 								ModifEmailOk = true;								
 							} 
@@ -179,7 +174,7 @@ public class ModificationUpdateProfil extends HttpServlet {
 							
 						
 					} catch (BusinessException e) {
-						e.printStackTrace();
+						
 					}
 					
 					//Vérification que le nouveau mot de passe est égal à la confirmation
@@ -224,17 +219,17 @@ public class ModificationUpdateProfil extends HttpServlet {
 						}
 
 					} catch (BusinessException e) {
-						e.printStackTrace();
+						
 					}
 				
-						// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'utilisateur est ajouté à la base de données
+						// Vérification que toutes les conditions soient remplies. Si c'est le cas, l'utilisateur est modifié dans la base de données
 						if (tailleChamp == true && ModifPseudoOk == true && ModifEmailOk == true && erreurMotDePasse == false && formatEmail == true /* && motDePasseModifie == true */) {
 							try {
 								manager.getUpdatedUtilisateur(IdSession, parametre.get(PARAM_PSEUDO), parametre.get(PARAM_PRENOM), parametre.get(PARAM_TELEPHONE), parametre.get(PARAM_CODE_POSTAL), password,
 										parametre.get(PARAM_NOM), parametre.get(PARAM_EMAIL), parametre.get(PARAM_RUE), parametre.get(PARAM_VILLE));
 								utilisateurUpdated = true;
 							} catch (BusinessException e) {
-								e.printStackTrace();
+								
 							}
 						} 
 
