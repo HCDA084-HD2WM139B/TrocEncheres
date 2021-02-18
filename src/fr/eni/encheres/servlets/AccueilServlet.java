@@ -257,7 +257,7 @@ public class AccueilServlet extends HttpServlet {
 		// sinon, mode déconnecté
 		} else {
 			// on ne prend en compte uniquement la liste complete des ventes
-			listSalesTemp = listCompleteOfSales;
+			listSalesTemp = getListeArticlesEncheresEnCours(listCompleteOfSales);
 		}
 		
 		// en mode connecté ou non :
