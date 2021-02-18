@@ -54,38 +54,38 @@
 				<article class="input-group mt-2 mb-2">
 					<aside class="col-12 mt-3 d-flex justify-content-between">
 						<div>
-							<input id="inp_achats" name="inp_radio" type="radio" value="achat" checked />
+							<input id="inp_achats" name="inp_radio" type="radio" value="achat" checked <c:if test="${ requestScope.memoSelection.achat == true || requestScope.memoSelection.init == true || requestScope.initRecherche == true }"><c:out value="checked"></c:out></c:if>  />
 							<label for="inp_achats">Achats</label>
 							<div class="d-flex flex-column ml-3">
 								<div>
-									<input type="checkbox" id="en_open" name="en_open" checked>
+									<input type="checkbox" id="en_open" name="en_open"  <c:if test="${ requestScope.memoSelection.enchereOuverte == true || requestScope.memoSelection.init == true || requestScope.initRecherche == true }"><c:out value="checked"></c:out></c:if> >
 									<label class="ml-2" for="en_open">encheres ouvertes</label>
 								</div>
 								<div>
-									<input type="checkbox" id="en_encours" name="en_encours">
+									<input type="checkbox" id="en_encours" name="en_encours" <c:if test="${ requestScope.memoSelection.enchereEnCours == true }"><c:out value="checked"></c:out></c:if> >
 									<label class="ml-2" for="en_encours">mes encheres en cours</label>
 								</div>
 								<div>
-									<input type="checkbox" id="en_val" name="en_val">
+									<input type="checkbox" id="en_val" name="en_val" <c:if test="${ requestScope.memoSelection.enchereAchevee == true }"><c:out value="checked"></c:out></c:if> >
 									<label class="ml-2" for="en_val">mes encheres acheves</label>
 								</div>
 
 							</div>
 						</div>
 						<div>
-							<input id="vente" name="inp_radio" type="radio" value="vente" <c:if test="${ requestScope.test != null }"><c:out value="checked"></c:out></c:if> />
+							<input id="vente" name="inp_radio" type="radio" value="vente" <c:if test="${ requestScope.memoSelection.vente == true }"><c:out value="checked"></c:out></c:if> />
 							<label for="vente">Mes ventes</label>
 							<div class="d-flex flex-column ml-4">
 								<div>
-									<input type="checkbox" id="ve_encours" name="ve_encours" disabled>
+									<input type="checkbox" id="ve_encours" name="ve_encours"  <c:if test="${ requestScope.memoSelection.venteEnCours == true }"><c:out value="checked"></c:out></c:if> >
 									<label class="ml-2" for="ve_encours">mes ventes en cours</label>
 								</div>
 								<div>
-									<input type="checkbox" id="ve_null" name="ve_null" disabled>
+									<input type="checkbox" id="ve_null" name="ve_null"  <c:if test="${ requestScope.memoSelection.venteNonCommencee == true }"><c:out value="checked"></c:out></c:if> >
 									<label class="ml-2" for="ve_null">mes ventes non debutees</label>
 								</div>
 								<div>
-									<input type="checkbox" id="ve_over" name="ve_over" disabled>
+									<input type="checkbox" id="ve_over" name="ve_over"  <c:if test="${ requestScope.memoSelection.venteTerminee == true }"><c:out value="checked"></c:out></c:if> >
 									<label class="ml-2" for="ve_over">mes ventes terminees</label>
 								</div>
 							</div>
@@ -118,7 +118,7 @@
 				  	
 					    <a class="card-title badge badge-pill badge-dark" href=
 							<c:if test="${ sessionScope.utilisateurConnecte != null }">
-				  				<c:url value="/DetailEnchereServlet?id=${ article.noArticle }"></c:url>
+				  				<c:url value="/DetailEnchereServlet?Article=${ article.noArticle }"></c:url>
 						  	</c:if>
 						  	<c:if test="${ sessionScope.utilisateurConnecte == null }">
 						  		<c:url value="/connexion"></c:url>

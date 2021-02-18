@@ -3,7 +3,9 @@ package fr.eni.encheres.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -75,9 +77,9 @@ public class AccueilServlet extends HttpServlet {
 			be.printStackTrace();
 		}
 		
-
 		if (!listeCategories.isEmpty() && !listCompleteOfSales.isEmpty()) {
 			// Dépot du résultat dans l'espace d'échange (contexte de requete)
+			request.setAttribute("initRecherche", true);
 			request.setAttribute(ATTRIBUT_LISTE_CATEGORIES, listeCategories);
 			request.setAttribute(ATTRIBUT_LISTE_ARTICLES, getListeArticlesEncheresEnCours(listCompleteOfSales));
 			// Transfert de l'affichage à la JSP
@@ -122,6 +124,7 @@ public class AccueilServlet extends HttpServlet {
 		List<Article> listSalesTempFilter = new ArrayList<Article>();
 		List<Integer> listeArticlesEnCours = new ArrayList<>();
 		List<Integer> listeArticlesGagnes = new ArrayList<>();
+		Map<String, Boolean> memoChoixRecherche = new LinkedHashMap<String, Boolean>();
 
 		// test de session ou non
 		isItConnected = (request.getSession().getAttribute("utilisateurConnecte") != null) ? true : false;
@@ -153,15 +156,21 @@ public class AccueilServlet extends HttpServlet {
 		if (isItConnected) {
 			// on récupère l'ID de l'utilisateur connecté
 			idUser = (Integer) request.getSession().getAttribute("id_utilisateur");
-
+			
+			
+			
 			// Si le type de recherche correspond à "mes ventes"
 			if ("vente".equals(selectionInpRadio)) {
+				//
+				memoChoixRecherche.put("vente", true);
 				// on parcours la liste totale des ventes
 				for (Article article : listCompleteOfSales) {
 					// si se sont celles de l'utilisateur :
 					if (idUser == article.getVendeur().getNoUtilisateur()) {
 						// si la case "mes ventes en cours" est cochée
 						if ("on".equals(selectMySalesInProgress)) {
+							//
+							memoChoixRecherche.put("venteEnCours", true);
 							if (article.getDateDebutEnchere().compareTo(today) < 0
 									&& article.getDateFinEchere().compareTo(today) > 0) {
 								listSalesTemp.add(article);
@@ -169,12 +178,16 @@ public class AccueilServlet extends HttpServlet {
 						}
 						// si la case "mes ventes débutées" est cochée
 						if ("on".equals(selectMySalesNotStarted)) {
+							//
+							memoChoixRecherche.put("venteNonCommencee", true);
 							if (article.getDateDebutEnchere().compareTo(today) > 0) {
 								listSalesTemp.add(article);
 							}
 						}
 						// si la case "mes ventes terminées" est cochée
 						if ("on".equals(selectMySalesDone)) {
+							//
+							memoChoixRecherche.put("venteTerminee", true);
 							if (article.getDateFinEchere().compareTo(today) < 0) {
 								listSalesTemp.add(article);
 							}
@@ -187,6 +200,8 @@ public class AccueilServlet extends HttpServlet {
 				}
 				// Sinon si le type de recherche correspond à "achats"
 			} else if ("achat".equals(selectionInpRadio)) {
+				//
+				memoChoixRecherche.put("achat", true);
 				// on récupère les articles correspondant à l'utilisateur
 				try {
 					listeArticlesEnCours = enchereManager.getNoArticleEncheresRemporteesOuEnCoursById(idUser, 1);
@@ -201,12 +216,16 @@ public class AccueilServlet extends HttpServlet {
 					// si la case "encheres ouvertes" est cochée OU par defaut :
 					if ("on".equals(selectAllSales) || 
 							(!"on".equals(selectAllSales) && !"on".equals(selectMyOfferInProgress) && !"on".equals(selectMyOfferDone)) ) {
+						//
+						memoChoixRecherche.put("enchereOuverte", true);
 						if (article.getDateDebutEnchere().compareTo(today) < 0 && article.getDateFinEchere().compareTo(today) > 0) {
 							isItToDisplay = true;
 						}
 					}
 					// si la case "Mes encheres en cours" est cochée :
 					if ("on".equals(selectMyOfferInProgress)) {
+						//
+						memoChoixRecherche.put("enchereEnCours", true);
 						for (Integer noArticle : listeArticlesEnCours) {
 							if (noArticle.equals(article.getNoArticle())) {
 								isItToDisplay = true;
@@ -215,6 +234,8 @@ public class AccueilServlet extends HttpServlet {
 					}
 					// si la case "Mes encheres achevées" est cochée :
 					if ("on".equals(selectMyOfferDone)) {
+						//
+						memoChoixRecherche.put("enchereAchevee", true);
 						for (Integer noArticle : listeArticlesGagnes) {
 							if (noArticle.equals(article.getNoArticle())) {
 								isItToDisplay = true;
@@ -227,7 +248,8 @@ public class AccueilServlet extends HttpServlet {
 				}	
 			} else {
 				// erreur
-				// TODO
+				//
+				memoChoixRecherche.put("init", true);
 				// à l'initialisation lors de la connexion par defaut ce sont les cases "achats" et "encheres ouvertes" qui sont selectionees
 				listSalesTemp = getListeArticlesEncheresEnCours(listCompleteOfSales);
 			}
@@ -266,7 +288,7 @@ public class AccueilServlet extends HttpServlet {
 
 		// on redirige vers la jsp 
 		// Dépot du résultat dans l'espace d'échange (contexte de requete)
-		request.setAttribute("test", "vente");
+		request.setAttribute("memoSelection", memoChoixRecherche);
 		request.setAttribute(ATTRIBUT_LISTE_CATEGORIES, listeCategories);
 		request.setAttribute(ATTRIBUT_LISTE_ARTICLES, listSalesToDisplay);
 		// Transfert de l'affichage à la JSP
