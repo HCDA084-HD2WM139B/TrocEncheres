@@ -184,14 +184,12 @@ public class ModificationUpdateProfil extends HttpServlet {
 						if (manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_CONFIRM_MOT_DE_PASSE)) && parametre.get(PARAM_NEW_MOT_DE_PASSE).isEmpty() && parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).isEmpty()) {
 							erreurMotDePasse = false;
 							password = parametre.get(PARAM_MOT_DE_PASSE_ACTUEL);
-							System.out.println("MDP ancien");
 						} 
 						
 						//  Cas où un des deux champs pour remplacer le MDP est vide 
 						else if (parametre.get(PARAM_NEW_MOT_DE_PASSE).isEmpty() || parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).isEmpty() )  {
 							erreurMotDePasse = true;
 							listErreurs.add(ERREUR_UN_CHAMP_MDP_VIDE);			
-							System.out.println("un champ vide");
 						} 
 						
 						// Vérifier si le new_mdp et confirm_mdp sont identiques, que les deux champs ne sont pas vides et que la taille des champs est respectée 
@@ -204,25 +202,25 @@ public class ModificationUpdateProfil extends HttpServlet {
 							
 							password = parametre.get(PARAM_NEW_MOT_DE_PASSE);
 							erreurMotDePasse = false; 
-							System.out.println("MDP ok");
+
 						} 
 						
 						// Cas où les deux champs new_mdp dont identiques mais pas compris entre 2 et 8 caractères
 						else if (parametre.get(PARAM_NEW_MOT_DE_PASSE).length() < VALEURMIN_MDP || parametre.get(PARAM_NEW_MOT_DE_PASSE).length() > VALEURMAX_MDP
 									|| parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).length() < VALEURMIN_MDP || parametre.get(PARAM_CONFIRM_MOT_DE_PASSE).length() > VALEURMAX_MDP) {
 							listErreurs.add(LE_MDP_ENTRE_2_ET_8_CARACTERES);
-							System.out.println("pas compris entre 2 et 8 caracts");
+
 						} 
 						
 						// Cas où le nouveau MDP est identique à l'ancien
 						else if (manager.verifMotDePasse(parametre.get(PARAM_NEW_MOT_DE_PASSE), parametre.get(PARAM_MOT_DE_PASSE_ACTUEL))) {
 							listErreurs.add(LE_NEW_MDP_IDENTIQUE_ANCIEN_MDP);
-							System.out.println("nouveau mdp identique à l'ancien");
+
 						} 
 						// Autres cas
 						else {
 							listErreurs.add(MOT_DE_PASSE_KO);
-							System.out.println("MDP erreur");
+
 						}
 
 					} catch (BusinessException e) {
