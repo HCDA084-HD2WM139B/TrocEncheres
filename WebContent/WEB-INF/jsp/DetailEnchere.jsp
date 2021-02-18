@@ -10,7 +10,7 @@
 	<div class="container d-flex mt-5" >
 
 		<section class="col-4">
-			<img class="img-thumbnail" src="https://zupimages.net/up/21/06/blep.png">
+			<img class="img-thumbnail" src="https://picsum.photos/300/300?grayscale">
 		</section>
 	
 		<section class="col-10">

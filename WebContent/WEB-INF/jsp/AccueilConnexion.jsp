@@ -112,7 +112,7 @@
 	    		<article class="card col-xl-5 col-md-12 d-flex mt-4">
 				  <div class="card-body d-flex">
 				  	<div class="col-xl-5 col-md-4">
-				  		<img alt="img-default" class="img-thumbnail" src="https://zupimages.net/up/21/06/blep.png">
+				  		<img alt="img-default" class="img-thumbnail" src="https://picsum.photos/300/300?grayscale">
 				  	</div>
 				  	<div class="col-xl-7 col-md-5 d-flex flex-column">
 				  	

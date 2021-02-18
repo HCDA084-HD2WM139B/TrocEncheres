@@ -62,11 +62,11 @@
 		<article class="d-flex col-12 mb-4">
 			<div class="col-6">
 				<label class="col-5" for="new_mdp">Nouveau mot de passe : </label>
-				<input class="col-6" name="new_mdp" id="new_mdp">
+				<input type="password" class="col-6" name="new_mdp" id="new_mdp">
 			</div>
 			<div class="col-6">
 				<label class="col-5" for="confir_mdp">Confirmation : </label>
-				<input class="col-6" name="confir_mdp" id="confir_mdp">
+				<input  type="password" class="col-6" name="confir_mdp" id="confir_mdp">
 			</div>
 		</article>
 		

@@ -31,7 +31,9 @@ public class EnchereManager {
     private Utilisateur utilisateurConnecte;
     private List<Article> listeArticlesEnchereEnCours;
     
-    // Constructeurs
+    /**
+ 	 * Constructeurs
+ 	 */
     private EnchereManager() {
         this.DAOutilisateur = DAOFactory.getUtilisateurDAO();
         this.utilisateurConnecte = null;
@@ -46,10 +48,12 @@ public class EnchereManager {
  	 */
  	public List<Categorie> selectionnerToutesLesCategories() throws BusinessException {
  		return this.enchereDAO.selectAllCategorie();
- 		
  	}
  	
-    // Méthode static pour obtenir une instance d'EnchereManager
+ 	
+    /**
+ 	 * Méthode static pour obtenir une instance d'EnchereManager
+ 	 */
     public static EnchereManager getEnchereManager() {
         return new EnchereManager();
     }     
@@ -58,7 +62,7 @@ public class EnchereManager {
      * Méthode permettant de vérifier si l'E-mail est :
      * - d'une longueur comprise entre 2 et 8 inclus.
      * @param pIdentifiant
-     * @return
+     * @return un boolean
      */
     public boolean verifierEmail(String pIdentifiant) {
         boolean resultat = false;
@@ -91,7 +95,6 @@ public class EnchereManager {
      */
     public boolean verifierMotDePasse(String pMotDePasse) {
         boolean resultat = false;
-        // TODO REGEX => regle métier -> au moins 1 caractere special, une majuscule et une minuscule
         Pattern mdpPattern = Pattern.compile("^[a-zA-Z0-9]*$"); 
         Matcher mdpMatcher = mdpPattern.matcher(pMotDePasse);
         if( !pMotDePasse.isEmpty() && pMotDePasse.length() <= 8 && pMotDePasse.length() > 2 && mdpMatcher.find() ) {
@@ -251,6 +254,21 @@ public class EnchereManager {
         return utilisateurCree;
     }
     
+    
+    /**
+     * Méthode permettant de modifier les informations d'un utilisateur 
+     * @param pNo_utilisateur : int répresentant l'ID de l'utilisateur 
+     * @param pPseudo : chaîne de caractère représentant le pseudo
+     * @param pPrenom : chaîne de caractère représentant le prénom
+     * @param pTelephone chaîne de caractère représentant le téléphone
+     * @param pMotDePasse chaîne de caractère représentant le mot de passe
+     * @param pNom  chaîne de caractère représentant le nom
+     * @param pEmail chaîne de caractère représentant l'email
+     * @param pRue chaîne de caractère représentant la rue
+     * @param pVille chaîne de caractère représentant la ville
+     * @return un utilisateur
+     * @throws BusinessException
+     */
     public Utilisateur getUpdatedUtilisateur(int pNo_utilisateur, String pPseudo, String pPrenom, String pTelephone, String pCodePostal, String pMotDePasse, 
     		String pNom, String pEmail, String pRue, String pVille) throws BusinessException {
     	
@@ -261,6 +279,12 @@ public class EnchereManager {
     	return utilisateurUpdated;
     }
     
+    /**
+     * Méthode qui permet de récupérer les informations d'un utilisateur avec son ID
+     * @param id : Id de l'utilisateur 
+     * @return un Utilisateur 
+     * @throws BusinessException
+     */
     public Utilisateur getUtilisateurByID(int id) throws BusinessException {
         Utilisateur utilisateurTrouve =null;
        
@@ -270,6 +294,12 @@ public class EnchereManager {
         
     }
     
+    
+    /**
+     * Méthode qui appelle la méthode de la DAL qui sélectionne la listes des articles avec les informations du vendeur
+     * @return Une liste d'Article
+     * @throws BusinessException
+     */
     public List<Article> getAllSales() throws BusinessException {
     	List<Article> listeArticle = null;
     	listeArticle = DAOFactory.getEnchereDAO().selectAllSales();
@@ -389,6 +419,8 @@ public class EnchereManager {
  
    /**
    * Méthode pour verifier que l'ID et le Pseudo correspond dans la BDD
+   * @param pPseudo : le pseudo de l'utilisateur
+   * @param pNo_utilisateur : l'ID de l'utilisateur
    * @return boolean
    * @throws BusinessException
    */
@@ -399,8 +431,11 @@ public class EnchereManager {
    }
    return resultat;
    }
+   
    /**
    * Méthode pour verifier que l'ID et l'Email correspond dans la BDD
+   * @param pEmail : l'email de l'utilisateur
+   * @param pNo_utilisateur : l'ID de l'utilisateur
    * @return boolean
    * @throws BusinessException
    */
@@ -411,8 +446,10 @@ public class EnchereManager {
    }
    return resultat;
    }
+   
    /**
    * Méthode pour Récupérer un ID avec le Pseudo dans la BDD
+   * @param pPseudo : le pseudo de l'utilisateur 
    * @return Integer
    * @throws BusinessException
    */
@@ -426,6 +463,7 @@ public class EnchereManager {
    
    /**
    * Méthode pour Récupérer un ID avec l'email dans la BDD
+   * @param pEmail : email de l'utilisateur 
    * @return Integer
    * @throws BusinessException
    */
@@ -451,6 +489,13 @@ public class EnchereManager {
 	   return articleTrouve;
    }
    
+   
+   /**
+    * Méthode qui retourne la liste des enchères en cours ou reportées
+    * @param idUser : id de l'utilisateur 
+    * @return List<Integer>
+    * @throws BusinessException
+    */
    public List<Integer> getNoArticleEncheresRemporteesOuEnCoursById(Integer idUser, Integer typeRqt) throws BusinessException {
 	   
 	   List<Integer> listeNumeroArticles = new ArrayList<>();
@@ -464,6 +509,9 @@ public class EnchereManager {
    }
    /**
     * Méthode qui vérifie que la proposition d'enchère soit supérieur au prixVente ou au prixInitial si pas d'enchères et que le crédit de l'acheteur soit supérieur au prixVente ou au prixInitial si pas d'enchères
+    * @param pCreditAcheteur : crédit de l'enchérisseur 
+    * @param pProposition : proposition de l'enchérisseur
+    * @param pPrixEnchere : prix de la dernière enchère de l'article 
     * @return boolean
     * @throws BusinessException
     */
@@ -480,7 +528,7 @@ public class EnchereManager {
     * Méthode qui vérifie si la date de fin de l'enchère est supérieure à la date du jour
     * @param pDateFinEnchere : date de fin de l'enchère
     * @param pDateDuJour : date du jour
-    * @return
+    * @return boolean
     */
    public boolean verifDateEnchereNonFinie(Date pDateFinEnchere, Date pDateDuJour) {
 	   boolean resultat = false; 
@@ -535,28 +583,53 @@ public class EnchereManager {
    		return nouveauCredit;
    	}
    	
-   	
+   	/**
+   	 * Méthode qui additionne le crédit de l'ancien enchérisseur selon le prix de l'enchère
+   	 * @param pCreditAcheteur
+   	 * @param prixEnchere
+   	 * @return le nouveau crédit de l'enchérisseur
+   	 */
    	public int calculNouveauCreditAncienAcheteur(int pCreditAcheteur, int prixEnchere) {
    		int nouveauCredit = ( pCreditAcheteur  + prixEnchere );
    
    		return nouveauCredit;
    	}
    	
-   	
+   	/**
+   	 * Méthode qui permet de sélectionner un enchérisseur en fonction de l'ID de l'article
+   	 * @param idArticle
+   	 * @return retourne les informations de l'enchérisseur ( information de l'utilisateur et de l'enchère ) 
+   	 */
    	public Enchere selectAcheteurByIdArticle(int idArticle) throws BusinessException {
    		Enchere enchere = null;
    		enchere = DAOFactory.getEnchereDAO().selectEnchereByIdArticle(idArticle);
    		return enchere;
    	}
    	
+   	
+   	/**
+   	 * Méthode qui permet d'insérer une enchère 
+   	 * @param idArticle
+   	 * @return retourne les informations de l'enchérisseur ( information de l'utilisateur et de l'enchère ) 
+   	 */
    	public void insertEnchere(int idUtilisateur, java.sql.Date date, int noArticle, int propositionEnchere) throws BusinessException {
    		DAOFactory.getEnchereDAO().insertEnchere( idUtilisateur, date, propositionEnchere, noArticle);
    	}
    	
+   	/**
+   	 * Méthode qui permet de sélectionner un enchérisseur en fonction de l'ID de l'article
+   	 * @param idUtilisateur : Id de l'enchérisseur
+   	 * @param dateEnchere : Date de l'insertion (date du jour)
+   	 * @param montant : montant de la nouvelle enchère
+   	 * @param noArticle : ID de l'article enchérit
+   	 * @return retourne les informations de l'enchérisseur ( information de l'utilisateur et de l'enchère ) 
+   	 */
    	public void updateEnchere( int idUtilisateur, java.sql.Date dateEnchere, int montant, int noArticle ) throws BusinessException {
    		DAOFactory.getEnchereDAO().updateEnchere(idUtilisateur, dateEnchere, montant, noArticle);
    	}
     
+   	
+   	
     // Getters & Setters
     private UtilisateurDAO getDAOUtilisateur() {
         return DAOutilisateur;
