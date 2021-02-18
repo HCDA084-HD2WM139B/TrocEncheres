@@ -38,7 +38,7 @@
     	<c:if test="${ id_utilisateur ==  afficheUtilisateur.noUtilisateur }">
     	
     	<article class="mb-4 text-center d-flex justify-content-center">
-    		<a class="col-6 p-3 btn btn-primary" href="<c:url value="/modifierProfil?id=${ id_utilisateur }" />">Modifier</a>
+    		<a class="col-6 p-3 btn btn-primary" href="<c:url value="/modifierProfil" />">Modifier</a>
     	</article>
     	
     	</c:if>

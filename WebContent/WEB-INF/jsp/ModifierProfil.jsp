@@ -9,7 +9,7 @@
 		
 		<h2 class="text-center mt-3 mb-5">Modifier mon Profil</h2>
 		
-		<form class="col-12" method="POST" action="<c:url value="/modificationUpdateProfil" />">
+		<form class="col-12" method="POST" action="<c:url value="/modifierProfil" />">
 		
 		<article class="d-flex col-12 mb-4">
 			<div class="col-6">
