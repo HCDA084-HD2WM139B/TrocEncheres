@@ -79,7 +79,7 @@ public class AccueilServlet extends HttpServlet {
 		if (!listeCategories.isEmpty() && !listCompleteOfSales.isEmpty()) {
 			// Dépot du résultat dans l'espace d'échange (contexte de requete)
 			request.setAttribute(ATTRIBUT_LISTE_CATEGORIES, listeCategories);
-			request.setAttribute(ATTRIBUT_LISTE_ARTICLES, listCompleteOfSales);
+			request.setAttribute(ATTRIBUT_LISTE_ARTICLES, getListeArticlesEncheresEnCours(listCompleteOfSales));
 			// Transfert de l'affichage à la JSP
 			rd = request.getRequestDispatcher(JSP_ACCUEIL_AVEC_CONNEXION);
 			rd.forward(request, response);
@@ -191,50 +191,41 @@ public class AccueilServlet extends HttpServlet {
 				try {
 					listeArticlesEnCours = enchereManager.getNoArticleEncheresRemporteesOuEnCoursById(idUser, 1);
 					listeArticlesGagnes = enchereManager.getNoArticleEncheresRemporteesOuEnCoursById(idUser, 2);
-System.out.println(listeArticlesEnCours.toString());
-System.out.println(listeArticlesGagnes.toString());
-System.out.println("listeSalesTemp : " + listSalesTemp.toString());
-System.out.println("listSalesToDisplay : " + listSalesToDisplay.toString());
-
 				} catch (BusinessException e) {
 					e.printStackTrace();
 				}
+				
 				// on parcours la liste totale des ventes
 				for (Article article : listCompleteOfSales) {
+					boolean isItToDisplay = false;
 					// si la case "encheres ouvertes" est cochée OU par defaut :
 					if ("on".equals(selectAllSales) || 
 							(!"on".equals(selectAllSales) && !"on".equals(selectMyOfferInProgress) && !"on".equals(selectMyOfferDone)) ) {
 						if (article.getDateDebutEnchere().compareTo(today) < 0 && article.getDateFinEchere().compareTo(today) > 0) {
-							listSalesTemp.add(article);
-System.out.println("+1 toutes enchere en cours - " + article.getNoArticle());
+							isItToDisplay = true;
 						}
 					}
 					// si la case "Mes encheres en cours" est cochée :
 					if ("on".equals(selectMyOfferInProgress)) {
-						// on cherche les articles correspondant
 						for (Integer noArticle : listeArticlesEnCours) {
 							if (noArticle.equals(article.getNoArticle())) {
-System.out.println("+1 enchere en cours - " + article.getNoArticle());
-								listSalesTemp.add(article);
+								isItToDisplay = true;
 							}
 						}
-
-						
 					}
 					// si la case "Mes encheres achevées" est cochée :
 					if ("on".equals(selectMyOfferDone)) {
-						//
 						for (Integer noArticle : listeArticlesGagnes) {
-							if (noArticle == article.getNoArticle()) {
-System.out.println("+1 enchere finit - " + article.getNoArticle());
-								listSalesTemp.add(article);
+							if (noArticle.equals(article.getNoArticle())) {
+								isItToDisplay = true;
 							}
 						}
 					}
+					if (isItToDisplay) {
+						listSalesTemp.add(article);
+					}
 				}	
-			} 
-			else {
-System.out.println("init de la page");
+			} else {
 				// erreur
 				// TODO
 				// à l'initialisation lors de la connexion par defaut ce sont les cases "achats" et "encheres ouvertes" qui sont selectionees
@@ -243,11 +234,10 @@ System.out.println("init de la page");
 			
 		// sinon, mode déconnecté
 		} else {
-System.out.println("mode deconnecté");
 			// on ne prend en compte uniquement la liste complete des ventes
 			listSalesTemp = listCompleteOfSales;
 		}
-System.out.println("listSalesTemp : " + listSalesTemp.toString());
+		
 		// en mode connecté ou non :
 		// si on a une categorie en filtre on agit sur listSalesTemp
 		if (!(CATEGORIE_PAR_DEFAUT).equals(selectionCategories) && selectionCategories != null ) {
@@ -259,7 +249,6 @@ System.out.println("listSalesTemp : " + listSalesTemp.toString());
 				}
 			}
 		} else {
-System.out.println("pas de controle de categories");
 			listSalesTempFilter = listSalesTemp;
 		}
 		// si on a une saisie de recherche, on affine la recherche
@@ -272,13 +261,12 @@ System.out.println("pas de controle de categories");
 				}
 			}
 		} else {
-System.out.println("pas de controle de saisies");
 			listSalesToDisplay = listSalesTempFilter;
 		}
-System.out.println("listSalesTemp : " + listSalesTemp.toString());
-System.out.println("listSalesToDisplay : " + listSalesToDisplay.toString());
+
 		// on redirige vers la jsp 
 		// Dépot du résultat dans l'espace d'échange (contexte de requete)
+		request.setAttribute("test", "vente");
 		request.setAttribute(ATTRIBUT_LISTE_CATEGORIES, listeCategories);
 		request.setAttribute(ATTRIBUT_LISTE_ARTICLES, listSalesToDisplay);
 		// Transfert de l'affichage à la JSP

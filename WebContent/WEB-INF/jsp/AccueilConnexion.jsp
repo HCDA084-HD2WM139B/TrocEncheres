@@ -73,7 +73,7 @@
 							</div>
 						</div>
 						<div>
-							<input id="vente" name="inp_radio" type="radio" value="vente" />
+							<input id="vente" name="inp_radio" type="radio" value="vente" <c:if test="${ requestScope.test != null }"><c:out value="checked"></c:out></c:if> />
 							<label for="vente">Mes ventes</label>
 							<div class="d-flex flex-column ml-4">
 								<div>
@@ -82,7 +82,7 @@
 								</div>
 								<div>
 									<input type="checkbox" id="ve_null" name="ve_null" disabled>
-									<label class="ml-2" for="en_encours">mes ventes non debutees</label>
+									<label class="ml-2" for="ve_null">mes ventes non debutees</label>
 								</div>
 								<div>
 									<input type="checkbox" id="ve_over" name="ve_over" disabled>
@@ -118,7 +118,7 @@
 				  	
 					    <a class="card-title badge badge-pill badge-dark" href=
 							<c:if test="${ sessionScope.utilisateurConnecte != null }">
-				  				<c:url value="/#"></c:url>
+				  				<c:url value="/DetailEnchereServlet?id=${ article.noArticle }"></c:url>
 						  	</c:if>
 						  	<c:if test="${ sessionScope.utilisateurConnecte == null }">
 						  		<c:url value="/connexion"></c:url>
